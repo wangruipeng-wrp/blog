@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="解构赋值语法是一个 JavaScript 表达式，这使得可以将 值从数组 或 属性从对象 提取到不同变量中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ES6】解构赋值">
+<meta property="og:url" content="http://yoursite.com/posts/53099/index.html">
+<meta property="og:site_name" content="wrp&#39;s Blog">
+<meta property="og:description" content="解构赋值语法是一个 JavaScript 表达式，这使得可以将 值从数组 或 属性从对象 提取到不同变量中。">
+<meta property="article:published_time" content="2020-06-16T11:30:20.000Z">
+<meta property="article:modified_time" content="2020-06-18T15:06:14.663Z">
+<meta property="article:author" content="王瑞鹏">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/posts/53099/"/>
+
+
+
+
+
+  <title>【ES6】解构赋值 | wrp's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wrp's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">大家加油：）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/53099/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王瑞鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wrp's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【ES6】解构赋值</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-16T19:30:20+08:00">
+                2020-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>解构赋值语法是一个 JavaScript 表达式，这使得可以将 <strong>值从数组</strong> 或 <strong>属性从对象</strong> 提取到不同变量中。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h1><p>数组的解构赋值是有序的，将会按照顺序去匹配</p>
+<h4 id="简单的解构赋值"><a href="#简单的解构赋值" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 的值将会对应上数组中的 1 2 3 4</span></span><br></pre></td></tr></table></figure>
+<p>在 ES6 之前，「解构赋值」还没出现的时候，想要实现以上功能只能够一个个的去定义 <code>a b c d</code> 这四个变量。因此，「解构赋值」的出现就是为了简化一些代码的编写，实现更加高效的开发。</p>
+<h4 id="数组嵌套的解构赋值"><a href="#数组嵌套的解构赋值" class="headerlink" title="数组嵌套的解构赋值"></a>数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, [<span class="string">'c'</span>, <span class="string">'d'</span>, [<span class="string">'e'</span>, <span class="string">'f'</span><span class="string">'g'</span>]]]</span><br><span class="line"><span class="keyword">let</span> [, , [, , [, , g]]] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 g 将对应 arr 中的字符 g</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="扩展运算符："><a href="#扩展运算符：" class="headerlink" title="扩展运算符： ..."></a>扩展运算符： <code>...</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">const</span> arr3 = [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr4 = [...arr1, ...arr2, ...arr3]</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr4 = [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br><span class="line"><span class="comment">// 注意：arr4 将是一个一维数组而不是二维数组</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 c 将对应数组中 c 之后的所有值组成的新数组</span></span><br><span class="line"><span class="comment">// 注意：这种写法扩展运算符必须放在最后一位</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="literal">undefined</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b = <span class="number">2</span>, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 将对应成[1, 2, 3, undefined]</span></span><br><span class="line"><span class="comment">// 没有匹配到的值将会默认为 undefined，匹配到 undefined 将会自动赋为默认值</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="数组解构赋值的使用"><a href="#数组解构赋值的使用" class="headerlink" title="数组解构赋值的使用"></a>数组解构赋值的使用</h4><ol>
+<li><p><strong>交换变量</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">[a, b] = [b, a];</span><br><span class="line"></span><br><span class="line"><span class="comment">// a = 10</span></span><br><span class="line"><span class="comment">// b = 20</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>接收函数中的数组返回值</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="literal">true</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">            age: <span class="number">18</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'请求成功'</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> [status, data, msg] = getUserInfo()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h1 id="对象的解构赋值"><a href="#对象的解构赋值" class="headerlink" title="对象的解构赋值"></a>对象的解构赋值</h1><p>对象的解构赋值是无序的，将直接按照属性名称去匹配</p>
+<h4 id="简单的解构赋值-1"><a href="#简单的解构赋值-1" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">name</span>: <span class="string">'zhangsan'</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name : 'zhangsan'</span></span><br><span class="line"><span class="comment">// age : 18</span></span><br><span class="line"><span class="comment">// 按照属性名称匹配对应的值</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对象与数组嵌套的解构赋值"><a href="#对象与数组嵌套的解构赋值" class="headerlink" title="对象与数组嵌套的解构赋值"></a>对象与数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    hobby: [&#123;</span><br><span class="line">        hobbyName: <span class="string">'听歌'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        hobbyName: <span class="string">'看电影'</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;</span><br><span class="line">    hobby:</span><br><span class="line">    [</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name1 &#125;,</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name2 &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name1: '听歌'</span></span><br><span class="line"><span class="comment">// name2: '看电影'</span></span><br></pre></td></tr></table></figure>
+<p>注意：<code>hobby</code> 后的“:”跟着的是 <code>obj</code> 对象中的 <code>hobby</code> 数组，<code>hobbyName</code> 后的“:”跟着的是为了区分两个同名的 <code>hobbyName</code> 所起的别名</p>
+<h4 id="扩展运算符：-1"><a href="#扩展运算符：-1" class="headerlink" title="扩展运算符：..."></a>扩展运算符：<code>...</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, ...obj1&#125; = obj;</span><br><span class="line"></span><br><span class="line"><span class="comment">// obj 对象中的 age 和 sex 属性将会被封装成 obj1 对象</span></span><br><span class="line"><span class="comment">// 注意：这种方式使用的扩展运算符只能够放在最后一位</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj2 = &#123;</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj3 = &#123;</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;...obj1, ...obj2, ...obj3&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象 obj 中会有 obj1-3 的全部属性</span></span><br><span class="line"><span class="comment">// 注意：如果存在重名属性，后面的会覆盖掉前面的</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对已经声明的变量进行解构赋值"><a href="#对已经声明的变量进行解构赋值" class="headerlink" title="对已经声明的变量进行解构赋值"></a>对已经声明的变量进行解构赋值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> age;</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;;</span><br><span class="line">(&#123; age &#125; = obj)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：以上的解构赋值语句如果没有加 () 会被视为是一个作用域而报错</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="默认值-1"><a href="#默认值-1" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age = <span class="number">18</span>, sex = <span class="string">'男'</span>&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在匹配时，如果匹配不到对应的属性或者是对应的属性为 undefined 时，将会寻找默认值自动匹配</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对象解构赋值的使用"><a href="#对象解构赋值的使用" class="headerlink" title="对象解构赋值的使用"></a>对象解构赋值的使用</h4><ol>
+<li><p><strong>传递乱序参数和设置默认值</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params">option</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: option.url,</span><br><span class="line">        type: option.type || <span class="string">'get'</span>,</span><br><span class="line">        data: option.data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">    url,</span></span></span><br><span class="line"><span class="function"><span class="params">    data,</span></span></span><br><span class="line"><span class="function"><span class="params">    type = <span class="string">'get'</span></span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: url,</span><br><span class="line">        type: type,</span><br><span class="line">        data: data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">AJAX(&#123;</span><br><span class="line">    url: <span class="string">'/getUserInfo'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        id: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>获取一个函数中的多个返回值</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span> (<span class="params">userId</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...ajax</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        status: <span class="literal">true</span>,</span><br><span class="line">        data: &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        msg: <span class="string">'请求成功'</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;status, data, msg&#125; = getUserInfo(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="字符串的解构赋值"><a href="#字符串的解构赋值" class="headerlink" title="字符串的解构赋值"></a>字符串的解构赋值</h1><ol>
+<li><p><strong>直接取值</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a b c 三个变量将会分别对应字符串 str 的前三个字符</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扩展运算符：<code>...</code></strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b 依旧对应前两个字符，变量 c 则对应的是后面的每个字符所组成的数组</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>分割字符串</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [ ...spStr1 ] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的代码效果等同于：let spStr1 = str.split('');</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>提取属性</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> &#123; length &#125; = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// length = 12</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/37909/" rel="next" title="【ES6】var、let、const">
+                <i class="fa fa-chevron-left"></i> 【ES6】var、let、const
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">王瑞鹏</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.unlinus.cn/" title="無名の小窩" target="_blank">無名の小窩</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数组的解构赋值"><span class="nav-number">1.</span> <span class="nav-text">数组的解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的解构赋值"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">简单的解构赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组嵌套的解构赋值"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">数组嵌套的解构赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展运算符："><span class="nav-number">1.0.0.3.</span> <span class="nav-text">扩展运算符： ...</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认值"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">默认值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组解构赋值的使用"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">数组解构赋值的使用</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象的解构赋值"><span class="nav-number">2.</span> <span class="nav-text">对象的解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的解构赋值-1"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">简单的解构赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象与数组嵌套的解构赋值"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">对象与数组嵌套的解构赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展运算符：-1"><span class="nav-number">2.0.0.3.</span> <span class="nav-text">扩展运算符：...</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对已经声明的变量进行解构赋值"><span class="nav-number">2.0.0.4.</span> <span class="nav-text">对已经声明的变量进行解构赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认值-1"><span class="nav-number">2.0.0.5.</span> <span class="nav-text">默认值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象解构赋值的使用"><span class="nav-number">2.0.0.6.</span> <span class="nav-text">对象解构赋值的使用</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串的解构赋值"><span class="nav-number">3.</span> <span class="nav-text">字符串的解构赋值</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王瑞鹏</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
