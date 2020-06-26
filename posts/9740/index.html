@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较，最后将会简单的看一下源码。">
+<meta name="description" content="本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java并发】创建线程">
 <meta property="og:url" content="http://yoursite.com/posts/9740/index.html">
 <meta property="og:site_name" content="wrp&#39;s Blog">
-<meta property="og:description" content="本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较，最后将会简单的看一下源码。">
+<meta property="og:description" content="本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。">
 <meta property="article:published_time" content="2020-06-19T14:32:26.000Z">
-<meta property="article:modified_time" content="2020-06-26T07:01:00.697Z">
+<meta property="article:modified_time" content="2020-06-26T07:27:00.942Z">
 <meta property="article:author" content="王瑞鹏">
 <meta name="twitter:card" content="summary">
 
@@ -159,7 +159,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">大家加油：）</p>
+        <p class="site-subtitle">未完待续。</p>
       
   </div>
 
@@ -210,7 +210,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/%20" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -340,7 +340,9 @@
       
 
       
-        <p>本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较，最后将会简单的看一下源码。</p>
+        <blockquote>
+<p>本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。</p>
+</blockquote>
 <a id="more"></a>
 
 <h1 id="一、实现线程的两种方式"><a href="#一、实现线程的两种方式" class="headerlink" title="一、实现线程的两种方式"></a>一、实现线程的两种方式</h1><p>在 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html" target="_blank" rel="noopener">Oracle官方文档</a> 中，明确说明了Java实现线程的方式就只有两种。一种是 <strong>实现 Runnable 接口</strong>，另一种是 <strong>继承 Thread 类</strong></p>
@@ -363,7 +365,7 @@
 </li>
 </ol>
 <h1 id="思考题：如果同时使用两种方式会怎么样"><a href="#思考题：如果同时使用两种方式会怎么样" class="headerlink" title="思考题：如果同时使用两种方式会怎么样"></a>思考题：如果同时使用两种方式会怎么样</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"实现 Runnable 接口创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"继承 Thread 类创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// 继承 Thread 类创建的线程</span></span><br></pre></td></tr></table></figure>
-<p>这个问题需要我们去阅读 run 方法的源码。<br><strong>run 方法源码：</strong></p>
+<p>这个问题需要我们去阅读 run 方法的源码。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">        target.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// target 为实现 Runnable 接口传入的 Runnable 对象</span></span><br></pre></td></tr></table></figure>
 <p>很明显，实现 Runnable 接口方式传入的 Runnable 对象被转换成了 target 对象，判空之后再执行 run 方法。但是我们又重写了 Thread 类的 run 方法，直接覆盖掉了 Thread 类中原有的 run 方法，所以 Runnable 对象的 run 方法并没有被调用，也就没有执行。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
@@ -487,7 +489,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/%20%7C%7C%20archive">
+                <a href="/archives/%7C%7C%20archive">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>

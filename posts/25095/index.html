@@ -79,12 +79,14 @@
 
 
 
+<meta name="description" content="本文将介绍 run 方法和 start 方法这两种启动线程的方式之间的区别">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java并发】启动线程">
 <meta property="og:url" content="http://yoursite.com/posts/25095/index.html">
 <meta property="og:site_name" content="wrp&#39;s Blog">
+<meta property="og:description" content="本文将介绍 run 方法和 start 方法这两种启动线程的方式之间的区别">
 <meta property="article:published_time" content="2020-06-26T07:00:38.000Z">
-<meta property="article:modified_time" content="2020-06-26T07:01:12.374Z">
+<meta property="article:modified_time" content="2020-06-26T07:29:26.333Z">
 <meta property="article:author" content="王瑞鹏">
 <meta name="twitter:card" content="summary">
 
@@ -157,7 +159,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">大家加油：）</p>
+        <p class="site-subtitle">未完待续。</p>
       
   </div>
 
@@ -208,7 +210,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/%20" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -289,6 +291,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index">
+                    <span itemprop="name">并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -316,7 +340,15 @@
       
 
       
-        
+        <blockquote>
+<p>本文将介绍 run 方法和 start 方法这两种启动线程的方式之间的区别</p>
+</blockquote>
+<a id="more"></a>
+<p>首先通过代码来看一下两者的区别。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Runnable runnable = () -&gt; &#123;</span><br><span class="line">    System.out.println(Thread.currentThread().getName());</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">runnable.run();</span><br><span class="line"><span class="keyword">new</span> Thread(runnable).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line">main</span><br><span class="line">Thread-<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>很明显 run 方法启动的线程并不是我们真正想要的，因为通过 run 方法启动的线程是开启了一个 main 方法的子线程，而不是我们想要的开启一个新的线程。</p>
+<p>先抛出结论：start 方法才是启动线程的正确方式。</p>
+<h1 id="start-方法原理解读"><a href="#start-方法原理解读" class="headerlink" title="start 方法原理解读"></a>start 方法原理解读</h1>
       
     </div>
     
@@ -400,8 +432,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -414,7 +455,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/%20%7C%7C%20archive">
+                <a href="/archives/%7C%7C%20archive">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
@@ -466,6 +507,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#start-方法原理解读"><span class="nav-number">1.</span> <span class="nav-text">start 方法原理解读</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
