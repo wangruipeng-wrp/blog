@@ -3,7 +3,7 @@
   <entry>
     <title>test</title>
     <url>/posts/63534/</url>
-    <content><![CDATA[<p>123123123123123123123</p>
+    <content><![CDATA[<p>12312312312312312312312312312312<br>21312312312</p>
 ]]></content>
   </entry>
   <entry>
@@ -297,6 +297,99 @@
       </tags>
   </entry>
   <entry>
+    <title>【JavaScript】执行上下文</title>
+    <url>/posts/54687/</url>
+    <content><![CDATA[<p>执行上下文是js中很重要的一个概念，每次当js程序去调用一个函数时，就会去创建一个对应的执行上下文。我们可以先将执行上下文理解为当前代码执行的环境，这会产生一个作用域的概念，也就是我的上一篇文章所提到的。js引擎会销毁该函数的执行上下文。js程序在执行时每次遇到函数时都会做这样的操作。</p>
+<a id="more"></a>
+
+<h1 id="一、执行上下文生命周期"><a href="#一、执行上下文生命周期" class="headerlink" title="一、执行上下文生命周期"></a>一、执行上下文生命周期</h1><p>首先我们还是来对执行上下文有一个深入的了解，当一个函数被调用时，一个对应的执行上下文就会被创建。而一个执行上下文的生命周期可以分为两个阶段。<strong>创建阶段</strong>和<strong>执行阶段</strong></p>
+<ul>
+<li><strong>创建阶段</strong><br>在这个阶段中，执行上下文会分别创建<strong>变量对象</strong>，建立<strong>作用域链</strong>，以及确定<strong>this</strong>的指向。这些概念接下来都会仔细的说一下。</li>
+<li><strong>执行阶段</strong><br>创建完成之后，开始逐行的执行代码。这个时候会完成变量赋值、函数引用、以及执行其他代码。</li>
+</ul>
+<h1 id="二、区别执行上下文和变量作用域"><a href="#二、区别执行上下文和变量作用域" class="headerlink" title="二、区别执行上下文和变量作用域"></a>二、区别执行上下文和变量作用域</h1><p>在上一篇文章重提到了一个作用域的概念。作用域与执行上下文都是在函数的中的概念，可能会有点冲突，导致理解起来容易混淆，这里有必要区别一下这两个概念。</p>
+<p>执行上下文是在函数调用时才去动态的创建，因为不同的调用可能会是完全不同的参数。而变量作用域则是在函数声明时就确定了，跟函数的调用无关，函数在调用时只会去创建执行上下文。相比较而言，变量作用域更像是一个静态的概念，在函数声明时就确定下来的，函数内部的变量只能存活于这个作用域之中，不管是什么样的变量只要是在函数的内部去声明的，就肯定是跑不出函数的作用域中。（这里插一句：函数的参数也是函数的内部变量，存活于函数的作用域之中）而执行上下文呢则是在调用时才会产生的，甚至是在某种特殊的环境下会产生多个执行上下文，例如闭包。</p>
+<p><strong>举个例子吧：</strong></p>
+<blockquote>
+<p>我们平时开的汽车，当这辆汽车被生产出来的时候，其中的功能就已经是确定的了，比如最高能达到多高的时速、最多能坐几个人、能载重多少重量等等，这相当于是确定了作用域。但是在我们实际的使用的时候由于路面环境的不同、用途不同、司机不同等等的原因导致这辆汽车发挥出来的效果也是不用。这就相当于是每次执行的时候都创建了对应的执行上下文。</p>
+<p><strong>上面的例子可能有些不太恰当的地方，仅代表个人的理解</strong></p>
+</blockquote>
+<h1 id="三、执行上下文栈"><a href="#三、执行上下文栈" class="headerlink" title="三、执行上下文栈"></a>三、执行上下文栈</h1><p>在js中函数的调用是有严格的先后顺序的，在一个js程序中正在执行的函数有且仅有一个，另外的函数想要执行必须等待当前函数执行完毕后按照顺序排队执行。如果是一个函数中包含了另外一个函数的执行的话那么需要在执行到<strong>被包含的函数</strong>中时去执行<strong>被包含的函数</strong>，等待被包含的函数<strong>执行完毕</strong>之后才可以继续接着执行下面的内容。这样的执行顺序天然的符合“<strong>栈</strong>”这种后入先出的数据结构。我们来看一个例子：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn函数开始执行"</span>);</span><br><span class="line">    fn2();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn函数执行完毕"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn2函数开始执行"</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn2函数执行完毕"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>在上面的这段代码中，js引擎首先创建了一个全局的执行上下文。</strong><br>将这个全局执行上下文压入执行上下文栈中。此时的栈结构：<code>栈底 -&gt; 全局 -&gt; 栈顶</code><br><strong>之后开始执行代码，当执行到第12行调用了<code>fn</code>函数的时候，去创建了一个<code>fn</code>的执行上下文。</strong><br>将<code>fn</code>的执行上下文再压入栈。此时的栈结构：<code>栈底 -&gt; 全局 -&gt; fn -&gt; 栈顶</code><br><strong>开始执行<code>fn</code>函数中的代码。执行到第3行的时候调用了<code>fn2</code>，这个时候会去创建一个<code>fn2</code>的执行上下文。</strong><br>将<code>fn2</code>压入栈。此时的栈结构：<code>栈底 -&gt; 全局 -&gt; fn -&gt; fn2 -&gt; 栈顶</code><br><strong>之后开始执行<code>fn2</code>的内容，当函数<code>fn2</code>执行完毕之后，销毁<code>fn2</code>的执行上下文。</strong><br>销毁执行上下文就是将该上下文弹出栈，此时弹出<code>fn2</code>后的栈结构：<code>栈底 -&gt; 全局 -&gt; fn -&gt; 栈顶</code><br><strong>再继续执行函数<code>fn</code>中剩余的部分，当函数<code>fn</code>执行完毕之后销毁了函数<code>fn</code>的执行上下文。</strong><br>弹出<code>fn</code>，此时的栈结构：<code>栈底 -&gt; 全局 -&gt; 栈顶</code><br><strong>等到关闭浏览器窗口的时候会去销毁全局的执行上下文。</strong><br>此时的栈结构：<code>栈底 -&gt;  -&gt;栈顶</code></p>
+</blockquote>
+<p>上面的这个例子很形象的阐述了函数调用栈是如何去管理执行上下文的执行顺序的。每次在调用函数的时候会去创建一个执行上下文，并将其压入栈顶。而执行的时候也是只执行位于栈顶的函数，执行完毕后将栈顶的函数弹出栈，再接着执行栈顶的函数。按照这个顺序去执行，到最后就只剩下一个全局的执行上下文，关闭浏览器窗口后把最后一个全局上下文弹出栈，之后调用栈为空，也意味着程序执行完毕。</p>
+<h1 id="四、作用域链"><a href="#四、作用域链" class="headerlink" title="四、作用域链"></a>四、作用域链</h1><p><strong>我们先来看一段代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"全局的name"</span>;</span><br><span class="line"><span class="keyword">var</span> name1 = <span class="string">"全局的name1"</span>;</span><br><span class="line"><span class="keyword">var</span> name2 = <span class="string">"全局的name2"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">"fn的name"</span>;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">"fn的name1"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> name =<span class="string">"fn2的name"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(name);  <span class="comment">// 输出fn2的name</span></span><br><span class="line">        <span class="built_in">console</span>.log(name1); <span class="comment">// 输出fn的name1</span></span><br><span class="line">        <span class="built_in">console</span>.log(name2); <span class="comment">// 输出全局的name2</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn();</span><br></pre></td></tr></table></figure>
+<p>这段代码中，很清晰的向我们展示了什么是作用域链。在函数<code>fn2</code>的内部去输出<code>name</code>这个变量，首先是在当前函数的作用域也就是<code>fn2</code>的执行上下文中去寻找<code>name</code>这个变量，找到了之后直接输出。如果找不到，例如变量<code>name1</code>的这种情况，则会去上一级的作用域中去寻找，也就是函数<code>fn</code>的作用域，找到后再输出。如果还是找不到，例如变量<code>name2</code>的情况，那么就会再到上一级的作用域中去寻找，找到后再输出。一级一级的网上去寻找形成了一个链式的操作，称之为<strong>作用域链</strong>。</p>
+<p><strong>分析作用域链的形成</strong></p>
+<blockquote>
+<p>结合一下前文提到过的函数调用栈的概念，一级一级网上去查找变量的这个过程，其实就是在函数调用栈中去一级一级的往栈底的执行上下文去查找。也就是说作用域链是在函数调用栈中由栈顶的执行上下文去往栈底的执行上下文去一级一级的链起来形成的作用域链。</p>
+</blockquote>
+<h1 id="五、变量对象（Variable-Object，VO）"><a href="#五、变量对象（Variable-Object，VO）" class="headerlink" title="五、变量对象（Variable Object，VO）"></a>五、变量对象（Variable Object，VO）</h1><p>变量对象无非也是一个对象，对象就是为了承载数据而存在的。所以变量对象就是一些数据的载体，只是这个对象我们并不能够去实际的创建出来，看不见摸不着而已。</p>
+<h2 id="变量对象的创建"><a href="#变量对象的创建" class="headerlink" title="变量对象的创建"></a>变量对象的创建</h2><ol>
+<li>建立arguments对象。检查当前上下文中的参数，建立该对象下的属性与属性值。</li>
+<li>检查当前上下文的函数声明，也就是使用function关键字声明的函数。在变量对象中以函数名建立一个属性，属性值为指向该函数所在内存地址的引用。如果函数名的属性已经存在，那么该属性将会被新的引用所覆盖。</li>
+<li>检查当前上下文中的变量声明，每找到一个变量声明，就在变量对象中以变量名建立一个属性，属性值为undefined。如果该变量名的属性已经存在，为了防止同名的函数被修改为undefined，则会直接跳过，原属性值不会被修改。这里牵扯到一个变量提升的概念，面试常考。</li>
+</ol>
+<h2 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h2><p>变量提升这个概念其实很好理解，在一个js程序中，使用<code>var</code>关键字声明的变量会在程序执行时提前去<strong>声明</strong>。仅此而已。我们再来看看js程序是如何去声明一个变量的。<code>var name;</code>这样就声明了一个变量名为<code>name</code>的变量。这么声明一个变量的话，变量的值毫无疑问就是一个<code>undefined</code>。总结一下就是：js引擎将使用<code>var</code>声明的变量赋值为<code>undefined</code>放在了程序开始执行的第一步去做了。这个概念就这么简洁明了的解释清楚了。</p>
+<p><strong>变量提升的作用：</strong><br>那为什么js引擎要做这个变量提升的事情呢，这个主要还是为了节约CPU开销去考虑的一个事情，因为声明变量是需要去在内存中开辟出一块空间来存放这个变量的。这个动作是比较耗费CPU资源的一个动作，如果在程序中大量的去执行这个动作的话，毫无疑问会对程序执行的效率造成一定的影响。所以将这一类的操作，全部提前一次性的给他完成了，以这样的方式来提升程序的执行效率。</p>
+<p><strong>我们结合一个例子来更加清楚的理解一下这个概念：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>这是一个简单的例子，很好的展现了变量提升这个概念。首先在全局作用域中，js引擎去搜索了所有<code>var</code>声明的变量，然后在当前的这个作用域中提前声明，再逐行执行代码。也就是说上面的这段代码实际上是下面的这个样子的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出undefined</span></span><br><span class="line">a = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>这么看来就毫无疑问输出一个<code>undefined</code>了。</p>
+<h2 id="window对象"><a href="#window对象" class="headerlink" title="window对象"></a>window对象</h2><p>介绍一个很重要的对象，<code>window</code>对象，这是一个内置的全局对象，之所以说这个对象很重要呢是因为我们所声明的一些全局变量都是这个对象下的属性，我们所写的方法也是这个对象的方法。</p>
+<p>我个人其实更愿意将这个<code>window</code>对象理解为一个特殊的<strong>变量对象</strong>（一个全局的变量对象）我们来分析一下变量对象在创建的时候都做了什么和<code>widnow</code>对象都有什么。</p>
+<ol>
+<li>首先创建变量对象的第一步是：建立arguments对象。检查当前上下文中的参数，建立该对象下的属性与属性值。<br> <code>window</code>对象做为一个全局的对象，并没有参数传递进来，自然也就没有这一步。</li>
+<li>然后第二步是：检查当前执行上下文中的函数声明，在变量对象中以函数名建立一个属性，属性值为指向该函数所在内存地址的引用。<br> 这一步在<code>window</code>对象中是有体现的，因为在js程序中声明的全局函数都是可以直接通过<code>window</code>对象去直接<code>.</code>的调用的。而且<code>window</code>对象还为我们内置了许多的方法可以直接调用，不需要自己手动的去写，封装了一些更方便的工具方法。</li>
+<li>最后第三步是：检查当前上下文中的变量声明，每找到一个变量声明，就在变量对象中以变量名建立一个属性，属性值为undefined。<br> 我们在声明全局的变量时其实就是在声明一个<code>window</code>对象的属性。</li>
+</ol>
+<p><strong>来看一些简单的例子：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"zhangsan"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name === name); <span class="comment">// 输出true</span></span><br><span class="line"><span class="built_in">window</span>.fn(); <span class="comment">// 输出fn</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，定义的全局变量或者是方法，都可以使用<code>windwow</code>去<code>.</code>一下调用出来。甚至是一个没有定义的变量，也可以使用<code>window</code>对象去<code>.</code>出来。在上面作用域的哪个例子中如果使用<code>window</code>对象去调用变量<code>name1</code>的话是不会报错的。我们来看一下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"zhangsan"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">"lisi"</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(name);   <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name1);  <span class="comment">//输出undefined</span></span><br><span class="line">fn();  <span class="comment">// 输出zhangsan</span></span><br></pre></td></tr></table></figure>
+<p>我们再来看一个例子，然后分析一下这个<code>window</code>对象</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name;</span><br><span class="line"><span class="built_in">console</span>.log(name);  <span class="comment">// 输出undefined</span></span><br><span class="line"></span><br><span class="line">conosle.log(<span class="built_in">window</span>.name1);  <span class="comment">// 输出undefined</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意：上面这个例子需要在IE浏览器中运行才会出效果</strong></p>
+<blockquote>
+<p>以上是我的一些个人看法，如果有不对的地方，还请在评论区直接指出。</p>
+</blockquote>
+<h2 id="活动对象（Activation-Object，AO）"><a href="#活动对象（Activation-Object，AO）" class="headerlink" title="活动对象（Activation Object，AO）"></a>活动对象（Activation Object，AO）</h2><p>前文提到的变量对象在执行上下文的<strong>创建阶段</strong>被创建出来，但是这个时候我们是没办法去访问变量对象里面的属性的。<br>但是在执行上下文的<strong>创建阶段</strong>结束后进入<strong>执行阶段</strong>时，变量对象会转变成为活动对象。这是就可以访问里面的属性了。<br>所以，实际上变量对象和活动对象是同一个对象，只是处于执行上下文生命周期的不同阶段而已。</p>
+<h1 id="六、this关键字"><a href="#六、this关键字" class="headerlink" title="六、this关键字"></a>六、this关键字</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>首先要说明的一点是：<code>this</code>并不是在定义函数的时候确定的，前文提过，一个执行上下文在创建的阶段最重要的三件事之中其中之一就是确定<code>this</code>的指向，所以<code>this</code>是在执行上下文创建的时候才会去指定的。而执行上下文有全局的还有函数的，因此<code>this</code>可以被剖析为全局的<code>this</code>和函数的<code>this</code>。<br>实际上，如果在一个对象中去定义了一个函数的话，其实是将这个函数在堆内存中声明了一下，再去赋值给对象中的属性，所以在调用这个对象的这个函数的属性的时候其实并不一定是在同一个作用域下去调用的，针对不同的作用域，<code>this</code>的指向也就不同。</p>
+<p>我们来看一个例子加深理解：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  name: <span class="string">'lisi'</span>,</span><br><span class="line">  fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  subObj: &#123;</span><br><span class="line">    fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.fn(); <span class="comment">// 输出lisi</span></span><br><span class="line">obj.subObj.fn() <span class="comment">// 输出undefined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> say = obj.subObj.fn;</span><br><span class="line">say(); <span class="comment">// 输出zhangsan</span></span><br></pre></td></tr></table></figure>
+<p>在上面这个例子中，三个<code>this</code>分别指向三个不同的对象。</p>
+<p>第一个<code>obj.fn()</code>直接由<code>obj</code>对象调用，指向的是<code>obj</code>对象。</p>
+<p>第二个<code>obj.subObj.fn()</code>由<code>obj</code>对象去调用了<code>subObj</code>对象，再由<code>subObj</code>对象去调用了<code>fn</code>方法，所以实际上是<code>subObj</code>对象去调用了<code>fn</code>方法，所处的也就是<code>sub</code>对象的作用域之中，自然指向的也就是<code>sub</code>对象了。</p>
+<p>第三个<code>say</code>对象是由<code>obj.subObj.fn</code>对象赋值而来的，而<code>say</code>对象又是处于全局的作用域下，所以在这里虽然是声明了一个<code>obj.subObj.fn</code>对象，但是所处的作用域确实一个全局作用域，指向的也就是全局中的<code>window</code>对象。</p>
+<p>上面这个例子很好的诠释了<code>this</code>这个关键字在不同情况下指向的是完全不同的对象。<strong>谨记一点<code>this</code>关键字是在调用时才能够确定指向的</strong>。</p>
+<h3 id="全局中的this"><a href="#全局中的this" class="headerlink" title="全局中的this"></a>全局中的this</h3><p>全局中的<code>this</code>对象非常简单，就是指向了上文提到的<code>window</code>对象，也就是说任何在函数外部的<code>this</code>都是指向了<code>window</code>对象。<br>例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>) <span class="comment">// 输出true</span></span><br></pre></td></tr></table></figure>
+<p>上面这个例子中，直接在全局中比较<code>this</code>对象和<code>window</code>对象，结果为true。充分证明了在全局环境中，<code>this</code>指向的就是<code>window</code>对象。</p>
+<h3 id="函数中的this"><a href="#函数中的this" class="headerlink" title="函数中的this"></a>函数中的this</h3><ol>
+<li><p><strong>普通函数</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn(); <span class="comment">// 输出Window</span></span><br></pre></td></tr></table></figure>
+<p>这个很好理解，<code>fn()</code>处于一个全局作用域中由<code>window</code>对象直接调用，所以<code>this</code>指向的是<code>window</code>对象本身。</p>
+</li>
+<li><p><strong>构造函数</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'zhangsan'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> Fn();</span><br><span class="line"><span class="built_in">console</span>.log(a.name); <span class="comment">// 输出zhangsan</span></span><br></pre></td></tr></table></figure>
+<p>任何使用<code>new</code>关键字创建出来的都是一个对象，是一个在<strong>堆内存</strong>中的对象，所以在这里<code>this</code>指的是新创建的这个对象。</p>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【JavaScript】数据类型</title>
     <url>/posts/24923/</url>
     <content><![CDATA[<p>我们所使用的编程语言，不管是js也好或者是其他的一些语言，例如：Java、C++。我们在编写程序的时候实际上都是在对数据进行操作。如果脱离了数据，那么我们编写的程序将变得毫无意义。甚至脱离了数据之后我们将无法编程。由此，数据类型便成了重中之重。</p>
@@ -433,99 +526,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【JavaScript】执行上下文</title>
-    <url>/posts/54687/</url>
-    <content><![CDATA[<p>执行上下文是js中很重要的一个概念，每次当js程序去调用一个函数时，就会去创建一个对应的执行上下文。我们可以先将执行上下文理解为当前代码执行的环境，这会产生一个作用域的概念，也就是我的上一篇文章所提到的。js引擎会销毁该函数的执行上下文。js程序在执行时每次遇到函数时都会做这样的操作。</p>
-<a id="more"></a>
-
-<h1 id="一、执行上下文生命周期"><a href="#一、执行上下文生命周期" class="headerlink" title="一、执行上下文生命周期"></a>一、执行上下文生命周期</h1><p>首先我们还是来对执行上下文有一个深入的了解，当一个函数被调用时，一个对应的执行上下文就会被创建。而一个执行上下文的生命周期可以分为两个阶段。<strong>创建阶段</strong>和<strong>执行阶段</strong></p>
-<ul>
-<li><strong>创建阶段</strong><br>在这个阶段中，执行上下文会分别创建<strong>变量对象</strong>，建立<strong>作用域链</strong>，以及确定<strong>this</strong>的指向。这些概念接下来都会仔细的说一下。</li>
-<li><strong>执行阶段</strong><br>创建完成之后，开始逐行的执行代码。这个时候会完成变量赋值、函数引用、以及执行其他代码。</li>
-</ul>
-<h1 id="二、区别执行上下文和变量作用域"><a href="#二、区别执行上下文和变量作用域" class="headerlink" title="二、区别执行上下文和变量作用域"></a>二、区别执行上下文和变量作用域</h1><p>在上一篇文章重提到了一个作用域的概念。作用域与执行上下文都是在函数的中的概念，可能会有点冲突，导致理解起来容易混淆，这里有必要区别一下这两个概念。</p>
-<p>执行上下文是在函数调用时才去动态的创建，因为不同的调用可能会是完全不同的参数。而变量作用域则是在函数声明时就确定了，跟函数的调用无关，函数在调用时只会去创建执行上下文。相比较而言，变量作用域更像是一个静态的概念，在函数声明时就确定下来的，函数内部的变量只能存活于这个作用域之中，不管是什么样的变量只要是在函数的内部去声明的，就肯定是跑不出函数的作用域中。（这里插一句：函数的参数也是函数的内部变量，存活于函数的作用域之中）而执行上下文呢则是在调用时才会产生的，甚至是在某种特殊的环境下会产生多个执行上下文，例如闭包。</p>
-<p><strong>举个例子吧：</strong></p>
-<blockquote>
-<p>我们平时开的汽车，当这辆汽车被生产出来的时候，其中的功能就已经是确定的了，比如最高能达到多高的时速、最多能坐几个人、能载重多少重量等等，这相当于是确定了作用域。但是在我们实际的使用的时候由于路面环境的不同、用途不同、司机不同等等的原因导致这辆汽车发挥出来的效果也是不用。这就相当于是每次执行的时候都创建了对应的执行上下文。</p>
-<p><strong>上面的例子可能有些不太恰当的地方，仅代表个人的理解</strong></p>
-</blockquote>
-<h1 id="三、执行上下文栈"><a href="#三、执行上下文栈" class="headerlink" title="三、执行上下文栈"></a>三、执行上下文栈</h1><p>在js中函数的调用是有严格的先后顺序的，在一个js程序中正在执行的函数有且仅有一个，另外的函数想要执行必须等待当前函数执行完毕后按照顺序排队执行。如果是一个函数中包含了另外一个函数的执行的话那么需要在执行到<strong>被包含的函数</strong>中时去执行<strong>被包含的函数</strong>，等待被包含的函数<strong>执行完毕</strong>之后才可以继续接着执行下面的内容。这样的执行顺序天然的符合“<strong>栈</strong>”这种后入先出的数据结构。我们来看一个例子：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn函数开始执行"</span>);</span><br><span class="line">    fn2();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn函数执行完毕"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn2函数开始执行"</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn2函数执行完毕"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn();</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>在上面的这段代码中，js引擎首先创建了一个全局的执行上下文。</strong><br>将这个全局执行上下文压入执行上下文栈中。此时的栈结构：<code>栈底 -&gt; 全局 -&gt; 栈顶</code><br><strong>之后开始执行代码，当执行到第12行调用了<code>fn</code>函数的时候，去创建了一个<code>fn</code>的执行上下文。</strong><br>将<code>fn</code>的执行上下文再压入栈。此时的栈结构：<code>栈底 -&gt; 全局 -&gt; fn -&gt; 栈顶</code><br><strong>开始执行<code>fn</code>函数中的代码。执行到第3行的时候调用了<code>fn2</code>，这个时候会去创建一个<code>fn2</code>的执行上下文。</strong><br>将<code>fn2</code>压入栈。此时的栈结构：<code>栈底 -&gt; 全局 -&gt; fn -&gt; fn2 -&gt; 栈顶</code><br><strong>之后开始执行<code>fn2</code>的内容，当函数<code>fn2</code>执行完毕之后，销毁<code>fn2</code>的执行上下文。</strong><br>销毁执行上下文就是将该上下文弹出栈，此时弹出<code>fn2</code>后的栈结构：<code>栈底 -&gt; 全局 -&gt; fn -&gt; 栈顶</code><br><strong>再继续执行函数<code>fn</code>中剩余的部分，当函数<code>fn</code>执行完毕之后销毁了函数<code>fn</code>的执行上下文。</strong><br>弹出<code>fn</code>，此时的栈结构：<code>栈底 -&gt; 全局 -&gt; 栈顶</code><br><strong>等到关闭浏览器窗口的时候会去销毁全局的执行上下文。</strong><br>此时的栈结构：<code>栈底 -&gt;  -&gt;栈顶</code></p>
-</blockquote>
-<p>上面的这个例子很形象的阐述了函数调用栈是如何去管理执行上下文的执行顺序的。每次在调用函数的时候会去创建一个执行上下文，并将其压入栈顶。而执行的时候也是只执行位于栈顶的函数，执行完毕后将栈顶的函数弹出栈，再接着执行栈顶的函数。按照这个顺序去执行，到最后就只剩下一个全局的执行上下文，关闭浏览器窗口后把最后一个全局上下文弹出栈，之后调用栈为空，也意味着程序执行完毕。</p>
-<h1 id="四、作用域链"><a href="#四、作用域链" class="headerlink" title="四、作用域链"></a>四、作用域链</h1><p><strong>我们先来看一段代码：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"全局的name"</span>;</span><br><span class="line"><span class="keyword">var</span> name1 = <span class="string">"全局的name1"</span>;</span><br><span class="line"><span class="keyword">var</span> name2 = <span class="string">"全局的name2"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">"fn的name"</span>;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">"fn的name1"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> name =<span class="string">"fn2的name"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(name);  <span class="comment">// 输出fn2的name</span></span><br><span class="line">        <span class="built_in">console</span>.log(name1); <span class="comment">// 输出fn的name1</span></span><br><span class="line">        <span class="built_in">console</span>.log(name2); <span class="comment">// 输出全局的name2</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn();</span><br></pre></td></tr></table></figure>
-<p>这段代码中，很清晰的向我们展示了什么是作用域链。在函数<code>fn2</code>的内部去输出<code>name</code>这个变量，首先是在当前函数的作用域也就是<code>fn2</code>的执行上下文中去寻找<code>name</code>这个变量，找到了之后直接输出。如果找不到，例如变量<code>name1</code>的这种情况，则会去上一级的作用域中去寻找，也就是函数<code>fn</code>的作用域，找到后再输出。如果还是找不到，例如变量<code>name2</code>的情况，那么就会再到上一级的作用域中去寻找，找到后再输出。一级一级的网上去寻找形成了一个链式的操作，称之为<strong>作用域链</strong>。</p>
-<p><strong>分析作用域链的形成</strong></p>
-<blockquote>
-<p>结合一下前文提到过的函数调用栈的概念，一级一级网上去查找变量的这个过程，其实就是在函数调用栈中去一级一级的往栈底的执行上下文去查找。也就是说作用域链是在函数调用栈中由栈顶的执行上下文去往栈底的执行上下文去一级一级的链起来形成的作用域链。</p>
-</blockquote>
-<h1 id="五、变量对象（Variable-Object，VO）"><a href="#五、变量对象（Variable-Object，VO）" class="headerlink" title="五、变量对象（Variable Object，VO）"></a>五、变量对象（Variable Object，VO）</h1><p>变量对象无非也是一个对象，对象就是为了承载数据而存在的。所以变量对象就是一些数据的载体，只是这个对象我们并不能够去实际的创建出来，看不见摸不着而已。</p>
-<h2 id="变量对象的创建"><a href="#变量对象的创建" class="headerlink" title="变量对象的创建"></a>变量对象的创建</h2><ol>
-<li>建立arguments对象。检查当前上下文中的参数，建立该对象下的属性与属性值。</li>
-<li>检查当前上下文的函数声明，也就是使用function关键字声明的函数。在变量对象中以函数名建立一个属性，属性值为指向该函数所在内存地址的引用。如果函数名的属性已经存在，那么该属性将会被新的引用所覆盖。</li>
-<li>检查当前上下文中的变量声明，每找到一个变量声明，就在变量对象中以变量名建立一个属性，属性值为undefined。如果该变量名的属性已经存在，为了防止同名的函数被修改为undefined，则会直接跳过，原属性值不会被修改。这里牵扯到一个变量提升的概念，面试常考。</li>
-</ol>
-<h2 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h2><p>变量提升这个概念其实很好理解，在一个js程序中，使用<code>var</code>关键字声明的变量会在程序执行时提前去<strong>声明</strong>。仅此而已。我们再来看看js程序是如何去声明一个变量的。<code>var name;</code>这样就声明了一个变量名为<code>name</code>的变量。这么声明一个变量的话，变量的值毫无疑问就是一个<code>undefined</code>。总结一下就是：js引擎将使用<code>var</code>声明的变量赋值为<code>undefined</code>放在了程序开始执行的第一步去做了。这个概念就这么简洁明了的解释清楚了。</p>
-<p><strong>变量提升的作用：</strong><br>那为什么js引擎要做这个变量提升的事情呢，这个主要还是为了节约CPU开销去考虑的一个事情，因为声明变量是需要去在内存中开辟出一块空间来存放这个变量的。这个动作是比较耗费CPU资源的一个动作，如果在程序中大量的去执行这个动作的话，毫无疑问会对程序执行的效率造成一定的影响。所以将这一类的操作，全部提前一次性的给他完成了，以这样的方式来提升程序的执行效率。</p>
-<p><strong>我们结合一个例子来更加清楚的理解一下这个概念：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
-<p>这是一个简单的例子，很好的展现了变量提升这个概念。首先在全局作用域中，js引擎去搜索了所有<code>var</code>声明的变量，然后在当前的这个作用域中提前声明，再逐行执行代码。也就是说上面的这段代码实际上是下面的这个样子的。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出undefined</span></span><br><span class="line">a = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
-<p>这么看来就毫无疑问输出一个<code>undefined</code>了。</p>
-<h2 id="window对象"><a href="#window对象" class="headerlink" title="window对象"></a>window对象</h2><p>介绍一个很重要的对象，<code>window</code>对象，这是一个内置的全局对象，之所以说这个对象很重要呢是因为我们所声明的一些全局变量都是这个对象下的属性，我们所写的方法也是这个对象的方法。</p>
-<p>我个人其实更愿意将这个<code>window</code>对象理解为一个特殊的<strong>变量对象</strong>（一个全局的变量对象）我们来分析一下变量对象在创建的时候都做了什么和<code>widnow</code>对象都有什么。</p>
-<ol>
-<li>首先创建变量对象的第一步是：建立arguments对象。检查当前上下文中的参数，建立该对象下的属性与属性值。<br> <code>window</code>对象做为一个全局的对象，并没有参数传递进来，自然也就没有这一步。</li>
-<li>然后第二步是：检查当前执行上下文中的函数声明，在变量对象中以函数名建立一个属性，属性值为指向该函数所在内存地址的引用。<br> 这一步在<code>window</code>对象中是有体现的，因为在js程序中声明的全局函数都是可以直接通过<code>window</code>对象去直接<code>.</code>的调用的。而且<code>window</code>对象还为我们内置了许多的方法可以直接调用，不需要自己手动的去写，封装了一些更方便的工具方法。</li>
-<li>最后第三步是：检查当前上下文中的变量声明，每找到一个变量声明，就在变量对象中以变量名建立一个属性，属性值为undefined。<br> 我们在声明全局的变量时其实就是在声明一个<code>window</code>对象的属性。</li>
-</ol>
-<p><strong>来看一些简单的例子：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"zhangsan"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fn"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name === name); <span class="comment">// 输出true</span></span><br><span class="line"><span class="built_in">window</span>.fn(); <span class="comment">// 输出fn</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中，定义的全局变量或者是方法，都可以使用<code>windwow</code>去<code>.</code>一下调用出来。甚至是一个没有定义的变量，也可以使用<code>window</code>对象去<code>.</code>出来。在上面作用域的哪个例子中如果使用<code>window</code>对象去调用变量<code>name1</code>的话是不会报错的。我们来看一下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"zhangsan"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">"lisi"</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(name);   <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name1);  <span class="comment">//输出undefined</span></span><br><span class="line">fn();  <span class="comment">// 输出zhangsan</span></span><br></pre></td></tr></table></figure>
-<p>我们再来看一个例子，然后分析一下这个<code>window</code>对象</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name;</span><br><span class="line"><span class="built_in">console</span>.log(name);  <span class="comment">// 输出undefined</span></span><br><span class="line"></span><br><span class="line">conosle.log(<span class="built_in">window</span>.name1);  <span class="comment">// 输出undefined</span></span><br></pre></td></tr></table></figure>
-<p><strong>注意：上面这个例子需要在IE浏览器中运行才会出效果</strong></p>
-<blockquote>
-<p>以上是我的一些个人看法，如果有不对的地方，还请在评论区直接指出。</p>
-</blockquote>
-<h2 id="活动对象（Activation-Object，AO）"><a href="#活动对象（Activation-Object，AO）" class="headerlink" title="活动对象（Activation Object，AO）"></a>活动对象（Activation Object，AO）</h2><p>前文提到的变量对象在执行上下文的<strong>创建阶段</strong>被创建出来，但是这个时候我们是没办法去访问变量对象里面的属性的。<br>但是在执行上下文的<strong>创建阶段</strong>结束后进入<strong>执行阶段</strong>时，变量对象会转变成为活动对象。这是就可以访问里面的属性了。<br>所以，实际上变量对象和活动对象是同一个对象，只是处于执行上下文生命周期的不同阶段而已。</p>
-<h1 id="六、this关键字"><a href="#六、this关键字" class="headerlink" title="六、this关键字"></a>六、this关键字</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>首先要说明的一点是：<code>this</code>并不是在定义函数的时候确定的，前文提过，一个执行上下文在创建的阶段最重要的三件事之中其中之一就是确定<code>this</code>的指向，所以<code>this</code>是在执行上下文创建的时候才会去指定的。而执行上下文有全局的还有函数的，因此<code>this</code>可以被剖析为全局的<code>this</code>和函数的<code>this</code>。<br>实际上，如果在一个对象中去定义了一个函数的话，其实是将这个函数在堆内存中声明了一下，再去赋值给对象中的属性，所以在调用这个对象的这个函数的属性的时候其实并不一定是在同一个作用域下去调用的，针对不同的作用域，<code>this</code>的指向也就不同。</p>
-<p>我们来看一个例子加深理解：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  name: <span class="string">'lisi'</span>,</span><br><span class="line">  fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  subObj: &#123;</span><br><span class="line">    fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.fn(); <span class="comment">// 输出lisi</span></span><br><span class="line">obj.subObj.fn() <span class="comment">// 输出undefined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> say = obj.subObj.fn;</span><br><span class="line">say(); <span class="comment">// 输出zhangsan</span></span><br></pre></td></tr></table></figure>
-<p>在上面这个例子中，三个<code>this</code>分别指向三个不同的对象。</p>
-<p>第一个<code>obj.fn()</code>直接由<code>obj</code>对象调用，指向的是<code>obj</code>对象。</p>
-<p>第二个<code>obj.subObj.fn()</code>由<code>obj</code>对象去调用了<code>subObj</code>对象，再由<code>subObj</code>对象去调用了<code>fn</code>方法，所以实际上是<code>subObj</code>对象去调用了<code>fn</code>方法，所处的也就是<code>sub</code>对象的作用域之中，自然指向的也就是<code>sub</code>对象了。</p>
-<p>第三个<code>say</code>对象是由<code>obj.subObj.fn</code>对象赋值而来的，而<code>say</code>对象又是处于全局的作用域下，所以在这里虽然是声明了一个<code>obj.subObj.fn</code>对象，但是所处的作用域确实一个全局作用域，指向的也就是全局中的<code>window</code>对象。</p>
-<p>上面这个例子很好的诠释了<code>this</code>这个关键字在不同情况下指向的是完全不同的对象。<strong>谨记一点<code>this</code>关键字是在调用时才能够确定指向的</strong>。</p>
-<h3 id="全局中的this"><a href="#全局中的this" class="headerlink" title="全局中的this"></a>全局中的this</h3><p>全局中的<code>this</code>对象非常简单，就是指向了上文提到的<code>window</code>对象，也就是说任何在函数外部的<code>this</code>都是指向了<code>window</code>对象。<br>例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>) <span class="comment">// 输出true</span></span><br></pre></td></tr></table></figure>
-<p>上面这个例子中，直接在全局中比较<code>this</code>对象和<code>window</code>对象，结果为true。充分证明了在全局环境中，<code>this</code>指向的就是<code>window</code>对象。</p>
-<h3 id="函数中的this"><a href="#函数中的this" class="headerlink" title="函数中的this"></a>函数中的this</h3><ol>
-<li><p><strong>普通函数</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn(); <span class="comment">// 输出Window</span></span><br></pre></td></tr></table></figure>
-<p>这个很好理解，<code>fn()</code>处于一个全局作用域中由<code>window</code>对象直接调用，所以<code>this</code>指向的是<code>window</code>对象本身。</p>
-</li>
-<li><p><strong>构造函数</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'zhangsan'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> Fn();</span><br><span class="line"><span class="built_in">console</span>.log(a.name); <span class="comment">// 输出zhangsan</span></span><br></pre></td></tr></table></figure>
-<p>任何使用<code>new</code>关键字创建出来的都是一个对象，是一个在<strong>堆内存</strong>中的对象，所以在这里<code>this</code>指的是新创建的这个对象。</p>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【JavaScript】闭包</title>
     <url>/posts/47023/</url>
     <content><![CDATA[<p>闭包：<strong>「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。</strong><br>闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。</p>
@@ -585,92 +585,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【Java并发】启动线程</title>
-    <url>/posts/25097/</url>
-    <content><![CDATA[<blockquote>
-<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
-</blockquote>
-<a id="more"></a>
-
-<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
-<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
-<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
-<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
-<blockquote>
-<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
-</blockquote>
-<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
-<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
-<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
-<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>线程</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Java并发】创建线程</title>
-    <url>/posts/9740/</url>
-    <content><![CDATA[<blockquote>
-<p>本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。</p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="一、实现线程的两种方式"><a href="#一、实现线程的两种方式" class="headerlink" title="一、实现线程的两种方式"></a>一、实现线程的两种方式</h1><p>在 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html" target="_blank" rel="noopener">Oracle官方文档</a> 中，明确说明了Java实现线程的方式就只有两种。一种是 <strong>实现 Runnable 接口</strong>，另一种是 <strong>继承 Thread 类</strong></p>
-<ol>
-<li><p><strong>实现 Runnable 接口</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Runnable 方式创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableStyle</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建新线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> RunnableStyle());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Runnable 方式实现线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>继承 Thread 类</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Thread 创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadStyle</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> ThreadStyle();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Thread 方式创建线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="二、两种实现方式的比较"><a href="#二、两种实现方式的比较" class="headerlink" title="二、两种实现方式的比较"></a>二、两种实现方式的比较</h1><p>通常情况下我们需要去创建一个线程的时候会选择实现<strong>Runnable 接口</strong>的方式，事实上 「实现 Runnable 接口」 的方式确实优于 「继承 Thread 类」 的方式。</p>
-<ol>
-<li><p><strong>程序架构的角度</strong><br>创建线程的工作和线程要做的工作应该是分开的，也就是解耦的。<strong>实现 Runnable 接口</strong> 的方式就将线程要执行的代码也就是 <code>run</code> 方法里面的内容以及创建线程的机制也就是 <code>Thread</code> 类进行分离了，从而解耦。而 <strong>继承 Thread 类</strong> 的方式就没有做到这一点。</p>
-</li>
-<li><p><strong>执行效率的角度</strong><br> <strong>实现 Runnable 接口</strong> 的方式也是优于 <strong>继承 Thread 类</strong> 的方式的。如果使用 <strong>继承 Thread 类</strong> 的方式去创建线程每次新建一个任务时都要去创建一个新的线程，而创建线程的消耗是比较大的。<strong>实现 Runnable 接口</strong> 的方式可以让我们在后续利用一些线程池之类的工具，减少对资源的损耗。</p>
-</li>
-<li><p><strong>代码设计的角度</strong><br>由于 Java 是不支持多继承的，实现接口的方式肯定是优于继承类的方式。</p>
-</li>
-</ol>
-<h1 id="三、run-方法源码"><a href="#三、run-方法源码" class="headerlink" title="三、run 方法源码"></a>三、run 方法源码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">        target.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// target 为实现 Runnable 接口传入的 Runnable 对象</span></span><br></pre></td></tr></table></figure>
-<p>以上便是 Thread 类中 run 方法的全部代码，非常的精简。如果在构造 Thread 类时传入了 Runnable 对象则执行 Runnable 对象的 run 方法，如果没有传入 Runnable 对象则什么都不做。</p>
-<p>恰恰也是这三行代码为 Thread 类提供了两种创建线程执行单元的方式，也就是我们上面一直在讨论的方式。实际上两种创建线程的方式在执行具体的新线程中的代码时都是调用的 Thread 类的 run 方法，新线程要实现的功能也是在 run 方法中去编写的。</p>
-<p><strong>「实现 Runnable 接口」</strong>的方式也是在 run 方法中调用了在 Runnable 接口中定义的 run 方法，而并不是直接去调用了 Runnable 接口的 run 方法。</p>
-<p><strong>「继承 Thread 类」</strong>的方式则是通过重写 Thread 类中的 run 方法，在 run 方法中去编写要实现的功能，覆盖掉 Thread 类中的 run 方法，从而使得在调用时执行我们自己编写的新线程的执行单元。</p>
-<h1 id="思考题：如果同时使用两种方式会怎么样"><a href="#思考题：如果同时使用两种方式会怎么样" class="headerlink" title="思考题：如果同时使用两种方式会怎么样"></a>思考题：如果同时使用两种方式会怎么样</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"实现 Runnable 接口创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"继承 Thread 类创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// 继承 Thread 类创建的线程</span></span><br></pre></td></tr></table></figure>
-<p>如果已经对 run 方法的源码理解透彻的话，那么这道题是没有任何难度的。</p>
-<p>「实现 Runnable 接口」的方式是的执行单元是需要在 Thread 的 run 方法去调用的，但是我们已经重写了 Thread 中的 run 方法，自然无从去调用 Runnable 对象的执行单元了，也就不会被执行。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
-<li>实现线程的方式只有两种，分别是「实现 Runnable 接口」和「继承 Thread 类」</li>
-<li>准确的讲，创建线程的方式只有一种那就是构造 Thread 类，而 Thread 类中提供了两种实现线程的执行单元的方式<ul>
-<li>方式一：实现 Runnable 接口的 run 方法，并把 Runnable 实例传给 Thread 类</li>
-<li>方式二：重写 Thread 的 run 方法</li>
-</ul>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>线程</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Java并发】停止线程</title>
     <url>/posts/41050/</url>
     <content><![CDATA[<p>正所谓上山容易下山难。我们创建启动一个线程并不是很困难，但是如何正确的停止一个线程就并不是那么简单。因为如果没有正确停止的线程的话，线程将继续消耗计算机的资源，对性能造成严重的损耗。</p>
@@ -724,8 +638,94 @@
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java并发】创建线程</title>
+    <url>/posts/9740/</url>
+    <content><![CDATA[<blockquote>
+<p>本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="一、实现线程的两种方式"><a href="#一、实现线程的两种方式" class="headerlink" title="一、实现线程的两种方式"></a>一、实现线程的两种方式</h1><p>在 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html" target="_blank" rel="noopener">Oracle官方文档</a> 中，明确说明了Java实现线程的方式就只有两种。一种是 <strong>实现 Runnable 接口</strong>，另一种是 <strong>继承 Thread 类</strong></p>
+<ol>
+<li><p><strong>实现 Runnable 接口</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Runnable 方式创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableStyle</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建新线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> RunnableStyle());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Runnable 方式实现线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>继承 Thread 类</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Thread 创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadStyle</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> ThreadStyle();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Thread 方式创建线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="二、两种实现方式的比较"><a href="#二、两种实现方式的比较" class="headerlink" title="二、两种实现方式的比较"></a>二、两种实现方式的比较</h1><p>通常情况下我们需要去创建一个线程的时候会选择实现<strong>Runnable 接口</strong>的方式，事实上 「实现 Runnable 接口」 的方式确实优于 「继承 Thread 类」 的方式。</p>
+<ol>
+<li><p><strong>程序架构的角度</strong><br>创建线程的工作和线程要做的工作应该是分开的，也就是解耦的。<strong>实现 Runnable 接口</strong> 的方式就将线程要执行的代码也就是 <code>run</code> 方法里面的内容以及创建线程的机制也就是 <code>Thread</code> 类进行分离了，从而解耦。而 <strong>继承 Thread 类</strong> 的方式就没有做到这一点。</p>
+</li>
+<li><p><strong>执行效率的角度</strong><br> <strong>实现 Runnable 接口</strong> 的方式也是优于 <strong>继承 Thread 类</strong> 的方式的。如果使用 <strong>继承 Thread 类</strong> 的方式去创建线程每次新建一个任务时都要去创建一个新的线程，而创建线程的消耗是比较大的。<strong>实现 Runnable 接口</strong> 的方式可以让我们在后续利用一些线程池之类的工具，减少对资源的损耗。</p>
+</li>
+<li><p><strong>代码设计的角度</strong><br>由于 Java 是不支持多继承的，实现接口的方式肯定是优于继承类的方式。</p>
+</li>
+</ol>
+<h1 id="三、run-方法源码"><a href="#三、run-方法源码" class="headerlink" title="三、run 方法源码"></a>三、run 方法源码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">        target.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// target 为实现 Runnable 接口传入的 Runnable 对象</span></span><br></pre></td></tr></table></figure>
+<p>以上便是 Thread 类中 run 方法的全部代码，非常的精简。如果在构造 Thread 类时传入了 Runnable 对象则执行 Runnable 对象的 run 方法，如果没有传入 Runnable 对象则什么都不做。</p>
+<p>恰恰也是这三行代码为 Thread 类提供了两种创建线程执行单元的方式，也就是我们上面一直在讨论的方式。实际上两种创建线程的方式在执行具体的新线程中的代码时都是调用的 Thread 类的 run 方法，新线程要实现的功能也是在 run 方法中去编写的。</p>
+<p><strong>「实现 Runnable 接口」</strong>的方式也是在 run 方法中调用了在 Runnable 接口中定义的 run 方法，而并不是直接去调用了 Runnable 接口的 run 方法。</p>
+<p><strong>「继承 Thread 类」</strong>的方式则是通过重写 Thread 类中的 run 方法，在 run 方法中去编写要实现的功能，覆盖掉 Thread 类中的 run 方法，从而使得在调用时执行我们自己编写的新线程的执行单元。</p>
+<h1 id="思考题：如果同时使用两种方式会怎么样"><a href="#思考题：如果同时使用两种方式会怎么样" class="headerlink" title="思考题：如果同时使用两种方式会怎么样"></a>思考题：如果同时使用两种方式会怎么样</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"实现 Runnable 接口创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"继承 Thread 类创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// 继承 Thread 类创建的线程</span></span><br></pre></td></tr></table></figure>
+<p>如果已经对 run 方法的源码理解透彻的话，那么这道题是没有任何难度的。</p>
+<p>「实现 Runnable 接口」的方式是的执行单元是需要在 Thread 的 run 方法去调用的，但是我们已经重写了 Thread 中的 run 方法，自然无从去调用 Runnable 对象的执行单元了，也就不会被执行。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>实现线程的方式只有两种，分别是「实现 Runnable 接口」和「继承 Thread 类」</li>
+<li>准确的讲，创建线程的方式只有一种那就是构造 Thread 类，而 Thread 类中提供了两种实现线程的执行单元的方式<ul>
+<li>方式一：实现 Runnable 接口的 run 方法，并把 Runnable 实例传给 Thread 类</li>
+<li>方式二：重写 Thread 的 run 方法</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java并发】启动线程</title>
+    <url>/posts/25097/</url>
+    <content><![CDATA[<blockquote>
+<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
+</blockquote>
+<a id="more"></a>
+
+<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
+<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
+<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
+<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
+<blockquote>
+<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
+</blockquote>
+<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
+<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
+<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
+<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
 </search>
