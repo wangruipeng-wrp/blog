@@ -7,56 +7,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>【ES6】var、let、const</title>
-    <url>/posts/37909/</url>
-    <content><![CDATA[<blockquote>
-<p>let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。</p>
-</blockquote>
-<a id="more"></a>
-
-
-<h1 id="let-amp-var"><a href="#let-amp-var" class="headerlink" title="let &amp; var"></a>let &amp; var</h1><h4 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h4><p>「块级作用域」这个概念是在 ES6 中新引入的概念，就是一个 <code>{}</code> 「花括号」而已。所有的花括号之内都是一个单独的块级作用域，但是有一种特殊情况不是，那就是在声明对象的时候字面式声明一个对象的时候不是。</p>
-<h4 id="let和var的区别"><a href="#let和var的区别" class="headerlink" title="let和var的区别"></a>let和var的区别</h4><ol>
-<li><p>let 和 var 最大的区别就是 <strong>let声明的对象只在当前作用域生效</strong><br>例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不能重复声明</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">20</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">20</span> </span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br></pre></td></tr></table></figure>
-<p>上面的代码将会直接报错</p>
-</li>
-<li><p>let 不存在「变量提升」<br>使用 var 关键字声明的变量在执行上下文中会有一个变量提升的现象，但是使用 let 声明的变量将不会出现这个现象，比如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a)  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>暂存死区</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a)</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">    <span class="built_in">console</span>.log(a) <span class="comment">// 20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的这段代码将会直接报错。因为 ES6 中单独的作用域内使用 let 或者是 const 声明的变量将会形成一个封闭的作用域，这直接导致重名的变量无法访问到父级作用域的变量，进而报错。</p>
-</li>
-</ol>
-<h1 id="const-常量"><a href="#const-常量" class="headerlink" title="const 常量"></a>const 常量</h1><ol>
-<li><p>声明常量<br>const 声明时与 let 声明并没有什么区别，唯一的区别是使用 const 声明常量时需要在声明的同时初始化。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line"><span class="keyword">const</span> a <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不能修改<br>声明的既然是常量，那么当然是不允许被修改的。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line">a = <span class="number">20</span> <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-<p> <strong>如果声明的是一个引用类型的数据，那么它将可以被修改</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// lisi</span></span><br></pre></td></tr></table></figure>
-<p>实际上 const 声明的常量仅仅只是「锁定」了<strong>栈内存</strong>中的值，而引用数据类型实际存放的地方是在<strong>堆内存</strong>中的。所以对象类型的值是可以被修改的。</p>
-<p> 那么我们既然是声明了一个常量的话当然是不希望这个常量能够被修改，如果是一个对象类型的常量的话，我们必须通过 <code>Object.freeze()</code> 这个方法来「冻结」这个对象类型的常量。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 冻结</span></span><br><span class="line"><span class="built_in">Object</span>.freeze(obj)</span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br></pre></td></tr></table></figure>
-<p>在上面这个例子中两次的输出都是 <code>zhangsan</code> 这说明了我们并没有修改到 <code>obj</code> 这个对象，这样子就是声明了一个对象类型的常量表了。</p>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【ES6】扩展知识</title>
     <url>/posts/18551/</url>
     <content><![CDATA[<blockquote>
@@ -128,6 +78,56 @@
 </blockquote>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    a: <span class="number">1</span>,</span><br><span class="line">    b: <span class="number">2</span>,</span><br><span class="line">    c: <span class="number">3</span>,</span><br><span class="line">    d: <span class="number">4</span>,</span><br><span class="line">    e: <span class="number">5</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(obj));      <span class="comment">// ['a','b','c','d','e']</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.values(obj));    <span class="comment">// [1,2,3,4,5]</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.entries(obj));   <span class="comment">// [['a',1], ['b',2], ['c',3], ['d',4], ['e',5]]</span></span><br></pre></td></tr></table></figure>
 
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【ES6】var、let、const</title>
+    <url>/posts/37909/</url>
+    <content><![CDATA[<blockquote>
+<p>let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。</p>
+</blockquote>
+<a id="more"></a>
+
+
+<h1 id="let-amp-var"><a href="#let-amp-var" class="headerlink" title="let &amp; var"></a>let &amp; var</h1><h4 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h4><p>「块级作用域」这个概念是在 ES6 中新引入的概念，就是一个 <code>{}</code> 「花括号」而已。所有的花括号之内都是一个单独的块级作用域，但是有一种特殊情况不是，那就是在声明对象的时候字面式声明一个对象的时候不是。</p>
+<h4 id="let和var的区别"><a href="#let和var的区别" class="headerlink" title="let和var的区别"></a>let和var的区别</h4><ol>
+<li><p>let 和 var 最大的区别就是 <strong>let声明的对象只在当前作用域生效</strong><br>例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不能重复声明</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">20</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">20</span> </span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br></pre></td></tr></table></figure>
+<p>上面的代码将会直接报错</p>
+</li>
+<li><p>let 不存在「变量提升」<br>使用 var 关键字声明的变量在执行上下文中会有一个变量提升的现象，但是使用 let 声明的变量将不会出现这个现象，比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a)  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>暂存死区</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a)</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">    <span class="built_in">console</span>.log(a) <span class="comment">// 20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的这段代码将会直接报错。因为 ES6 中单独的作用域内使用 let 或者是 const 声明的变量将会形成一个封闭的作用域，这直接导致重名的变量无法访问到父级作用域的变量，进而报错。</p>
+</li>
+</ol>
+<h1 id="const-常量"><a href="#const-常量" class="headerlink" title="const 常量"></a>const 常量</h1><ol>
+<li><p>声明常量<br>const 声明时与 let 声明并没有什么区别，唯一的区别是使用 const 声明常量时需要在声明的同时初始化。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line"><span class="keyword">const</span> a <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不能修改<br>声明的既然是常量，那么当然是不允许被修改的。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line">a = <span class="number">20</span> <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+<p> <strong>如果声明的是一个引用类型的数据，那么它将可以被修改</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// lisi</span></span><br></pre></td></tr></table></figure>
+<p>实际上 const 声明的常量仅仅只是「锁定」了<strong>栈内存</strong>中的值，而引用数据类型实际存放的地方是在<strong>堆内存</strong>中的。所以对象类型的值是可以被修改的。</p>
+<p> 那么我们既然是声明了一个常量的话当然是不希望这个常量能够被修改，如果是一个对象类型的常量的话，我们必须通过 <code>Object.freeze()</code> 这个方法来「冻结」这个对象类型的常量。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 冻结</span></span><br><span class="line"><span class="built_in">Object</span>.freeze(obj)</span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br></pre></td></tr></table></figure>
+<p>在上面这个例子中两次的输出都是 <code>zhangsan</code> 这说明了我们并没有修改到 <code>obj</code> 这个对象，这样子就是声明了一个对象类型的常量表了。</p>
+</li>
+</ol>
 <hr>
 <p>大家加油：）</p>
 ]]></content>
@@ -212,6 +212,29 @@
       </tags>
   </entry>
   <entry>
+    <title>【JavaScript】作用域</title>
+    <url>/posts/1709/</url>
+    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
+<a id="more"></a>
+
+<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
+<blockquote>
+<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
+</blockquote>
+<p><strong>来看一个例子：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
+<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【JavaScript】创建对象</title>
     <url>/posts/15655/</url>
     <content><![CDATA[<p>这篇博客将会记录一下js中创建对象的几种不同的方式，分别是字面式声明、<code>new</code>关键字声明、构造函数声明、工厂模式声明、原型声明。</p>
@@ -249,18 +272,52 @@
       </tags>
   </entry>
   <entry>
-    <title>【JavaScript】作用域</title>
-    <url>/posts/1709/</url>
-    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
+    <title>【JavaScript】闭包</title>
+    <url>/posts/47023/</url>
+    <content><![CDATA[<p>闭包：<strong>「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。</strong><br>闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。</p>
 <a id="more"></a>
 
-<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
 <blockquote>
-<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
+<p>本文摘抄自 <a href="https://zhuanlan.zhihu.com/p/22486908" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22486908</a></p>
 </blockquote>
-<p><strong>来看一个例子：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
-<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
+<h1 id="什么是闭包"><a href="#什么是闭包" class="headerlink" title="什么是闭包"></a>什么是闭包</h1><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> local = <span class="string">'变量'</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(local)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面函数内部的三行代码中，有一个局部变量 <code>local</code>，有一个函数 <code>foo</code> ，<code>foo</code> 里面可以访问到 <code>local</code> 变量。这就是一个闭包，就是这么简单。</p>
+<p>其实大家比较熟知的闭包是下面的这种嵌套函数的形式：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> local = <span class="number">1</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    local++</span><br><span class="line">    <span class="keyword">return</span> local</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> bar</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = foo()</span><br><span class="line">func()</span><br></pre></td></tr></table></figure>
+<p>这里面呢确实有闭包的存在，<code>local</code> 变量和 <code>bar</code> 函数就组成了一个闭包。</p>
+<p><strong>那么为什么要嵌套函数呢？</strong></p>
+<p>是因为需要局部变量，所以才把 <code>local</code> 放在一个函数里，如果不把 <code>local</code> 放在一个函数里，<code>local</code> 就是一个全局变量了，达不到使用闭包的目的——隐藏变量（等会会讲）。</p>
+<p>可能看到「闭包」这个名字，就一定觉得要用什么包起来才行。其实这是翻译问题，闭包的原文是 Closure，跟「包」没有任何关系。</p>
+<p>所以函数套函数只是为了造出一个局部变量，<strong>跟闭包无关</strong>。</p>
+<p><strong>为什么要 return bar 呢？</strong></p>
+<p>因为如果不 <code>return</code>，你就无法使用这个闭包。把 <code>return bar</code> 改成 <code>window.bar = bar</code> 也是一样的，只要让外面可以访问到这个 <code>bar</code> 函数就行了。</p>
+<p>所以 <code>return bar</code> 只是为了 <code>bar</code> 能被使用，也<strong>跟闭包无关</strong>。</p>
+<hr>
+<h1 id="闭包的作用"><a href="#闭包的作用" class="headerlink" title="闭包的作用"></a>闭包的作用</h1><p>闭包常常用来「间接访问一个变量」。换句话说，「隐藏一个变量」。</p>
+<p>假设我们现在在做一个系统的注册登录功能，在写其中关于「用户年龄」的代码。</p>
+<p>如果不使用闭包的话</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.age = <span class="number">18</span> <span class="comment">// 18岁</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这么看起来是非常危险的，因为这将在全局的任何一个地方都可以直接的访问到这个 <code>age</code> 变量，如果不加校验的话，等会要是被修改成 「负数」 怎么办，对吧？</p>
+<p>所以，我们不能让别人可以「直接访问」这个 <code>age</code> 变量。</p>
+<p>我们需要使用「局部变量」</p>
+<p>但是使用了局部变量的话，这个变量的又需要一个全局的作用域。这个时候应该怎么办？</p>
+<p>我们可以主动暴露一个访问器（函数），让别人可以「间接访问」</p>
+<blockquote>
+<p>上面的思考过程其实也就是 闭包 使用函数嵌套形式的由来。</p>
+</blockquote>
+<p>代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> age = <span class="number">18</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改年龄，增加1岁</span></span><br><span class="line">    <span class="built_in">window</span>.addAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        age += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改年龄，减少1岁</span></span><br><span class="line">    <span class="built_in">window</span>.subLives = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (age &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            lives -= <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'没办法再往下修改年龄啦'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+
+<p>上面这也是一个闭包的例子。使用闭包之后可以更加规范的去管理我们的变量，这也是闭包的意义。总的来说这就是闭包，闭包也仅此而已。</p>
+<hr>
+<p>其实写到这里之后，可能由于我是学 Java 出身的，立马就想到了 Java 中实体类的封装。来看一段 Java 代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">student</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (age &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.age = age;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"年龄必须为正数"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简要说明一下上面这段代码：<br>首先声明一个私有化的 <code>age</code> 变量，然后为这个变量提供公有的 <code>get</code> 和 <code>set</code> 方法，可以让外界访问到这个 <code>age</code> 变量。当我们设置这个 <code>age</code> 变量的时候，我们可以在 <code>set</code> 方法中去定义一些规范，保证 <code>age</code> 值的一个正确性。</p>
+<p>在我看来，刚刚的闭包的例子与上面的这段 Java 代码实现的是同一个功能。也就是说闭包其实是为了封装变量，只是在这里我们将其称为了隐藏变量，仅此而已。</p>
+<blockquote>
+<p>分享一个小经验：<br>编程崇尚的是以简洁优雅为美，很多时候<br><strong>如果你觉得一个概念很复杂，那么很可能是你理解错了</strong></p>
+</blockquote>
 <hr>
 <p>大家加油：）</p>
 ]]></content>
@@ -269,6 +326,8 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
+        <tag>封装</tag>
+        <tag>闭包</tag>
       </tags>
   </entry>
   <entry>
@@ -433,6 +492,18 @@
       </tags>
   </entry>
   <entry>
+    <title>【Java并发】线程生命周期</title>
+    <url>/posts/43936/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【JavaScript】执行上下文</title>
     <url>/posts/54687/</url>
     <content><![CDATA[<p>执行上下文是js中很重要的一个概念，每次当js程序去调用一个函数时，就会去创建一个对应的执行上下文。我们可以先将执行上下文理解为当前代码执行的环境，这会产生一个作用域的概念，也就是我的上一篇文章所提到的。js引擎会销毁该函数的执行上下文。js程序在执行时每次遇到函数时都会做这样的操作。</p>
@@ -523,65 +594,6 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【JavaScript】闭包</title>
-    <url>/posts/47023/</url>
-    <content><![CDATA[<p>闭包：<strong>「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。</strong><br>闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。</p>
-<a id="more"></a>
-
-<blockquote>
-<p>本文摘抄自 <a href="https://zhuanlan.zhihu.com/p/22486908" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22486908</a></p>
-</blockquote>
-<h1 id="什么是闭包"><a href="#什么是闭包" class="headerlink" title="什么是闭包"></a>什么是闭包</h1><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> local = <span class="string">'变量'</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(local)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在上面函数内部的三行代码中，有一个局部变量 <code>local</code>，有一个函数 <code>foo</code> ，<code>foo</code> 里面可以访问到 <code>local</code> 变量。这就是一个闭包，就是这么简单。</p>
-<p>其实大家比较熟知的闭包是下面的这种嵌套函数的形式：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> local = <span class="number">1</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    local++</span><br><span class="line">    <span class="keyword">return</span> local</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> bar</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = foo()</span><br><span class="line">func()</span><br></pre></td></tr></table></figure>
-<p>这里面呢确实有闭包的存在，<code>local</code> 变量和 <code>bar</code> 函数就组成了一个闭包。</p>
-<p><strong>那么为什么要嵌套函数呢？</strong></p>
-<p>是因为需要局部变量，所以才把 <code>local</code> 放在一个函数里，如果不把 <code>local</code> 放在一个函数里，<code>local</code> 就是一个全局变量了，达不到使用闭包的目的——隐藏变量（等会会讲）。</p>
-<p>可能看到「闭包」这个名字，就一定觉得要用什么包起来才行。其实这是翻译问题，闭包的原文是 Closure，跟「包」没有任何关系。</p>
-<p>所以函数套函数只是为了造出一个局部变量，<strong>跟闭包无关</strong>。</p>
-<p><strong>为什么要 return bar 呢？</strong></p>
-<p>因为如果不 <code>return</code>，你就无法使用这个闭包。把 <code>return bar</code> 改成 <code>window.bar = bar</code> 也是一样的，只要让外面可以访问到这个 <code>bar</code> 函数就行了。</p>
-<p>所以 <code>return bar</code> 只是为了 <code>bar</code> 能被使用，也<strong>跟闭包无关</strong>。</p>
-<hr>
-<h1 id="闭包的作用"><a href="#闭包的作用" class="headerlink" title="闭包的作用"></a>闭包的作用</h1><p>闭包常常用来「间接访问一个变量」。换句话说，「隐藏一个变量」。</p>
-<p>假设我们现在在做一个系统的注册登录功能，在写其中关于「用户年龄」的代码。</p>
-<p>如果不使用闭包的话</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.age = <span class="number">18</span> <span class="comment">// 18岁</span></span><br></pre></td></tr></table></figure>
-
-<p>但是这么看起来是非常危险的，因为这将在全局的任何一个地方都可以直接的访问到这个 <code>age</code> 变量，如果不加校验的话，等会要是被修改成 「负数」 怎么办，对吧？</p>
-<p>所以，我们不能让别人可以「直接访问」这个 <code>age</code> 变量。</p>
-<p>我们需要使用「局部变量」</p>
-<p>但是使用了局部变量的话，这个变量的又需要一个全局的作用域。这个时候应该怎么办？</p>
-<p>我们可以主动暴露一个访问器（函数），让别人可以「间接访问」</p>
-<blockquote>
-<p>上面的思考过程其实也就是 闭包 使用函数嵌套形式的由来。</p>
-</blockquote>
-<p>代码如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> age = <span class="number">18</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改年龄，增加1岁</span></span><br><span class="line">    <span class="built_in">window</span>.addAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        age += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修改年龄，减少1岁</span></span><br><span class="line">    <span class="built_in">window</span>.subLives = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (age &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            lives -= <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'没办法再往下修改年龄啦'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
-
-<p>上面这也是一个闭包的例子。使用闭包之后可以更加规范的去管理我们的变量，这也是闭包的意义。总的来说这就是闭包，闭包也仅此而已。</p>
-<hr>
-<p>其实写到这里之后，可能由于我是学 Java 出身的，立马就想到了 Java 中实体类的封装。来看一段 Java 代码</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">student</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (age &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.age = age;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"年龄必须为正数"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>简要说明一下上面这段代码：<br>首先声明一个私有化的 <code>age</code> 变量，然后为这个变量提供公有的 <code>get</code> 和 <code>set</code> 方法，可以让外界访问到这个 <code>age</code> 变量。当我们设置这个 <code>age</code> 变量的时候，我们可以在 <code>set</code> 方法中去定义一些规范，保证 <code>age</code> 值的一个正确性。</p>
-<p>在我看来，刚刚的闭包的例子与上面的这段 Java 代码实现的是同一个功能。也就是说闭包其实是为了封装变量，只是在这里我们将其称为了隐藏变量，仅此而已。</p>
-<blockquote>
-<p>分享一个小经验：<br>编程崇尚的是以简洁优雅为美，很多时候<br><strong>如果你觉得一个概念很复杂，那么很可能是你理解错了</strong></p>
-</blockquote>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-        <tag>封装</tag>
-        <tag>闭包</tag>
       </tags>
   </entry>
   <entry>
