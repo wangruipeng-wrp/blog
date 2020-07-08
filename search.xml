@@ -206,6 +206,29 @@
       </tags>
   </entry>
   <entry>
+    <title>【JavaScript】作用域</title>
+    <url>/posts/1709/</url>
+    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
+<a id="more"></a>
+
+<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
+<blockquote>
+<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
+</blockquote>
+<p><strong>来看一个例子：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
+<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【JavaScript】创建对象</title>
     <url>/posts/15655/</url>
     <content><![CDATA[<p>这篇博客将会记录一下js中创建对象的几种不同的方式，分别是字面式声明、<code>new</code>关键字声明、构造函数声明、工厂模式声明、原型声明。</p>
@@ -240,29 +263,6 @@
       <tags>
         <tag>JavaScript</tag>
         <tag>面向对象</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【JavaScript】作用域</title>
-    <url>/posts/1709/</url>
-    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
-<a id="more"></a>
-
-<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
-<blockquote>
-<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
-</blockquote>
-<p><strong>来看一个例子：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
-<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -578,6 +578,18 @@
       </tags>
   </entry>
   <entry>
+    <title>【Java并发】线程生命周期</title>
+    <url>/posts/43936/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【JavaScript】闭包</title>
     <url>/posts/47023/</url>
     <content><![CDATA[<p>闭包：<strong>「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。</strong><br>闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。</p>
@@ -723,15 +735,45 @@
       </tags>
   </entry>
   <entry>
-    <title>【Java并发】线程生命周期</title>
-    <url>/posts/43936/</url>
-    <content><![CDATA[]]></content>
+    <title>【随笔】Linux 切换阿里云 yum 源</title>
+    <url>/posts/40578/</url>
+    <content><![CDATA[<blockquote>
+<p>随笔01<br>记录点滴，分享世界  Hello World！：）</p>
+</blockquote>
+<a id="more"></a>
+
+<p><a href="https://developer.aliyun.com/mirror/," target="_blank" rel="noopener"阿里云官方文档"">阿里云官方文档</a></p>
+<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><ol>
+<li><p><strong>备份</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mv &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/</strong></p>
+<p> <strong>CentOS 6</strong></p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-6.repo</span><br></pre></td></tr></table></figure>
+<p> 或者</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -o &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-6.repo</span><br></pre></td></tr></table></figure>
+
+<p> <strong>CentOS7</strong></p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-7.repo</span><br></pre></td></tr></table></figure>
+<p> 或者</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -o &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-7.repo</span><br></pre></td></tr></table></figure>
+
+<p> <strong>CentOS8</strong></p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-8.repo</span><br></pre></td></tr></table></figure>
+<p> 或者</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -o &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-8.repo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>运行 <code>yum makecache</code> 生成缓存</strong></p>
+</li>
+</ol>
+]]></content>
       <categories>
-        <category>并发</category>
+        <category>随笔</category>
       </categories>
       <tags>
-        <tag>Java</tag>
-        <tag>线程</tag>
+        <tag>随笔</tag>
+        <tag>Linux</tag>
+        <tag>阿里云</tag>
+        <tag>yum</tag>
       </tags>
   </entry>
   <entry>
@@ -776,48 +818,6 @@
         <tag>随笔</tag>
         <tag>Linux</tag>
         <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【随笔】Linux 切换阿里云 yum 源</title>
-    <url>/posts/40578/</url>
-    <content><![CDATA[<blockquote>
-<p>随笔01<br>记录点滴，分享世界  Hello World！：）</p>
-</blockquote>
-<a id="more"></a>
-
-<p><a href="https://developer.aliyun.com/mirror/," target="_blank" rel="noopener"阿里云官方文档"">阿里云官方文档</a></p>
-<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><ol>
-<li><p><strong>备份</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mv &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>下载新的 CentOS-Base.repo 到 /etc/yum.repos.d/</strong></p>
-<p> <strong>CentOS 6</strong></p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-6.repo</span><br></pre></td></tr></table></figure>
-<p> 或者</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -o &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-6.repo</span><br></pre></td></tr></table></figure>
-
-<p> <strong>CentOS7</strong></p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-7.repo</span><br></pre></td></tr></table></figure>
-<p> 或者</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -o &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-7.repo</span><br></pre></td></tr></table></figure>
-
-<p> <strong>CentOS8</strong></p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-8.repo</span><br></pre></td></tr></table></figure>
-<p> 或者</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -o &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-8.repo</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>运行 <code>yum makecache</code> 生成缓存</strong></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>随笔</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-        <tag>Linux</tag>
-        <tag>阿里云</tag>
-        <tag>yum</tag>
       </tags>
   </entry>
 </search>
