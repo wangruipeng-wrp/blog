@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="简笔">
 <meta property="og:description" content="一句话说明 Synchronized 关键字的作用：  能够保证在 「同一时刻」 最多只有 「一个」 线程执行该段代码，以达到保证 「并发安全」 的效果">
 <meta property="article:published_time" content="2020-07-09T15:37:42.000Z">
-<meta property="article:modified_time" content="2020-07-12T06:51:45.879Z">
+<meta property="article:modified_time" content="2020-07-12T12:21:52.856Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
@@ -408,7 +408,7 @@
 <h3 id="类锁"><a href="#类锁" class="headerlink" title="类锁"></a>类锁</h3><p>synchronized 修饰静态方法和修饰代码块时指定（*.class）对象都称之为类锁<br>以下是我的个人理解：</p>
 <ul>
 <li><strong>静态方法</strong><br> Java 中一个类的静态方法只会随着类的加载而加载，在创建类对象时是不会加载静态方法的。这意味着一个类的静态方法在内存中只有一份，这与类的实例无关。当 synchronized 修饰了静态方法时，这个静态方法是在同一个时间内是绝对只会有一个线程在执行的。这与修饰普通方法的对象锁不同，对象锁的话是将调用方法的对象作为锁的，如果执行这个对象的方法被阻塞时，可以再新建一个对象去执行这个方法。而修饰静态方法的类锁是不同的，由于静态方法在内存中只有一份，所以<strong>在同一时间段内只能有一个线程执行</strong></li>
-<li><strong>指定（*。class）对象</strong><br> 首先必须明白一个概念，Java 中的类无论被实例化多少次 <code>class</code> 对象都始终只有一个，所以修饰代码块时指定一个 <code>类名.class</code> 的类对象作为锁传入的话，那么由于锁在内存中的唯一性，那么这个代码块也是<strong>在同一时间段内只能有一个线程执行的</strong>。同样的这与对象锁中指定对象的形式不同，指定一个对象作为锁的话，在阻塞时实际上也可以通过重新创建一个对象来执行代码块中的代码。</li>
+<li><strong>指定（*.class）对象</strong><br> 首先必须明白一个概念，Java 中的类无论被实例化多少次 <code>class</code> 对象都始终只有一个，所以修饰代码块时指定一个 <code>类名.class</code> 的类对象作为锁传入的话，那么由于锁在内存中的唯一性，那么这个代码块也是<strong>在同一时间段内只能有一个线程执行的</strong>。同样的这与对象锁中指定对象的形式不同，指定一个对象作为锁的话，在阻塞时实际上也可以通过重新创建一个对象来执行代码块中的代码。</li>
 </ul>
 <h5 id="静态方法形式"><a href="#静态方法形式" class="headerlink" title="静态方法形式"></a>静态方法形式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
 
