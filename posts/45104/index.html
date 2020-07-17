@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Java,并发,线程,练习," />
 
 
 
@@ -79,11 +79,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="简笔">
-<meta property="og:url" content="http://yoursite.com/tags/yum/index.html">
+<meta name="description" content="题目：实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。   分析题目：题目关键字：两个线程、交替、0~100、专门打印奇数、专门打印偶数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java练习】两个线程交替打印0~100">
+<meta property="og:url" content="http://yoursite.com/posts/45104/index.html">
 <meta property="og:site_name" content="简笔">
+<meta property="og:description" content="题目：实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。   分析题目：题目关键字：两个线程、交替、0~100、专门打印奇数、专门打印偶数">
+<meta property="article:published_time" content="2020-07-16T11:19:21.000Z">
+<meta property="article:modified_time" content="2020-07-17T13:11:55.676Z">
 <meta property="article:author" content="王瑞鹏">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="并发">
+<meta property="article:tag" content="线程">
+<meta property="article:tag" content="练习">
 <meta name="twitter:card" content="summary">
 
 
@@ -114,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/yum/"/>
+  <link rel="canonical" href="http://yoursite.com/posts/45104/"/>
 
 
 
 
 
-  <title>标签: yum | 简笔</title>
+  <title>【Java练习】两个线程交替打印0~100 | 简笔</title>
   
 
 
@@ -139,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -257,57 +265,196 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>yum<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/45104/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王瑞鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="简笔">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/posts/40578/" itemprop="url">
-              
-                <span itemprop="name">【随笔】Linux 切换阿里云 yum 源</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">【Java练习】两个线程交替打印0~100</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-06T20:53:16+08:00"
-              content="2020-07-06" >
-          07-06
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-16T19:19:21+08:00">
+                2020-07-16
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A2%98%E8%A7%A3/" itemprop="url" rel="index">
+                    <span itemprop="name">题解</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>题目：<br>实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。</p>
+</blockquote>
+<blockquote>
+<p><strong>分析题目：</strong><br>题目关键字：<strong>两个线程</strong>、<strong>交替</strong>、<strong>0~100</strong>、<strong>专门打印奇数</strong>、<strong>专门打印偶数</strong></p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li>首先创建两个线程</li>
+<li>交替打印证明线程之间需要协同配合、考虑 synchronized、wait-notify</li>
+</ol>
+<h1 id="使用-sychronized"><a href="#使用-sychronized" class="headerlink" title="使用 sychronized"></a>使用 sychronized</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 打印奇数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"奇数"</span>).start();</span><br><span class="line">    <span class="comment">// 打印偶数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"偶数"</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 synchronized 的方法虽然也是能够完成题目的要求，但是效率上略差一些。<br>main 方法中的逻辑是，先判断是否满足打印 0~100 的要求，如果满足则进入同步代码块中，此时两个线程将会竞争同一把锁 <code>lock</code><br>竞争到锁的线程将判断是否满足打印条件，如果满足则打印，否则直接跳出，紧接着同步代码块执行完毕释放锁，两个线程重新进入竞争锁的步骤<br>如果在这个时候其中一个线程接连多次竞争到锁，但是却因为不满足打印条件而再次直接释放锁，这就是无意义的性能浪费</p>
+</blockquote>
+<h1 id="使用-wait-notify"><a href="#使用-wait-notify" class="headerlink" title="使用 wait-notify"></a>使用 wait-notify</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="comment">// 获取锁证明是符合打印条件，直接打印</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                <span class="comment">// 唤醒另外的线程</span></span><br><span class="line">                lock.notify();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 判断是否打印到最后的数字了，如果还没有则中断，把锁让给另外的线程去打印</span></span><br><span class="line">                    <span class="comment">// 做这层判断是为了预防在打印到最后一个数字时，中断后另外的线程已经执行完毕，而无法唤醒</span></span><br><span class="line">                    <span class="keyword">if</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test test = <span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">new</span> Thread(test, <span class="string">"偶数"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(test,<span class="string">"奇数"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 wait-notify 不需要去判断是否符合奇偶数的打印条件，而是当拿到锁则证明肯定是符合打印条件的，直接打印<br>打印完唤醒另外的线程准备执行下一次的打印，再中断本线程让渡锁</p>
+</blockquote>
+<hr>
+<p>大家加油：）</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
+          
+            <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
+          
+            <a href="/tags/%E7%BB%83%E4%B9%A0/" rel="tag"># 练习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/29010/" rel="next" title="【Java并发】wait()、notify()、notifyAll()">
+                <i class="fa fa-chevron-left"></i> 【Java并发】wait()、notify()、notifyAll()
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  <!--
 
--->
 
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -315,6 +462,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -335,8 +486,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -414,6 +574,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-text">思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-sychronized"><span class="nav-text">使用 sychronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-wait-notify"><span class="nav-text">使用 wait-notify</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -550,6 +726,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

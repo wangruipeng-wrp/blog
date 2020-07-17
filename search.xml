@@ -51,6 +51,79 @@
       </tags>
   </entry>
   <entry>
+    <title>【ES6】解构赋值</title>
+    <url>/posts/53099/</url>
+    <content><![CDATA[<blockquote>
+<p>解构赋值语法是一个 JavaScript 表达式，这使得可以将 <strong>值从数组</strong> 或 <strong>属性从对象</strong> 提取到不同变量中。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h1><p>数组的解构赋值是有序的，将会按照顺序去匹配</p>
+<h4 id="简单的解构赋值"><a href="#简单的解构赋值" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 的值将会对应上数组中的 1 2 3 4</span></span><br></pre></td></tr></table></figure>
+<p>在 ES6 之前，「解构赋值」还没出现的时候，想要实现以上功能只能够一个个的去定义 <code>a b c d</code> 这四个变量。因此，「解构赋值」的出现就是为了简化一些代码的编写，实现更加高效的开发。</p>
+<h4 id="数组嵌套的解构赋值"><a href="#数组嵌套的解构赋值" class="headerlink" title="数组嵌套的解构赋值"></a>数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, [<span class="string">'c'</span>, <span class="string">'d'</span>, [<span class="string">'e'</span>, <span class="string">'f'</span><span class="string">'g'</span>]]]</span><br><span class="line"><span class="keyword">let</span> [, , [, , [, , g]]] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 g 将对应 arr 中的字符 g</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="扩展运算符："><a href="#扩展运算符：" class="headerlink" title="扩展运算符： ..."></a>扩展运算符： <code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">const</span> arr3 = [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr4 = [...arr1, ...arr2, ...arr3]</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr4 = [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br><span class="line"><span class="comment">// 注意：arr4 将是一个一维数组而不是二维数组</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 c 将对应数组中 c 之后的所有值组成的新数组</span></span><br><span class="line"><span class="comment">// 注意：这种写法扩展运算符必须放在最后一位</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="literal">undefined</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b = <span class="number">2</span>, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 将对应成[1, 2, 3, undefined]</span></span><br><span class="line"><span class="comment">// 没有匹配到的值将会默认为 undefined，匹配到 undefined 将会自动赋为默认值</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="数组解构赋值的使用"><a href="#数组解构赋值的使用" class="headerlink" title="数组解构赋值的使用"></a>数组解构赋值的使用</h4><ol>
+<li><p><strong>交换变量</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">[a, b] = [b, a];</span><br><span class="line"></span><br><span class="line"><span class="comment">// a = 10</span></span><br><span class="line"><span class="comment">// b = 20</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>接收函数中的数组返回值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="literal">true</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">            age: <span class="number">18</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'请求成功'</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> [status, data, msg] = getUserInfo()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h1 id="对象的解构赋值"><a href="#对象的解构赋值" class="headerlink" title="对象的解构赋值"></a>对象的解构赋值</h1><p>对象的解构赋值是无序的，将直接按照属性名称去匹配</p>
+<h4 id="简单的解构赋值-1"><a href="#简单的解构赋值-1" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">name</span>: <span class="string">'zhangsan'</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name : 'zhangsan'</span></span><br><span class="line"><span class="comment">// age : 18</span></span><br><span class="line"><span class="comment">// 按照属性名称匹配对应的值</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对象与数组嵌套的解构赋值"><a href="#对象与数组嵌套的解构赋值" class="headerlink" title="对象与数组嵌套的解构赋值"></a>对象与数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    hobby: [&#123;</span><br><span class="line">        hobbyName: <span class="string">'听歌'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        hobbyName: <span class="string">'看电影'</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;</span><br><span class="line">    hobby:</span><br><span class="line">    [</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name1 &#125;,</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name2 &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name1: '听歌'</span></span><br><span class="line"><span class="comment">// name2: '看电影'</span></span><br></pre></td></tr></table></figure>
+<p>注意：<code>hobby</code> 后的“:”跟着的是 <code>obj</code> 对象中的 <code>hobby</code> 数组，<code>hobbyName</code> 后的“:”跟着的是为了区分两个同名的 <code>hobbyName</code> 所起的别名</p>
+<h4 id="扩展运算符：-1"><a href="#扩展运算符：-1" class="headerlink" title="扩展运算符：..."></a>扩展运算符：<code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, ...obj1&#125; = obj;</span><br><span class="line"></span><br><span class="line"><span class="comment">// obj 对象中的 age 和 sex 属性将会被封装成 obj1 对象</span></span><br><span class="line"><span class="comment">// 注意：这种方式使用的扩展运算符只能够放在最后一位</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj2 = &#123;</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj3 = &#123;</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;...obj1, ...obj2, ...obj3&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象 obj 中会有 obj1-3 的全部属性</span></span><br><span class="line"><span class="comment">// 注意：如果存在重名属性，后面的会覆盖掉前面的</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对已经声明的变量进行解构赋值"><a href="#对已经声明的变量进行解构赋值" class="headerlink" title="对已经声明的变量进行解构赋值"></a>对已经声明的变量进行解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> age;</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;;</span><br><span class="line">(&#123; age &#125; = obj)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：以上的解构赋值语句如果没有加 () 会被视为是一个作用域而报错</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="默认值-1"><a href="#默认值-1" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age = <span class="number">18</span>, sex = <span class="string">'男'</span>&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在匹配时，如果匹配不到对应的属性或者是对应的属性为 undefined 时，将会寻找默认值自动匹配</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对象解构赋值的使用"><a href="#对象解构赋值的使用" class="headerlink" title="对象解构赋值的使用"></a>对象解构赋值的使用</h4><ol>
+<li><p><strong>传递乱序参数和设置默认值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params">option</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: option.url,</span><br><span class="line">        type: option.type || <span class="string">'get'</span>,</span><br><span class="line">        data: option.data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params"> &#123; url, data, type = <span class="string">'get'</span> &#125; </span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: url,</span><br><span class="line">        type: type,</span><br><span class="line">        data: data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">AJAX(&#123;</span><br><span class="line">    url: <span class="string">'/getUserInfo'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        id: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>获取一个函数中的多个返回值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span> (<span class="params">userId</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...ajax</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        status: <span class="literal">true</span>,</span><br><span class="line">        data: &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        msg: <span class="string">'请求成功'</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;status, data, msg&#125; = getUserInfo(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="字符串的解构赋值"><a href="#字符串的解构赋值" class="headerlink" title="字符串的解构赋值"></a>字符串的解构赋值</h1><ol>
+<li><p><strong>直接取值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a b c 三个变量将会分别对应字符串 str 的前三个字符</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扩展运算符：<code>...</code></strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b 依旧对应前两个字符，变量 c 则对应的是后面的每个字符所组成的数组</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>分割字符串</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [ ...spStr1 ] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的代码效果等同于：let spStr1 = str.split('');</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>提取属性</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> &#123; length &#125; = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// length = 12</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【ES6】扩展知识</title>
     <url>/posts/18551/</url>
     <content><![CDATA[<blockquote>
@@ -133,102 +206,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【ES6】解构赋值</title>
-    <url>/posts/53099/</url>
-    <content><![CDATA[<blockquote>
-<p>解构赋值语法是一个 JavaScript 表达式，这使得可以将 <strong>值从数组</strong> 或 <strong>属性从对象</strong> 提取到不同变量中。</p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h1><p>数组的解构赋值是有序的，将会按照顺序去匹配</p>
-<h4 id="简单的解构赋值"><a href="#简单的解构赋值" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 的值将会对应上数组中的 1 2 3 4</span></span><br></pre></td></tr></table></figure>
-<p>在 ES6 之前，「解构赋值」还没出现的时候，想要实现以上功能只能够一个个的去定义 <code>a b c d</code> 这四个变量。因此，「解构赋值」的出现就是为了简化一些代码的编写，实现更加高效的开发。</p>
-<h4 id="数组嵌套的解构赋值"><a href="#数组嵌套的解构赋值" class="headerlink" title="数组嵌套的解构赋值"></a>数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, [<span class="string">'c'</span>, <span class="string">'d'</span>, [<span class="string">'e'</span>, <span class="string">'f'</span><span class="string">'g'</span>]]]</span><br><span class="line"><span class="keyword">let</span> [, , [, , [, , g]]] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 g 将对应 arr 中的字符 g</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="扩展运算符："><a href="#扩展运算符：" class="headerlink" title="扩展运算符： ..."></a>扩展运算符： <code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">const</span> arr3 = [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr4 = [...arr1, ...arr2, ...arr3]</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr4 = [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br><span class="line"><span class="comment">// 注意：arr4 将是一个一维数组而不是二维数组</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 c 将对应数组中 c 之后的所有值组成的新数组</span></span><br><span class="line"><span class="comment">// 注意：这种写法扩展运算符必须放在最后一位</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="literal">undefined</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b = <span class="number">2</span>, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 将对应成[1, 2, 3, undefined]</span></span><br><span class="line"><span class="comment">// 没有匹配到的值将会默认为 undefined，匹配到 undefined 将会自动赋为默认值</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="数组解构赋值的使用"><a href="#数组解构赋值的使用" class="headerlink" title="数组解构赋值的使用"></a>数组解构赋值的使用</h4><ol>
-<li><p><strong>交换变量</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">[a, b] = [b, a];</span><br><span class="line"></span><br><span class="line"><span class="comment">// a = 10</span></span><br><span class="line"><span class="comment">// b = 20</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>接收函数中的数组返回值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="literal">true</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">            age: <span class="number">18</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'请求成功'</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> [status, data, msg] = getUserInfo()</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<hr>
-<h1 id="对象的解构赋值"><a href="#对象的解构赋值" class="headerlink" title="对象的解构赋值"></a>对象的解构赋值</h1><p>对象的解构赋值是无序的，将直接按照属性名称去匹配</p>
-<h4 id="简单的解构赋值-1"><a href="#简单的解构赋值-1" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">name</span>: <span class="string">'zhangsan'</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name : 'zhangsan'</span></span><br><span class="line"><span class="comment">// age : 18</span></span><br><span class="line"><span class="comment">// 按照属性名称匹配对应的值</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对象与数组嵌套的解构赋值"><a href="#对象与数组嵌套的解构赋值" class="headerlink" title="对象与数组嵌套的解构赋值"></a>对象与数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    hobby: [&#123;</span><br><span class="line">        hobbyName: <span class="string">'听歌'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        hobbyName: <span class="string">'看电影'</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;</span><br><span class="line">    hobby:</span><br><span class="line">    [</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name1 &#125;,</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name2 &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name1: '听歌'</span></span><br><span class="line"><span class="comment">// name2: '看电影'</span></span><br></pre></td></tr></table></figure>
-<p>注意：<code>hobby</code> 后的“:”跟着的是 <code>obj</code> 对象中的 <code>hobby</code> 数组，<code>hobbyName</code> 后的“:”跟着的是为了区分两个同名的 <code>hobbyName</code> 所起的别名</p>
-<h4 id="扩展运算符：-1"><a href="#扩展运算符：-1" class="headerlink" title="扩展运算符：..."></a>扩展运算符：<code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, ...obj1&#125; = obj;</span><br><span class="line"></span><br><span class="line"><span class="comment">// obj 对象中的 age 和 sex 属性将会被封装成 obj1 对象</span></span><br><span class="line"><span class="comment">// 注意：这种方式使用的扩展运算符只能够放在最后一位</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj2 = &#123;</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj3 = &#123;</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;...obj1, ...obj2, ...obj3&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象 obj 中会有 obj1-3 的全部属性</span></span><br><span class="line"><span class="comment">// 注意：如果存在重名属性，后面的会覆盖掉前面的</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对已经声明的变量进行解构赋值"><a href="#对已经声明的变量进行解构赋值" class="headerlink" title="对已经声明的变量进行解构赋值"></a>对已经声明的变量进行解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> age;</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;;</span><br><span class="line">(&#123; age &#125; = obj)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：以上的解构赋值语句如果没有加 () 会被视为是一个作用域而报错</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="默认值-1"><a href="#默认值-1" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age = <span class="number">18</span>, sex = <span class="string">'男'</span>&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在匹配时，如果匹配不到对应的属性或者是对应的属性为 undefined 时，将会寻找默认值自动匹配</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对象解构赋值的使用"><a href="#对象解构赋值的使用" class="headerlink" title="对象解构赋值的使用"></a>对象解构赋值的使用</h4><ol>
-<li><p><strong>传递乱序参数和设置默认值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params">option</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: option.url,</span><br><span class="line">        type: option.type || <span class="string">'get'</span>,</span><br><span class="line">        data: option.data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params"> &#123; url, data, type = <span class="string">'get'</span> &#125; </span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: url,</span><br><span class="line">        type: type,</span><br><span class="line">        data: data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">AJAX(&#123;</span><br><span class="line">    url: <span class="string">'/getUserInfo'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        id: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>获取一个函数中的多个返回值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span> (<span class="params">userId</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...ajax</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        status: <span class="literal">true</span>,</span><br><span class="line">        data: &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        msg: <span class="string">'请求成功'</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;status, data, msg&#125; = getUserInfo(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="字符串的解构赋值"><a href="#字符串的解构赋值" class="headerlink" title="字符串的解构赋值"></a>字符串的解构赋值</h1><ol>
-<li><p><strong>直接取值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a b c 三个变量将会分别对应字符串 str 的前三个字符</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>扩展运算符：<code>...</code></strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b 依旧对应前两个字符，变量 c 则对应的是后面的每个字符所组成的数组</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>分割字符串</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [ ...spStr1 ] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的代码效果等同于：let spStr1 = str.split('');</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>提取属性</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> &#123; length &#125; = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// length = 12</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【JavaScript】作用域</title>
-    <url>/posts/1709/</url>
-    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
-<a id="more"></a>
-
-<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
-<blockquote>
-<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
-</blockquote>
-<p><strong>来看一个例子：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
-<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【JavaScript】创建对象</title>
     <url>/posts/15655/</url>
     <content><![CDATA[<p>这篇博客将会记录一下js中创建对象的几种不同的方式，分别是字面式声明、<code>new</code>关键字声明、构造函数声明、工厂模式声明、原型声明。</p>
@@ -263,6 +240,29 @@
       <tags>
         <tag>JavaScript</tag>
         <tag>面向对象</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【JavaScript】作用域</title>
+    <url>/posts/1709/</url>
+    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
+<a id="more"></a>
+
+<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
+<blockquote>
+<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
+</blockquote>
+<p><strong>来看一个例子：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
+<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -384,33 +384,139 @@
       </tags>
   </entry>
   <entry>
-    <title>【Java并发】wait()、notify()、notifyAll()</title>
-    <url>/posts/29010/</url>
-    <content><![CDATA[<p><code>wait()、notify()和notifyAll()</code> 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。<br>同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。<br>Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多线程可以更好的配合、协同工作。</p>
+    <title>【JavaScript】数据类型</title>
+    <url>/posts/24923/</url>
+    <content><![CDATA[<p>我们所使用的编程语言，不管是js也好或者是其他的一些语言，例如：Java、C++。我们在编写程序的时候实际上都是在对数据进行操作。如果脱离了数据，那么我们编写的程序将变得毫无意义。甚至脱离了数据之后我们将无法编程。由此，数据类型便成了重中之重。</p>
 <a id="more"></a>
 
-<h1 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h1><h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>想要执行 wait 方法必须要在 synchronized 方法或者是代码块中才可以执行，执行 wait方法会使得当前线程释放掉 monitor 锁，强迫当前线程进入阻塞状态。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (Object) &#123;</span><br><span class="line">    object.wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果想要唤醒当前线程则必须是另外的一个线程去调用了 notiify 并且刚刚好唤醒的是本线程，或者是直接调用 notifyAll。</p>
+<h1 id="一、js数据类型简介"><a href="#一、js数据类型简介" class="headerlink" title="一、js数据类型简介"></a>一、js数据类型简介</h1><ol>
+<li>js的数据类型主要分为两大类，原始类型（即基本数据类型）和对象类型（即引用数据类型）。</li>
+<li>js中的基本数据类型可以分为5种：Number、String、Boolean、Undefined、Null。</li>
+<li>js中的引用数据类型也就是对象类型Object，主要是Object、Array、Function这几种。</li>
+</ol>
+<h1 id="二、基本数据类型和引用数据类型的区别"><a href="#二、基本数据类型和引用数据类型的区别" class="headerlink" title="二、基本数据类型和引用数据类型的区别"></a>二、基本数据类型和引用数据类型的区别</h1><p>首先这里需要先简单的介绍一下堆内存和栈内存。计算机的内存中有堆内存和栈内存，栈内存呢是一个一个排列下去的是有序的，也是固定大小的，像是数组一样；而堆内存呢则刚好是与栈内存相反，堆内存中的数据是无序的，也是不固定大小的。</p>
+<h2 id="堆栈内存的优缺点"><a href="#堆栈内存的优缺点" class="headerlink" title="堆栈内存的优缺点"></a>堆栈内存的优缺点</h2><p>栈内存由于是有序的所以在查询数据的时候直接按照排序的序号去查的话是比较快的，但是由于固定大小的原因呢，栈内存无法随心所欲的存储数据。堆内存由于不固定大小，所以在其中存储的数据是比较方便的，也就是想怎么存就怎么存，但是因为堆内存中的数据是无序的，所以在查找的时候就是要比较慢一些。  </p>
 <blockquote>
-<p>假如现在有四个线程在运行，其中线程A、B、C都调用了<code>wait()</code>在等待同一个monitor锁，而线程D持有这个monitor锁。那么如果现在线程D调用了<code>notify()</code>方法，则会随机的从前面的线程A、B、C中去唤醒一个线程，如果调用的是<code>notifyAll()</code>方法的话，则会将线程A、B、C全部唤醒</p>
+<p>总结：就是栈内存优点是查询快，存储不方便；而堆内存则是存储方便，但查询慢。  </p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Object object = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"开始执行"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    object.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"再次获取到monitor锁"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread2</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                object.notify();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"已经执行了 notify 方法"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread1 thread1 = <span class="keyword">new</span> Thread1();</span><br><span class="line">        Thread2 thread2 = <span class="keyword">new</span> Thread2();</span><br><span class="line">        thread1.start();</span><br><span class="line">        Thread.sleep(<span class="number">5</span>);</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法运行结果</span></span><br><span class="line">Thread-<span class="number">0</span>开始执行</span><br><span class="line">Thread-<span class="number">1</span>已经执行了 notify 方法</span><br><span class="line">Thread-<span class="number">0</span>再次获取到monitor锁</span><br></pre></td></tr></table></figure>
-<p>上面的这段代码就可以说明<code>wait()</code>方法和<code>notify</code>方法的执行过程。<br>首先是Thread-0线程执行<code>wait()</code>方法<strong>释放monitor锁之后</strong>进入等待状态，之后Thread-1线程执行了<code>notify()</code>方法去唤醒了Thread-0线程。<br>此时Thread-0线程已经是被唤醒的状态，但是并没有继续往下执行，这是因为没有获得monitor锁，唤醒Thread-0线程的Thread-1线程还没有释放这把锁。<br>等待Thread-1线程执行完毕也就是打印了「Thread-1已经执行了 notify 方法」这句语句之后，Thread-1线程执行完毕，释放monitor锁之后，Thread-0线程再次获取monitor锁之后开始执行剩余代码。</p>
-<p>注意：</p>
-<ol>
-<li>调用<code>wait()</code>方法的线程会主动释放monitor锁，上面的代码也正是因为Thread-0主动释放掉了monitor锁之后，Thread-1才可以执行</li>
-<li>当休息的线程被唤醒时并不是直接执行的，而是需要重新去竞争对应的锁，获取到锁之后才可以执行</li>
+<p><em>这么说可能还是有点不太形象，举个例子吧。栈内存中的空间呢就像是现实生活中的商品房一样，一个一个的房子都是开发商建好的，每个房子的大小是固定的，每个房子也有对应的门牌号，比如某某单元的几零几这样，查找起来呢是比较方便。堆内存呢就像是一栋一栋的独栋别墅一样，没有一个集中的管理，但是大小不固定，可能是有一块地用来建别墅，我今天打算建个100平米的别墅，明天我就可能扩建到200平米了，甚至是再往上多建几层。</em>    </p>
+<p>既然堆内存和栈内存有这样的优缺点，那么何不将两者的优点结合起来，在栈内存中存放指向堆内存中的指针。这样可以即查询快又存储数据方便。这样的数据也就是上面说的引用数据类型。我们待会细说。</p>
+<h1 id="三、基本数据类型的特点"><a href="#三、基本数据类型的特点" class="headerlink" title="三、基本数据类型的特点"></a>三、基本数据类型的特点</h1><ol>
+<li><p>基本数据类型的赋值仅仅只是简单的值传递：<br>如果需要从一个变量向另一个变量去赋一个基本数据类型的值，那么会将其中基本变量的值生成一个副本再将这个副本的值直接传递过去，而不是引用同一个值。例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">18</span>;</span><br><span class="line"><span class="keyword">var</span> b = a;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出18</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 输出18</span></span><br><span class="line">a++;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出19</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 输出18</span></span><br></pre></td></tr></table></figure>
+<p>在上述的例子中，一开始先将变量<code>a</code>的值赋给了变量<code>b</code>，这时变量<code>a</code>的值和变量<code>b</code>的值都是18，然后我们再将变量<code>a</code>的值进行<code>++</code>操作，变量<code>a</code>的值变成了19，但是变量<code>b</code>的值任然还是18，由此可见变量<code>a</code>和变量<code>b</code>的值是完全互不相干的，没有关系的。</p>
+<p> <em>举个例子吧，就比如我们平时在使用<code>ctrl + c</code>和<code>ctrl + v</code>复制黏贴的时候是一样的，我们复制的文本并不会随着原来文本的改变而改变，同样原来的文本也不会因为被复制的文本的改变而发生任何变化。同理，变量之间的赋值也是一次简单的“<code>ctrl + c</code>和<code>ctrl + v</code>”而已。</em></p>
+</li>
+<li><p>基本数据类型的值是固定的，无法修改的。比如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'string'</span>;</span><br><span class="line"><span class="keyword">var</span> anotherStr = str.replace(<span class="string">'s'</span>,<span class="string">''</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str); <span class="comment">// 输出 string</span></span><br><span class="line"><span class="built_in">console</span>.log(anotherStr); <span class="comment">// 输出 tring</span></span><br></pre></td></tr></table></figure>
+<p>在上面的这个例子中我们可以看到，字符串<code>str</code>的值一直都是<code>string</code>，尽管我们调用的<code>replace</code>方法将其中的<code>s</code>替换成了空字符串，但是实际上的<code>str</code>的值并没有被修改，任然是<code>string</code>。修改后的值传回来了一个新的变量，这个变量的值才是<code>tring</code>，然而这是一个全新的变量跟原来的<code>str</code>并没有什么关系。</p>
+<p> <strong>我们再来看一个例子：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line">name = <span class="string">'lisi'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出lisi</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中看起来<code>name</code>的值由“zhangsan”被修改为“lisi”，但其实并不是修改，原来的“zhangsan”还是“zhangsan”，只是被一个新的值“lisi”覆盖掉了而已。</p>
+<p> <em>这么说起来可能不是很形象，举个例子吧。现实生活中我们在画画的时候如果原本的颜色是红色的，但是我们想要将其修改为绿色的话我们是将新的绿色的颜料直接涂抹在原来红色的地方上面，这样在我们看来好像红色被修改为绿色，但红色还是红色只是被覆盖了我们看不到了而已，我们看到的是绿色。在这个例子中也是同理。</em></p>
+</li>
+</ol>
+<h1 id="四、五种基本数据类型详解"><a href="#四、五种基本数据类型详解" class="headerlink" title="四、五种基本数据类型详解"></a>四、五种基本数据类型详解</h1><h2 id="typeof运算符"><a href="#typeof运算符" class="headerlink" title="typeof运算符"></a>typeof运算符</h2><p>我们要检测一种基本数据类型时可以使用typeof运算符去检测，其语法是<code>typeof 变量</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="number">123</span>);            <span class="comment">// 输出number</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="string">'string'</span>);       <span class="comment">// 输出string</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">true</span>);           <span class="comment">// 输出boolean</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">null</span>);           <span class="comment">// 输出Object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">undefined</span>);      <span class="comment">// 输出undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);   <span class="comment">// 输出function</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：检测null时返回的是一个Object类型，这是因为null类型其实是一个空的对象应用，也就是一个对象但什么都没有。</p>
+</blockquote>
+<h2 id="Number-数值类型"><a href="#Number-数值类型" class="headerlink" title="Number(数值类型)"></a>Number(数值类型)</h2><p>在一些强语言中，数值类型可能会分为整数和浮点数，再根据占用的长度去再往下继续分为好几种数据类型，比如Java和C。但是在js中数值类型只有一种就是Number，在定义一个数值类型时加不加小数点都是可以的。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> number = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> number); <span class="comment">// 输出number</span></span><br></pre></td></tr></table></figure>
+<p>上面的这个例子中为我们展示了如何去定义一个number类型的变量，以及如何去检测一个number变量。<br>js中如果需要表示一个非常大或者是非常小的数字可以使用科学计数法，例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="number">123e+5</span>;  <span class="comment">// 表示的是 12300000</span></span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">123e-5</span>;  <span class="comment">// 表示的是 0.00123</span></span><br></pre></td></tr></table></figure>
+<p>js中表示最大的数值是<code>Number.MAX_VALUE</code>，与之对应的是<code>Numver.MIN_VALUE</code>表示的是js中最小的数值。</p>
+<p>js中还有一个非常特殊的数值类型，就是NaN(Not A Number)即非数值，这个数值用于表示一个本来要返回数值的操作数未返回数值的情况（这样就不会抛出错误了）。例如，在其他编程语言中，任何数值除以0都会导致错误，从而停止代码执行。但在JavaScript中，任何数值除以0会返回NaN，因此不会影响其他代码的执行。</p>
+<p>NaN有两个非同寻常的点，一个是任何涉及NaN的操作都会返回NaN，例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> + <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> - <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> * <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> / <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：这个特点在多步计算中有可能导致问题，需要特别注意</p>
+</blockquote>
+<p>另一个是NaN与任何值都不相等，包括NaN本身，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> == <span class="literal">NaN</span>); <span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="String-字符串类型"><a href="#String-字符串类型" class="headerlink" title="String(字符串类型)"></a>String(字符串类型)</h2><p>在js中的字符串类型是需要使用引号引起来的，使用单引号’’或者是双引号””都可以，但是不要混合着用，也不能嵌套使用单双引号。</p>
+<p>string类型有些特殊，因为字符串具有可变的大小，所以显然它不能被直接存储在具有固定大小的变量中。由于效率的原因，我们希望JS只复制对字符串的引用，而不是字符串的内容。但是另一方面，字符串在许多方面都和基本类型的表现相似，而字符串是不可变的这一事实（即没法改变一个字符串值的内容），因此可以将字符串看成<strong>行为与基本类型相似的不可变引用类型</strong></p>
+<p>如果需要在String类型中输出一些特殊的字符的话可以使用<code>\</code>字符来转义，例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"我说：\"我想吃西瓜\""</span>); <span class="comment">// 输出 我说："我想吃西瓜"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果想输出一个<code>\</code>的话则需要再使用一个<code>\</code>来转义，即<code>\\</code></p>
+</blockquote>
+<h2 id="Boolean-布尔类型"><a href="#Boolean-布尔类型" class="headerlink" title="Boolean(布尔类型)"></a>Boolean(布尔类型)</h2><p>Boolean类型只有两个值：true表示真和false表示假。<br>虽然Boolean类型的字面值只有两个，但JavaScript中所有类型的值都有与这两个Boolean值等价的值。要将一个值转换为其对应的Boolean值，可以调用类型转换函数Boolean()，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> message = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="keyword">var</span> messageAsBoolean = <span class="built_in">Boolean</span>(message);</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，字符串message被转换成了一个Boolean值，该值被保存在messageAsBoolean变量中。可以对任何数据类型的值调用Boolean()函数，而且总会返回一个Boolean值。至于返回的这个值是true还是false，取决于要转换值的数据类型及其实际值。下表给出了各种数据类型及其对象的转换规则。</p>
+<table>
+<thead>
+<tr>
+<th align="left">数据类型</th>
+<th align="right">转换成true值</th>
+<th align="center">转换成false值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Boolean</td>
+<td align="right">true</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="left">String</td>
+<td align="right">任何非空字符串</td>
+<td align="center">“”空字符串</td>
+</tr>
+<tr>
+<td align="left">Number</td>
+<td align="right">任何非0数值（包括无穷大）</td>
+<td align="center">0和NaN</td>
+</tr>
+<tr>
+<td align="left">Object</td>
+<td align="right">任何非空对象</td>
+<td align="center">null</td>
+</tr>
+<tr>
+<td align="left">Undefined</td>
+<td align="right">不适用</td>
+<td align="center">Undefined</td>
+</tr>
+</tbody></table>
+<p><strong>ps：如果需要将一个变量转换成对应的布尔值的话，可以使用<code>!!</code>(两个感叹号)操作符转换。例如：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> message = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(!message);  <span class="comment">// 输出false</span></span><br><span class="line"><span class="built_in">console</span>.log(!!message); <span class="comment">// 输出true</span></span><br></pre></td></tr></table></figure>
+<p>使用一个<code>!</code>代表的是取反的操作，即转换为Boolean值之后取的是相反的值，但是再使用多一个<code>!</code>之后呢再将取反的操作再次取反之后就可以得到原来对应的Boolean值</p>
+<h2 id="Null-空引用类型"><a href="#Null-空引用类型" class="headerlink" title="Null(空引用类型)"></a>Null(空引用类型)</h2><p>Null类型是只有一个值的特殊数据类型，这个特殊的值就是<code>null</code>代表的是一个空对象，一个空引用。从逻辑角度来看，<code>null</code>值表示一个空对象指针，而这也正是使用<code>typeof</code>操作符检测<code>null</code>时会返回<code>object</code>的原因。</p>
+<p>如果定义的变量准备在将来用于保存对象，那么最好将该变量初始化为<code>null</code>而不是其他值。这样一来，只要直接检测<code>null</code>值就可以知道相应的变量是否已经保存了一个对象的引用了。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">if</span> (obj != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 对obj对象进行的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Undefined-未定义"><a href="#Undefined-未定义" class="headerlink" title="Undefined(未定义)"></a>Undefined(未定义)</h2><p>Undefined类型只有一个值，即特殊的<code>undefined</code>。在使用<code>var</code>声明变量但未对其加以初始化时，这个变量的值就是<code>undefined</code>。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出undefined</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="五、引用数据类型"><a href="#五、引用数据类型" class="headerlink" title="五、引用数据类型"></a>五、引用数据类型</h1><h2 id="引用数据类型的介绍"><a href="#引用数据类型的介绍" class="headerlink" title="引用数据类型的介绍"></a>引用数据类型的介绍</h2><p>除了上面介绍的基本数据类型之外，其他的就是引用数据类型了。引用类型统称是Objcet，所有的引用数据类型的数据都是继承自Object的。例如：Array（数组）、Date（日期）、Function（函数）等。这些都是引用数据类型，也都是继承自Object。</p>
+<h2 id="引用数据类型的特点"><a href="#引用数据类型的特点" class="headerlink" title="引用数据类型的特点"></a>引用数据类型的特点</h2><ol>
+<li><p><strong>引用类型的值是可变的</strong></p>
+<p> 引用数据类型跟基本数据类型最大的不同就是内存存放位置的不同，上文提过基本数据类型是存放在<strong>栈内存</strong>中的，引用数据类型则是存放在<strong>堆内存</strong>中的。引用数据类型将堆内存中的地址存放在栈内存中，通过变量标识符去取到地址再进行访问。而堆内存的大小并不是固定的，所以引用数据类型的值是可变的。基于这个特点，我们如果想要在一个引用数据类型中取增加或者是删除一些内容的话也都是可以实现的，我们甚至可以在一个引用中去定义另一个引用，我们来看一个例子：</p>
+ <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">name</span>:<span class="string">"zhangsan"</span>&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">obj.name = <span class="string">"lisi"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name);  <span class="comment">// 输出lisi</span></span><br><span class="line">obj.age = <span class="number">18</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.age);   <span class="comment">// 输出18</span></span><br><span class="line">obj.age = <span class="literal">null</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.age);   <span class="comment">// 输出null</span></span><br><span class="line">obj.printObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">"---"</span> + <span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line">obj.printObj(); <span class="comment">// 输出lisi---null</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>引用数据类型的比较是引用的比较</strong></p>
+<p> 我们先来看一个例子：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1 = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj1 == obj2);   <span class="comment">// 输出false</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1 === obj2);  <span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>obj1</code>和<code>obj2</code>都是定义了相同的内容，都是<code>{}</code>，但是在比较的时候js却不认为这是两个相同的对象。原因在于声明这两个对象时，会在堆内存中开辟出两块不同的空间去分别存放这两个变量，然后将堆内存存放这两个对象对应的内存地址再去存在栈内存中去。在比较时并不会去比较两个对象具体的区别，而是在栈内存中将地址取出来之后进行比较，如果地址相同都是指向同一块内存的话才会认为是相同的对象，反之则认为是不同的对象。</p>
+<p> 我们再来看一个例子：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1 = &#123;<span class="attr">name</span>:<span class="string">"zhangsan"</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = obj1;</span><br><span class="line"><span class="built_in">console</span>.log(obj1.name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(obj2.name); <span class="comment">// 输出zhangsan</span></span><br><span class="line">obj2.name = <span class="string">"lisi"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj1.name); <span class="comment">// 输出lisi</span></span><br><span class="line"><span class="built_in">console</span>.log(obj2.name); <span class="comment">// 输出lisi</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，首先声明了一个对象<code>obj1</code>再将<code>obj1</code>的值赋给<code>obj2</code>，这时其实是将<code>obj1</code>的地址赋给了<code>obj2</code>，也就是说在栈内存中的<code>obj1</code>和<code>obj2</code>的值是相等的，都是保存的相同的地址，指向的是同一块堆内存中的空间。所以不管是改变了<code>obj1</code>还是改变了<code>obj2</code>其实都是在操作的同一块内存空间，做出来的改变也是相同的，另一个指向这个空间的对象也是会跟随着一起改变。</p>
+</li>
+<li><p><strong>instanceof</strong><br>一个对象如果我们需要去检测它是不是属于某个对象的实例的话，我们需要使用<code>instanceof</code>关键字，语法是<code>实例 instanceof 对象</code>表示这个实例是否属于这个对象。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log((&#123;&#125;) <span class="keyword">instanceof</span> <span class="built_in">Object</span>);    <span class="comment">// 输出true</span></span><br><span class="line"><span class="built_in">console</span>.log(([]) <span class="keyword">instanceof</span> <span class="built_in">Array</span>);     <span class="comment">// 输出true</span></span><br></pre></td></tr></table></figure>
+
+</li>
 </ol>
 <hr>
 <p>大家加油：）</p>
 ]]></content>
       <categories>
-        <category>并发</category>
+        <category>JavaScript基础</category>
       </categories>
       <tags>
-        <tag>Java</tag>
-        <tag>并发</tag>
+        <tag>JavaScript</tag>
+        <tag>基础</tag>
       </tags>
   </entry>
   <entry>
@@ -580,139 +686,33 @@
       </tags>
   </entry>
   <entry>
-    <title>【JavaScript】数据类型</title>
-    <url>/posts/24923/</url>
-    <content><![CDATA[<p>我们所使用的编程语言，不管是js也好或者是其他的一些语言，例如：Java、C++。我们在编写程序的时候实际上都是在对数据进行操作。如果脱离了数据，那么我们编写的程序将变得毫无意义。甚至脱离了数据之后我们将无法编程。由此，数据类型便成了重中之重。</p>
+    <title>【Java并发】wait()、notify()、notifyAll()</title>
+    <url>/posts/29010/</url>
+    <content><![CDATA[<p><code>wait()、notify()和notifyAll()</code> 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。<br>同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。<br>Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多线程可以更好的配合、协同工作。</p>
 <a id="more"></a>
 
-<h1 id="一、js数据类型简介"><a href="#一、js数据类型简介" class="headerlink" title="一、js数据类型简介"></a>一、js数据类型简介</h1><ol>
-<li>js的数据类型主要分为两大类，原始类型（即基本数据类型）和对象类型（即引用数据类型）。</li>
-<li>js中的基本数据类型可以分为5种：Number、String、Boolean、Undefined、Null。</li>
-<li>js中的引用数据类型也就是对象类型Object，主要是Object、Array、Function这几种。</li>
-</ol>
-<h1 id="二、基本数据类型和引用数据类型的区别"><a href="#二、基本数据类型和引用数据类型的区别" class="headerlink" title="二、基本数据类型和引用数据类型的区别"></a>二、基本数据类型和引用数据类型的区别</h1><p>首先这里需要先简单的介绍一下堆内存和栈内存。计算机的内存中有堆内存和栈内存，栈内存呢是一个一个排列下去的是有序的，也是固定大小的，像是数组一样；而堆内存呢则刚好是与栈内存相反，堆内存中的数据是无序的，也是不固定大小的。</p>
-<h2 id="堆栈内存的优缺点"><a href="#堆栈内存的优缺点" class="headerlink" title="堆栈内存的优缺点"></a>堆栈内存的优缺点</h2><p>栈内存由于是有序的所以在查询数据的时候直接按照排序的序号去查的话是比较快的，但是由于固定大小的原因呢，栈内存无法随心所欲的存储数据。堆内存由于不固定大小，所以在其中存储的数据是比较方便的，也就是想怎么存就怎么存，但是因为堆内存中的数据是无序的，所以在查找的时候就是要比较慢一些。  </p>
+<h1 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h1><h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>想要执行 wait 方法必须要在 synchronized 方法或者是代码块中才可以执行，执行 wait方法会使得当前线程释放掉 monitor 锁，强迫当前线程进入阻塞状态。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (Object) &#123;</span><br><span class="line">    object.wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果想要唤醒当前线程则必须是另外的一个线程去调用了 notiify 并且刚刚好唤醒的是本线程，或者是直接调用 notifyAll。</p>
 <blockquote>
-<p>总结：就是栈内存优点是查询快，存储不方便；而堆内存则是存储方便，但查询慢。  </p>
+<p>假如现在有四个线程在运行，其中线程A、B、C都调用了<code>wait()</code>在等待同一个monitor锁，而线程D持有这个monitor锁。那么如果现在线程D调用了<code>notify()</code>方法，则会随机的从前面的线程A、B、C中去唤醒一个线程，如果调用的是<code>notifyAll()</code>方法的话，则会将线程A、B、C全部唤醒</p>
 </blockquote>
-<p><em>这么说可能还是有点不太形象，举个例子吧。栈内存中的空间呢就像是现实生活中的商品房一样，一个一个的房子都是开发商建好的，每个房子的大小是固定的，每个房子也有对应的门牌号，比如某某单元的几零几这样，查找起来呢是比较方便。堆内存呢就像是一栋一栋的独栋别墅一样，没有一个集中的管理，但是大小不固定，可能是有一块地用来建别墅，我今天打算建个100平米的别墅，明天我就可能扩建到200平米了，甚至是再往上多建几层。</em>    </p>
-<p>既然堆内存和栈内存有这样的优缺点，那么何不将两者的优点结合起来，在栈内存中存放指向堆内存中的指针。这样可以即查询快又存储数据方便。这样的数据也就是上面说的引用数据类型。我们待会细说。</p>
-<h1 id="三、基本数据类型的特点"><a href="#三、基本数据类型的特点" class="headerlink" title="三、基本数据类型的特点"></a>三、基本数据类型的特点</h1><ol>
-<li><p>基本数据类型的赋值仅仅只是简单的值传递：<br>如果需要从一个变量向另一个变量去赋一个基本数据类型的值，那么会将其中基本变量的值生成一个副本再将这个副本的值直接传递过去，而不是引用同一个值。例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">18</span>;</span><br><span class="line"><span class="keyword">var</span> b = a;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出18</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 输出18</span></span><br><span class="line">a++;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出19</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 输出18</span></span><br></pre></td></tr></table></figure>
-<p>在上述的例子中，一开始先将变量<code>a</code>的值赋给了变量<code>b</code>，这时变量<code>a</code>的值和变量<code>b</code>的值都是18，然后我们再将变量<code>a</code>的值进行<code>++</code>操作，变量<code>a</code>的值变成了19，但是变量<code>b</code>的值任然还是18，由此可见变量<code>a</code>和变量<code>b</code>的值是完全互不相干的，没有关系的。</p>
-<p> <em>举个例子吧，就比如我们平时在使用<code>ctrl + c</code>和<code>ctrl + v</code>复制黏贴的时候是一样的，我们复制的文本并不会随着原来文本的改变而改变，同样原来的文本也不会因为被复制的文本的改变而发生任何变化。同理，变量之间的赋值也是一次简单的“<code>ctrl + c</code>和<code>ctrl + v</code>”而已。</em></p>
-</li>
-<li><p>基本数据类型的值是固定的，无法修改的。比如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'string'</span>;</span><br><span class="line"><span class="keyword">var</span> anotherStr = str.replace(<span class="string">'s'</span>,<span class="string">''</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str); <span class="comment">// 输出 string</span></span><br><span class="line"><span class="built_in">console</span>.log(anotherStr); <span class="comment">// 输出 tring</span></span><br></pre></td></tr></table></figure>
-<p>在上面的这个例子中我们可以看到，字符串<code>str</code>的值一直都是<code>string</code>，尽管我们调用的<code>replace</code>方法将其中的<code>s</code>替换成了空字符串，但是实际上的<code>str</code>的值并没有被修改，任然是<code>string</code>。修改后的值传回来了一个新的变量，这个变量的值才是<code>tring</code>，然而这是一个全新的变量跟原来的<code>str</code>并没有什么关系。</p>
-<p> <strong>我们再来看一个例子：</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line">name = <span class="string">'lisi'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出lisi</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中看起来<code>name</code>的值由“zhangsan”被修改为“lisi”，但其实并不是修改，原来的“zhangsan”还是“zhangsan”，只是被一个新的值“lisi”覆盖掉了而已。</p>
-<p> <em>这么说起来可能不是很形象，举个例子吧。现实生活中我们在画画的时候如果原本的颜色是红色的，但是我们想要将其修改为绿色的话我们是将新的绿色的颜料直接涂抹在原来红色的地方上面，这样在我们看来好像红色被修改为绿色，但红色还是红色只是被覆盖了我们看不到了而已，我们看到的是绿色。在这个例子中也是同理。</em></p>
-</li>
-</ol>
-<h1 id="四、五种基本数据类型详解"><a href="#四、五种基本数据类型详解" class="headerlink" title="四、五种基本数据类型详解"></a>四、五种基本数据类型详解</h1><h2 id="typeof运算符"><a href="#typeof运算符" class="headerlink" title="typeof运算符"></a>typeof运算符</h2><p>我们要检测一种基本数据类型时可以使用typeof运算符去检测，其语法是<code>typeof 变量</code>。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="number">123</span>);            <span class="comment">// 输出number</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="string">'string'</span>);       <span class="comment">// 输出string</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">true</span>);           <span class="comment">// 输出boolean</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">null</span>);           <span class="comment">// 输出Object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">undefined</span>);      <span class="comment">// 输出undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);   <span class="comment">// 输出function</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：检测null时返回的是一个Object类型，这是因为null类型其实是一个空的对象应用，也就是一个对象但什么都没有。</p>
-</blockquote>
-<h2 id="Number-数值类型"><a href="#Number-数值类型" class="headerlink" title="Number(数值类型)"></a>Number(数值类型)</h2><p>在一些强语言中，数值类型可能会分为整数和浮点数，再根据占用的长度去再往下继续分为好几种数据类型，比如Java和C。但是在js中数值类型只有一种就是Number，在定义一个数值类型时加不加小数点都是可以的。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> number = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> number); <span class="comment">// 输出number</span></span><br></pre></td></tr></table></figure>
-<p>上面的这个例子中为我们展示了如何去定义一个number类型的变量，以及如何去检测一个number变量。<br>js中如果需要表示一个非常大或者是非常小的数字可以使用科学计数法，例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="number">123e+5</span>;  <span class="comment">// 表示的是 12300000</span></span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">123e-5</span>;  <span class="comment">// 表示的是 0.00123</span></span><br></pre></td></tr></table></figure>
-<p>js中表示最大的数值是<code>Number.MAX_VALUE</code>，与之对应的是<code>Numver.MIN_VALUE</code>表示的是js中最小的数值。</p>
-<p>js中还有一个非常特殊的数值类型，就是NaN(Not A Number)即非数值，这个数值用于表示一个本来要返回数值的操作数未返回数值的情况（这样就不会抛出错误了）。例如，在其他编程语言中，任何数值除以0都会导致错误，从而停止代码执行。但在JavaScript中，任何数值除以0会返回NaN，因此不会影响其他代码的执行。</p>
-<p>NaN有两个非同寻常的点，一个是任何涉及NaN的操作都会返回NaN，例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> + <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> - <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> * <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> / <span class="number">1</span>); <span class="comment">// 输出NaN</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：这个特点在多步计算中有可能导致问题，需要特别注意</p>
-</blockquote>
-<p>另一个是NaN与任何值都不相等，包括NaN本身，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> == <span class="literal">NaN</span>); <span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="String-字符串类型"><a href="#String-字符串类型" class="headerlink" title="String(字符串类型)"></a>String(字符串类型)</h2><p>在js中的字符串类型是需要使用引号引起来的，使用单引号’’或者是双引号””都可以，但是不要混合着用，也不能嵌套使用单双引号。</p>
-<p>string类型有些特殊，因为字符串具有可变的大小，所以显然它不能被直接存储在具有固定大小的变量中。由于效率的原因，我们希望JS只复制对字符串的引用，而不是字符串的内容。但是另一方面，字符串在许多方面都和基本类型的表现相似，而字符串是不可变的这一事实（即没法改变一个字符串值的内容），因此可以将字符串看成<strong>行为与基本类型相似的不可变引用类型</strong></p>
-<p>如果需要在String类型中输出一些特殊的字符的话可以使用<code>\</code>字符来转义，例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"我说：\"我想吃西瓜\""</span>); <span class="comment">// 输出 我说："我想吃西瓜"</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：如果想输出一个<code>\</code>的话则需要再使用一个<code>\</code>来转义，即<code>\\</code></p>
-</blockquote>
-<h2 id="Boolean-布尔类型"><a href="#Boolean-布尔类型" class="headerlink" title="Boolean(布尔类型)"></a>Boolean(布尔类型)</h2><p>Boolean类型只有两个值：true表示真和false表示假。<br>虽然Boolean类型的字面值只有两个，但JavaScript中所有类型的值都有与这两个Boolean值等价的值。要将一个值转换为其对应的Boolean值，可以调用类型转换函数Boolean()，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> message = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="keyword">var</span> messageAsBoolean = <span class="built_in">Boolean</span>(message);</span><br></pre></td></tr></table></figure>
-<p>在这个例子中，字符串message被转换成了一个Boolean值，该值被保存在messageAsBoolean变量中。可以对任何数据类型的值调用Boolean()函数，而且总会返回一个Boolean值。至于返回的这个值是true还是false，取决于要转换值的数据类型及其实际值。下表给出了各种数据类型及其对象的转换规则。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据类型</th>
-<th align="right">转换成true值</th>
-<th align="center">转换成false值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Boolean</td>
-<td align="right">true</td>
-<td align="center">false</td>
-</tr>
-<tr>
-<td align="left">String</td>
-<td align="right">任何非空字符串</td>
-<td align="center">“”空字符串</td>
-</tr>
-<tr>
-<td align="left">Number</td>
-<td align="right">任何非0数值（包括无穷大）</td>
-<td align="center">0和NaN</td>
-</tr>
-<tr>
-<td align="left">Object</td>
-<td align="right">任何非空对象</td>
-<td align="center">null</td>
-</tr>
-<tr>
-<td align="left">Undefined</td>
-<td align="right">不适用</td>
-<td align="center">Undefined</td>
-</tr>
-</tbody></table>
-<p><strong>ps：如果需要将一个变量转换成对应的布尔值的话，可以使用<code>!!</code>(两个感叹号)操作符转换。例如：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> message = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(!message);  <span class="comment">// 输出false</span></span><br><span class="line"><span class="built_in">console</span>.log(!!message); <span class="comment">// 输出true</span></span><br></pre></td></tr></table></figure>
-<p>使用一个<code>!</code>代表的是取反的操作，即转换为Boolean值之后取的是相反的值，但是再使用多一个<code>!</code>之后呢再将取反的操作再次取反之后就可以得到原来对应的Boolean值</p>
-<h2 id="Null-空引用类型"><a href="#Null-空引用类型" class="headerlink" title="Null(空引用类型)"></a>Null(空引用类型)</h2><p>Null类型是只有一个值的特殊数据类型，这个特殊的值就是<code>null</code>代表的是一个空对象，一个空引用。从逻辑角度来看，<code>null</code>值表示一个空对象指针，而这也正是使用<code>typeof</code>操作符检测<code>null</code>时会返回<code>object</code>的原因。</p>
-<p>如果定义的变量准备在将来用于保存对象，那么最好将该变量初始化为<code>null</code>而不是其他值。这样一来，只要直接检测<code>null</code>值就可以知道相应的变量是否已经保存了一个对象的引用了。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">if</span> (obj != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 对obj对象进行的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Undefined-未定义"><a href="#Undefined-未定义" class="headerlink" title="Undefined(未定义)"></a>Undefined(未定义)</h2><p>Undefined类型只有一个值，即特殊的<code>undefined</code>。在使用<code>var</code>声明变量但未对其加以初始化时，这个变量的值就是<code>undefined</code>。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 输出undefined</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="五、引用数据类型"><a href="#五、引用数据类型" class="headerlink" title="五、引用数据类型"></a>五、引用数据类型</h1><h2 id="引用数据类型的介绍"><a href="#引用数据类型的介绍" class="headerlink" title="引用数据类型的介绍"></a>引用数据类型的介绍</h2><p>除了上面介绍的基本数据类型之外，其他的就是引用数据类型了。引用类型统称是Objcet，所有的引用数据类型的数据都是继承自Object的。例如：Array（数组）、Date（日期）、Function（函数）等。这些都是引用数据类型，也都是继承自Object。</p>
-<h2 id="引用数据类型的特点"><a href="#引用数据类型的特点" class="headerlink" title="引用数据类型的特点"></a>引用数据类型的特点</h2><ol>
-<li><p><strong>引用类型的值是可变的</strong></p>
-<p> 引用数据类型跟基本数据类型最大的不同就是内存存放位置的不同，上文提过基本数据类型是存放在<strong>栈内存</strong>中的，引用数据类型则是存放在<strong>堆内存</strong>中的。引用数据类型将堆内存中的地址存放在栈内存中，通过变量标识符去取到地址再进行访问。而堆内存的大小并不是固定的，所以引用数据类型的值是可变的。基于这个特点，我们如果想要在一个引用数据类型中取增加或者是删除一些内容的话也都是可以实现的，我们甚至可以在一个引用中去定义另一个引用，我们来看一个例子：</p>
- <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">name</span>:<span class="string">"zhangsan"</span>&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">obj.name = <span class="string">"lisi"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name);  <span class="comment">// 输出lisi</span></span><br><span class="line">obj.age = <span class="number">18</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.age);   <span class="comment">// 输出18</span></span><br><span class="line">obj.age = <span class="literal">null</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.age);   <span class="comment">// 输出null</span></span><br><span class="line">obj.printObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">"---"</span> + <span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line">obj.printObj(); <span class="comment">// 输出lisi---null</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>引用数据类型的比较是引用的比较</strong></p>
-<p> 我们先来看一个例子：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1 = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj1 == obj2);   <span class="comment">// 输出false</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1 === obj2);  <span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中，<code>obj1</code>和<code>obj2</code>都是定义了相同的内容，都是<code>{}</code>，但是在比较的时候js却不认为这是两个相同的对象。原因在于声明这两个对象时，会在堆内存中开辟出两块不同的空间去分别存放这两个变量，然后将堆内存存放这两个对象对应的内存地址再去存在栈内存中去。在比较时并不会去比较两个对象具体的区别，而是在栈内存中将地址取出来之后进行比较，如果地址相同都是指向同一块内存的话才会认为是相同的对象，反之则认为是不同的对象。</p>
-<p> 我们再来看一个例子：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1 = &#123;<span class="attr">name</span>:<span class="string">"zhangsan"</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = obj1;</span><br><span class="line"><span class="built_in">console</span>.log(obj1.name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(obj2.name); <span class="comment">// 输出zhangsan</span></span><br><span class="line">obj2.name = <span class="string">"lisi"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj1.name); <span class="comment">// 输出lisi</span></span><br><span class="line"><span class="built_in">console</span>.log(obj2.name); <span class="comment">// 输出lisi</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中，首先声明了一个对象<code>obj1</code>再将<code>obj1</code>的值赋给<code>obj2</code>，这时其实是将<code>obj1</code>的地址赋给了<code>obj2</code>，也就是说在栈内存中的<code>obj1</code>和<code>obj2</code>的值是相等的，都是保存的相同的地址，指向的是同一块堆内存中的空间。所以不管是改变了<code>obj1</code>还是改变了<code>obj2</code>其实都是在操作的同一块内存空间，做出来的改变也是相同的，另一个指向这个空间的对象也是会跟随着一起改变。</p>
-</li>
-<li><p><strong>instanceof</strong><br>一个对象如果我们需要去检测它是不是属于某个对象的实例的话，我们需要使用<code>instanceof</code>关键字，语法是<code>实例 instanceof 对象</code>表示这个实例是否属于这个对象。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log((&#123;&#125;) <span class="keyword">instanceof</span> <span class="built_in">Object</span>);    <span class="comment">// 输出true</span></span><br><span class="line"><span class="built_in">console</span>.log(([]) <span class="keyword">instanceof</span> <span class="built_in">Array</span>);     <span class="comment">// 输出true</span></span><br></pre></td></tr></table></figure>
-
-</li>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Object object = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"开始执行"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    object.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"再次获取到monitor锁"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread2</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                object.notify();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"已经执行了 notify 方法"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread1 thread1 = <span class="keyword">new</span> Thread1();</span><br><span class="line">        Thread2 thread2 = <span class="keyword">new</span> Thread2();</span><br><span class="line">        thread1.start();</span><br><span class="line">        Thread.sleep(<span class="number">5</span>);</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法运行结果</span></span><br><span class="line">Thread-<span class="number">0</span>开始执行</span><br><span class="line">Thread-<span class="number">1</span>已经执行了 notify 方法</span><br><span class="line">Thread-<span class="number">0</span>再次获取到monitor锁</span><br></pre></td></tr></table></figure>
+<p>上面的这段代码就可以说明<code>wait()</code>方法和<code>notify</code>方法的执行过程。<br>首先是Thread-0线程执行<code>wait()</code>方法<strong>释放monitor锁之后</strong>进入等待状态，之后Thread-1线程执行了<code>notify()</code>方法去唤醒了Thread-0线程。<br>此时Thread-0线程已经是被唤醒的状态，但是并没有继续往下执行，这是因为没有获得monitor锁，唤醒Thread-0线程的Thread-1线程还没有释放这把锁。<br>等待Thread-1线程执行完毕也就是打印了「Thread-1已经执行了 notify 方法」这句语句之后，Thread-1线程执行完毕，释放monitor锁之后，Thread-0线程再次获取monitor锁之后开始执行剩余代码。</p>
+<p>注意：</p>
+<ol>
+<li>调用<code>wait()</code>方法的线程会主动释放monitor锁，上面的代码也正是因为Thread-0主动释放掉了monitor锁之后，Thread-1才可以执行</li>
+<li>当休息的线程被唤醒时并不是直接执行的，而是需要重新去竞争对应的锁，获取到锁之后才可以执行</li>
 </ol>
 <hr>
 <p>大家加油：）</p>
 ]]></content>
       <categories>
-        <category>JavaScript基础</category>
+        <category>并发</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
-        <tag>基础</tag>
+        <tag>Java</tag>
+        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -762,38 +762,6 @@
 <blockquote>
 <p>在某些特定的业务场景中，我们可能必须去处理 InterruptedException 异常。那么就必须要在 catch 块中去再次发出 Interrupt 通知，恢复这个通知。让 run 方法的编写者可以正确的处理 Interrupt 通知。</p>
 </blockquote>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Java并发】启动线程</title>
-    <url>/posts/25097/</url>
-    <content><![CDATA[<blockquote>
-<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
-</blockquote>
-<a id="more"></a>
-
-<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
-<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
-<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
-<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
-<blockquote>
-<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
-</blockquote>
-<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
-<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
-<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
-<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
 <hr>
 <p>大家加油：）</p>
 ]]></content>
@@ -857,6 +825,74 @@
       <tags>
         <tag>Java</tag>
         <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java并发】启动线程</title>
+    <url>/posts/25097/</url>
+    <content><![CDATA[<blockquote>
+<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
+</blockquote>
+<a id="more"></a>
+
+<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
+<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
+<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
+<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
+<blockquote>
+<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
+</blockquote>
+<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
+<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
+<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
+<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java练习】两个线程交替打印0~100</title>
+    <url>/posts/45104/</url>
+    <content><![CDATA[<blockquote>
+<p>题目：<br>实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。</p>
+</blockquote>
+<blockquote>
+<p><strong>分析题目：</strong><br>题目关键字：<strong>两个线程</strong>、<strong>交替</strong>、<strong>0~100</strong>、<strong>专门打印奇数</strong>、<strong>专门打印偶数</strong></p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li>首先创建两个线程</li>
+<li>交替打印证明线程之间需要协同配合、考虑 synchronized、wait-notify</li>
+</ol>
+<h1 id="使用-sychronized"><a href="#使用-sychronized" class="headerlink" title="使用 sychronized"></a>使用 sychronized</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 打印奇数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"奇数"</span>).start();</span><br><span class="line">    <span class="comment">// 打印偶数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"偶数"</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 synchronized 的方法虽然也是能够完成题目的要求，但是效率上略差一些。<br>main 方法中的逻辑是，先判断是否满足打印 0~100 的要求，如果满足则进入同步代码块中，此时两个线程将会竞争同一把锁 <code>lock</code><br>竞争到锁的线程将判断是否满足打印条件，如果满足则打印，否则直接跳出，紧接着同步代码块执行完毕释放锁，两个线程重新进入竞争锁的步骤<br>如果在这个时候其中一个线程接连多次竞争到锁，但是却因为不满足打印条件而再次直接释放锁，这就是无意义的性能浪费</p>
+</blockquote>
+<h1 id="使用-wait-notify"><a href="#使用-wait-notify" class="headerlink" title="使用 wait-notify"></a>使用 wait-notify</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="comment">// 获取锁证明是符合打印条件，直接打印</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                <span class="comment">// 唤醒另外的线程</span></span><br><span class="line">                lock.notify();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 判断是否打印到最后的数字了，如果还没有则中断，把锁让给另外的线程去打印</span></span><br><span class="line">                    <span class="comment">// 做这层判断是为了预防在打印到最后一个数字时，中断后另外的线程已经执行完毕，而无法唤醒</span></span><br><span class="line">                    <span class="keyword">if</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test test = <span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">new</span> Thread(test, <span class="string">"偶数"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(test,<span class="string">"奇数"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 wait-notify 不需要去判断是否符合奇偶数的打印条件，而是当拿到锁则证明肯定是符合打印条件的，直接打印<br>打印完唤醒另外的线程准备执行下一次的打印，再中断本线程让渡锁</p>
+</blockquote>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>题解</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>并发</tag>
+        <tag>线程</tag>
+        <tag>练习</tag>
       </tags>
   </entry>
   <entry>
