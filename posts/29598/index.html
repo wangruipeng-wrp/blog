@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,并发," />
+  <meta name="keywords" content="Java,并发,线程,异常," />
 
 
 
@@ -79,17 +79,19 @@
 
 
 
-<meta name="description" content="wait()、notify()和notifyAll() 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多">
+<meta name="description" content="我们平时在处理异常的时候，如果是主线程抛出了一个未处理的异常，那么我们可以轻松的使用 try-catch 捕获这个异常。但是如果这个异常是在子线程中抛出的，那么主线程实际上对于子线程的异常是不敏感的，虽然可以正常的抛出，但是却很难去发现。就算是在主线程中使用 try-catch 去捕获子线程的异常那也是没用的，因为 try-catch 只会捕获本线程中的异常。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Java并发】wait()、notify()、notifyAll()">
-<meta property="og:url" content="http://yoursite.com/posts/29010/index.html">
+<meta property="og:title" content="【Java并发】多线程异常处理器">
+<meta property="og:url" content="http://yoursite.com/posts/29598/index.html">
 <meta property="og:site_name" content="简笔">
-<meta property="og:description" content="wait()、notify()和notifyAll() 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多">
-<meta property="article:published_time" content="2020-07-14T15:50:07.000Z">
-<meta property="article:modified_time" content="2020-07-15T15:57:26.938Z">
+<meta property="og:description" content="我们平时在处理异常的时候，如果是主线程抛出了一个未处理的异常，那么我们可以轻松的使用 try-catch 捕获这个异常。但是如果这个异常是在子线程中抛出的，那么主线程实际上对于子线程的异常是不敏感的，虽然可以正常的抛出，但是却很难去发现。就算是在主线程中使用 try-catch 去捕获子线程的异常那也是没用的，因为 try-catch 只会捕获本线程中的异常。">
+<meta property="article:published_time" content="2020-07-23T13:31:05.000Z">
+<meta property="article:modified_time" content="2020-07-23T15:33:40.996Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
+<meta property="article:tag" content="线程">
+<meta property="article:tag" content="异常">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/posts/29010/"/>
+  <link rel="canonical" href="http://yoursite.com/posts/29598/"/>
 
 
 
 
 
-  <title>【Java并发】wait()、notify()、notifyAll() | 简笔</title>
+  <title>【Java并发】多线程异常处理器 | 简笔</title>
   
 
 
@@ -277,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/29010/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/29598/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="王瑞鹏">
@@ -294,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【Java并发】wait()、notify()、notifyAll()</h1>
+          <h1 class="post-title" itemprop="name headline">【Java并发】多线程异常处理器</h1>
         
 
         <div class="post-meta">
@@ -306,8 +308,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-14T23:50:07+08:00">
-                2020-07-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-23T21:31:05+08:00">
+                2020-07-23
               </time>
             
 
@@ -366,23 +368,35 @@
       
 
       
-        <p><code>wait()、notify()和notifyAll()</code> 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。<br>同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。<br>Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多线程可以更好的配合、协同工作。</p>
+        <p>我们平时在处理异常的时候，如果是主线程抛出了一个未处理的异常，那么我们可以轻松的使用 <code>try-catch</code> 捕获这个异常。但是如果这个异常是在子线程中抛出的，那么主线程实际上对于子线程的异常是不敏感的，虽然可以正常的抛出，但是却很难去发现。就算是在主线程中使用 <code>try-catch</code> 去捕获子线程的异常那也是没用的，因为 <code>try-catch</code> 只会捕获本线程中的异常。</p>
 <a id="more"></a>
+<p>简单对比一下主线程和子线程之间抛异常的不同之处：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是子线程抛出来的异常"</span>);</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是主线程抛出来的异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码就可以清晰的展现这个问题。我们使用一个for循环来模拟程序的正常执行过程，这其中，子线程的异常大概是在控制台打印到500的时候抛出来，但这完全不会影响到主线程的正常执行，但是主线程的异常却每次都准确的在程序打印到5000的时候去抛出来，然后程序终止运行。如果是在真实的开发环境中，子线程抛出来的异常并不会被主线程捕获并处理，而在茫茫的日志文件中，我们想要去发现子线程的异常，简直是大海捞针。今天的主题就是要来说一说如何去处理子线程中的异常。</p>
+<p>演示「主线程」<strong>无法捕获</strong>「子线程」中的异常</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程1"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程2"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程3"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程4"</span>).start();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">            System.out.println(<span class="string">"捕获了异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"子线程抛出的异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h1><h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>想要执行 wait 方法必须要在 synchronized 方法或者是代码块中才可以执行，执行 wait方法会使得当前线程释放掉 monitor 锁，强迫当前线程进入阻塞状态。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (Object) &#123;</span><br><span class="line">    object.wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果想要唤醒当前线程则必须是另外的一个线程去调用了 notiify 并且刚刚好唤醒的是本线程，或者是直接调用 notifyAll。</p>
-<blockquote>
-<p>假如现在有四个线程在运行，其中线程A、B、C都调用了<code>wait()</code>在等待同一个monitor锁，而线程D持有这个monitor锁。那么如果现在线程D调用了<code>notify()</code>方法，则会随机的从前面的线程A、B、C中去唤醒一个线程，如果调用的是<code>notifyAll()</code>方法的话，则会将线程A、B、C全部唤醒</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Object object = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"开始执行"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    object.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"再次获取到monitor锁"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread2</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                object.notify();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"已经执行了 notify 方法"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread1 thread1 = <span class="keyword">new</span> Thread1();</span><br><span class="line">        Thread2 thread2 = <span class="keyword">new</span> Thread2();</span><br><span class="line">        thread1.start();</span><br><span class="line">        Thread.sleep(<span class="number">5</span>);</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法运行结果</span></span><br><span class="line">Thread-<span class="number">0</span>开始执行</span><br><span class="line">Thread-<span class="number">1</span>已经执行了 notify 方法</span><br><span class="line">Thread-<span class="number">0</span>再次获取到monitor锁</span><br></pre></td></tr></table></figure>
-<p>上面的这段代码就可以说明<code>wait()</code>方法和<code>notify</code>方法的执行过程。<br>首先是Thread-0线程执行<code>wait()</code>方法<strong>释放monitor锁之后</strong>进入等待状态，之后Thread-1线程执行了<code>notify()</code>方法去唤醒了Thread-0线程。<br>此时Thread-0线程已经是被唤醒的状态，但是并没有继续往下执行，这是因为没有获得monitor锁，唤醒Thread-0线程的Thread-1线程还没有释放这把锁。<br>等待Thread-1线程执行完毕也就是打印了「Thread-1已经执行了 notify 方法」这句语句之后，Thread-1线程执行完毕，释放monitor锁之后，Thread-0线程再次获取monitor锁之后开始执行剩余代码。</p>
-<p>注意：</p>
-<ol>
-<li>调用<code>wait()</code>方法的线程会主动释放monitor锁，上面的代码也正是因为Thread-0主动释放掉了monitor锁之后，Thread-1才可以执行</li>
-<li>当休息的线程被唤醒时并不是直接执行的，而是需要重新去竞争对应的锁，获取到锁之后才可以执行</li>
-</ol>
+<p>上面演示的在主线程中使用 <code>try-catch</code> 去捕获异常也是无法处理的，但是把 <code>try-catch</code> 放到子线程中去就可以处理这个异常了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是子线程抛出来的异常"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeExeception e) &#123;</span><br><span class="line">            <span class="comment">// 处理异常逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是主线程抛出来的异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>像上面这样在子线程中使用 <code>try-catch</code> 去捕获异常这是解决问题的办法之一。这也不可避免的带来一个弊端，那就是我们需要在每个run方法中都手动的去编写 <code>try-catch</code> 来处理异常，而且我们也不知道具体可能出现什么类型的异常。我们有更好的办法——UncaughtExceptionHandler</p>
+<h1 id="Thread类中的接口UncaughtExceptionHandler"><a href="#Thread类中的接口UncaughtExceptionHandler" class="headerlink" title="Thread类中的接口UncaughtExceptionHandler"></a>Thread类中的接口UncaughtExceptionHandler</h1><p>java.lang 包中有一个ThreadGroup的类实现了这个接口，这里就简单的称之为线程的异常处理器。我们来看看这处理了什么内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接口中仅定义了这一个方法，以下是实现类</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    通过接口的参数我们大致可以猜出，当子线程中抛出异常时，将会通过某种方式（个人猜测是反射）回调这个方法</span></span><br><span class="line"><span class="comment">    也清晰明了的告诉了我们是哪个线程抛出的哪个异常</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        parent 的定义：private final ThreadGroup parent;</span></span><br><span class="line"><span class="comment">        首先检查是否存在一个父线程的这个异常处理器，如果存在则调用父线程的异常处理器进行处理，这里是一个递归的操作</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">        parent.uncaughtException(t, e);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            当调用完毕发现并没有一个可以处理异常的处理器之后</span></span><br><span class="line"><span class="comment">            尝试获取全局的异常处理器“这里的 ueh”</span></span><br><span class="line"><span class="comment">            如果存在一个全局的异常处理器，则使用这个处理器处理异常</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        Thread.UncaughtExceptionHandler ueh =</span><br><span class="line">            Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        <span class="keyword">if</span> (ueh != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ueh.uncaughtException(t, e);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!(e <span class="keyword">instanceof</span> ThreadDeath)) &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">                不存在的情况，直接将异常的堆栈信息打印出来</span></span><br><span class="line"><span class="comment">                也就是本文开头子线程中抛出的“我是子线程抛出来的异常”</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            System.err.print(<span class="string">"Exception in thread \""</span></span><br><span class="line">                            + t.getName() + <span class="string">"\" "</span>);</span><br><span class="line">            e.printStackTrace(System.err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看完这个线程处理器之后来看看要如何实现这个线程处理器</p>
+<ul>
+<li><p>首先我们需要编写一个类实现 Thread.UncaughtExceptionHandler 接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyUncaughtExceptionHandler</span> <span class="keyword">implements</span> <span class="title">Thread</span>.<span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyUncaughtExceptionHandler</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">        System.out.println(name + <span class="string">"已经成功捕获了异常。抛出异常的线程是："</span> + t.getName() + <span class="string">"。抛出的异常是："</span> + e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其次我们需要将自己编写的异常处理器织入到主线程中，让它自动去处理子线程的异常。（这里使用开篇中「演示主线程中无法捕获子线程中的异常」的例子并作对比）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">new</span> MyUncaughtExceptionHandler(<span class="string">"线程异常处理器"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程1"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程2"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程3"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程4"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"子线程抛出的异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法执行结果</span></span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">1</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">2</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">3</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">4</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br></pre></td></tr></table></figure>
+
+<p>  至此，多线程异常处理器介绍完毕。</p>
+</li>
+</ul>
 <hr>
+<blockquote>
+<p>插一句题外话，我认为本文的例子中很形象的向我们展示了线程的工作过程。线程在执行期间是互相不打扰的，各自干着各自的事情，这期间并不会互相影响。就像是一个团队在协同工作一样，每个人都是一个独立的线程，各自在完成自己的工作，并不会互相打扰。每个线程领取到自己的任务（run方法）之后，等待开始执行（调用start方法）。之后便是一直闷头干下去，直到把工作做完（run方法执行完毕）</p>
+</blockquote>
 <p>大家加油：）</p>
 
       
@@ -405,6 +419,10 @@
           
             <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
           
+            <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
+          
+            <a href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag"># 异常</a>
+          
         </div>
       
 
@@ -416,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/10492/" rel="next" title="【Java并发】Synchronized关键字">
-                <i class="fa fa-chevron-left"></i> 【Java并发】Synchronized关键字
+              <a href="/posts/50308/" rel="next" title="【Java并发】join()方法">
+                <i class="fa fa-chevron-left"></i> 【Java并发】join()方法
               </a>
             
           </div>
@@ -425,10 +443,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/45104/" rel="prev" title="【Java并发练习】两个线程交替打印0~100">
-                【Java并发练习】两个线程交替打印0~100 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -578,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#方法详解"><span class="nav-text">方法详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#wait"><span class="nav-text">wait</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Thread类中的接口UncaughtExceptionHandler"><span class="nav-text">Thread类中的接口UncaughtExceptionHandler</span></a></li></ol></div>
             
 
           </div>
