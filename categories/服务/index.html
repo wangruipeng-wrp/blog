@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,线程," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,17 +79,11 @@
 
 
 
-<meta name="description" content="本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【Java并发】启动线程">
-<meta property="og:url" content="http://yoursite.com/posts/25097/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="简笔">
+<meta property="og:url" content="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1/index.html">
 <meta property="og:site_name" content="简笔">
-<meta property="og:description" content="本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别">
-<meta property="article:published_time" content="2020-06-26T08:05:08.000Z">
-<meta property="article:modified_time" content="2020-06-27T12:02:06.527Z">
 <meta property="article:author" content="王瑞鹏">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="线程">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +114,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/posts/25097/"/>
+  <link rel="canonical" href="http://yoursite.com/categories/服务/"/>
 
 
 
 
 
-  <title>【Java并发】启动线程 | 简笔</title>
+  <title>分类: 服务 | 简笔</title>
   
 
 
@@ -145,7 +139,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -263,204 +257,58 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block category">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>服务<small>分类</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/25097/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="王瑞鹏">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="简笔">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/posts/9973/" itemprop="url">
+              
+                <span itemprop="name">【Redis】五种数据类型</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">【Java并发】启动线程</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-26T16:05:08+08:00">
-                2020-06-26
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2020-07-30T19:22:22+08:00"
+              content="2020-07-30" >
+          07-30
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index">
-                    <span itemprop="name">并发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/25097/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/posts/25097/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <blockquote>
-<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
-</blockquote>
-<a id="more"></a>
-
-<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
-<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
-<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
-<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
-<blockquote>
-<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
-</blockquote>
-<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
-<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
-<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
-<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
-<hr>
-<p>大家加油：）</p>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
-            <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/posts/18551/" rel="next" title="【ES6】扩展知识">
-                <i class="fa fa-chevron-left"></i> 【ES6】扩展知识
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/41050/" rel="prev" title="【Java并发】停止线程">
-                【Java并发】停止线程 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  <!--
+
+-->
+
+
 
 
           </div>
@@ -468,13 +316,6 @@
 
 
           
-
-  
-    <div class="comments" id="comments">
-    </div>
-  
-
-
 
         </div>
         
@@ -495,17 +336,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -583,22 +415,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#start-方法"><span class="nav-text">start 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#含义（启动新线程）"><span class="nav-text">含义（启动新线程）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析"><span class="nav-text">源码解析</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#start-方法和-run-方法"><span class="nav-text">start 方法和 run 方法</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -735,10 +551,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
