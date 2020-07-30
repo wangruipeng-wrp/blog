@@ -914,24 +914,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【Redis】五种数据类型</title>
-    <url>/posts/9973/</url>
-    <content><![CDATA[<blockquote>
-<p>本文整理自<a href="https://www.runoob.com/redis/redis-intro.html" target="_blank" rel="noopener">菜鸟教程</a></p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="一、String（字符串）"><a href="#一、String（字符串）" class="headerlink" title="一、String（字符串）"></a>一、String（字符串）</h1><p>string 是 redis 最基本的类型，你可以理解成与 Memcached 一模一样的类型，一个 key 对应一个 value。<br>string 类型是二进制安全的。意思是 redis 的 string 可以包含任何数据。比如jpg图片或者序列化的对象。<br>string 类型是 Redis 最基本的数据类型，string 类型的值最大能存储 512MB。</p>
-]]></content>
-      <categories>
-        <category>服务</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
-        <tag>数据类型</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Java并发】启动线程</title>
     <url>/posts/25097/</url>
     <content><![CDATA[<blockquote>
