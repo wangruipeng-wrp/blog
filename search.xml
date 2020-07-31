@@ -1,152 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>【JavaScript】作用域</title>
-    <url>/posts/1709/</url>
-    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
-<a id="more"></a>
-
-<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
-<blockquote>
-<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
-</blockquote>
-<p><strong>来看一个例子：</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
-<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【ES6】解构赋值</title>
-    <url>/posts/53099/</url>
-    <content><![CDATA[<blockquote>
-<p>解构赋值语法是一个 JavaScript 表达式，这使得可以将 <strong>值从数组</strong> 或 <strong>属性从对象</strong> 提取到不同变量中。</p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h1><p>数组的解构赋值是有序的，将会按照顺序去匹配</p>
-<h4 id="简单的解构赋值"><a href="#简单的解构赋值" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 的值将会对应上数组中的 1 2 3 4</span></span><br></pre></td></tr></table></figure>
-<p>在 ES6 之前，「解构赋值」还没出现的时候，想要实现以上功能只能够一个个的去定义 <code>a b c d</code> 这四个变量。因此，「解构赋值」的出现就是为了简化一些代码的编写，实现更加高效的开发。</p>
-<h4 id="数组嵌套的解构赋值"><a href="#数组嵌套的解构赋值" class="headerlink" title="数组嵌套的解构赋值"></a>数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, [<span class="string">'c'</span>, <span class="string">'d'</span>, [<span class="string">'e'</span>, <span class="string">'f'</span><span class="string">'g'</span>]]]</span><br><span class="line"><span class="keyword">let</span> [, , [, , [, , g]]] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 g 将对应 arr 中的字符 g</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="扩展运算符："><a href="#扩展运算符：" class="headerlink" title="扩展运算符： ..."></a>扩展运算符： <code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">const</span> arr3 = [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr4 = [...arr1, ...arr2, ...arr3]</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr4 = [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br><span class="line"><span class="comment">// 注意：arr4 将是一个一维数组而不是二维数组</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 c 将对应数组中 c 之后的所有值组成的新数组</span></span><br><span class="line"><span class="comment">// 注意：这种写法扩展运算符必须放在最后一位</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="literal">undefined</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b = <span class="number">2</span>, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 将对应成[1, 2, 3, undefined]</span></span><br><span class="line"><span class="comment">// 没有匹配到的值将会默认为 undefined，匹配到 undefined 将会自动赋为默认值</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="数组解构赋值的使用"><a href="#数组解构赋值的使用" class="headerlink" title="数组解构赋值的使用"></a>数组解构赋值的使用</h4><ol>
-<li><p><strong>交换变量</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">[a, b] = [b, a];</span><br><span class="line"></span><br><span class="line"><span class="comment">// a = 10</span></span><br><span class="line"><span class="comment">// b = 20</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>接收函数中的数组返回值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="literal">true</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">            age: <span class="number">18</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'请求成功'</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> [status, data, msg] = getUserInfo()</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<hr>
-<h1 id="对象的解构赋值"><a href="#对象的解构赋值" class="headerlink" title="对象的解构赋值"></a>对象的解构赋值</h1><p>对象的解构赋值是无序的，将直接按照属性名称去匹配</p>
-<h4 id="简单的解构赋值-1"><a href="#简单的解构赋值-1" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">name</span>: <span class="string">'zhangsan'</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name : 'zhangsan'</span></span><br><span class="line"><span class="comment">// age : 18</span></span><br><span class="line"><span class="comment">// 按照属性名称匹配对应的值</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对象与数组嵌套的解构赋值"><a href="#对象与数组嵌套的解构赋值" class="headerlink" title="对象与数组嵌套的解构赋值"></a>对象与数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    hobby: [&#123;</span><br><span class="line">        hobbyName: <span class="string">'听歌'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        hobbyName: <span class="string">'看电影'</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;</span><br><span class="line">    hobby:</span><br><span class="line">    [</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name1 &#125;,</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name2 &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name1: '听歌'</span></span><br><span class="line"><span class="comment">// name2: '看电影'</span></span><br></pre></td></tr></table></figure>
-<p>注意：<code>hobby</code> 后的“:”跟着的是 <code>obj</code> 对象中的 <code>hobby</code> 数组，<code>hobbyName</code> 后的“:”跟着的是为了区分两个同名的 <code>hobbyName</code> 所起的别名</p>
-<h4 id="扩展运算符：-1"><a href="#扩展运算符：-1" class="headerlink" title="扩展运算符：..."></a>扩展运算符：<code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, ...obj1&#125; = obj;</span><br><span class="line"></span><br><span class="line"><span class="comment">// obj 对象中的 age 和 sex 属性将会被封装成 obj1 对象</span></span><br><span class="line"><span class="comment">// 注意：这种方式使用的扩展运算符只能够放在最后一位</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj2 = &#123;</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj3 = &#123;</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;...obj1, ...obj2, ...obj3&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象 obj 中会有 obj1-3 的全部属性</span></span><br><span class="line"><span class="comment">// 注意：如果存在重名属性，后面的会覆盖掉前面的</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对已经声明的变量进行解构赋值"><a href="#对已经声明的变量进行解构赋值" class="headerlink" title="对已经声明的变量进行解构赋值"></a>对已经声明的变量进行解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> age;</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;;</span><br><span class="line">(&#123; age &#125; = obj)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：以上的解构赋值语句如果没有加 () 会被视为是一个作用域而报错</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="默认值-1"><a href="#默认值-1" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age = <span class="number">18</span>, sex = <span class="string">'男'</span>&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在匹配时，如果匹配不到对应的属性或者是对应的属性为 undefined 时，将会寻找默认值自动匹配</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对象解构赋值的使用"><a href="#对象解构赋值的使用" class="headerlink" title="对象解构赋值的使用"></a>对象解构赋值的使用</h4><ol>
-<li><p><strong>传递乱序参数和设置默认值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params">option</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: option.url,</span><br><span class="line">        type: option.type || <span class="string">'get'</span>,</span><br><span class="line">        data: option.data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params"> &#123; url, data, type = <span class="string">'get'</span> &#125; </span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: url,</span><br><span class="line">        type: type,</span><br><span class="line">        data: data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">AJAX(&#123;</span><br><span class="line">    url: <span class="string">'/getUserInfo'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        id: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>获取一个函数中的多个返回值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span> (<span class="params">userId</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...ajax</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        status: <span class="literal">true</span>,</span><br><span class="line">        data: &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        msg: <span class="string">'请求成功'</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;status, data, msg&#125; = getUserInfo(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="字符串的解构赋值"><a href="#字符串的解构赋值" class="headerlink" title="字符串的解构赋值"></a>字符串的解构赋值</h1><ol>
-<li><p><strong>直接取值</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a b c 三个变量将会分别对应字符串 str 的前三个字符</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>扩展运算符：<code>...</code></strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b 依旧对应前两个字符，变量 c 则对应的是后面的每个字符所组成的数组</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>分割字符串</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [ ...spStr1 ] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的代码效果等同于：let spStr1 = str.split('');</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>提取属性</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> &#123; length &#125; = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// length = 12</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【ES6】var、let、const</title>
-    <url>/posts/37909/</url>
-    <content><![CDATA[<blockquote>
-<p>let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。</p>
-</blockquote>
-<a id="more"></a>
-
-
-<h1 id="let-amp-var"><a href="#let-amp-var" class="headerlink" title="let &amp; var"></a>let &amp; var</h1><h4 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h4><p>「块级作用域」这个概念是在 ES6 中新引入的概念，就是一个 <code>{}</code> 「花括号」而已。所有的花括号之内都是一个单独的块级作用域，但是有一种特殊情况不是，那就是在声明对象的时候字面式声明一个对象的时候不是。</p>
-<h4 id="let和var的区别"><a href="#let和var的区别" class="headerlink" title="let和var的区别"></a>let和var的区别</h4><ol>
-<li><p>let 和 var 最大的区别就是 <strong>let声明的对象只在当前作用域生效</strong><br>例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不能重复声明</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">20</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">20</span> </span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br></pre></td></tr></table></figure>
-<p>上面的代码将会直接报错</p>
-</li>
-<li><p>let 不存在「变量提升」<br>使用 var 关键字声明的变量在执行上下文中会有一个变量提升的现象，但是使用 let 声明的变量将不会出现这个现象，比如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a)  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>暂存死区</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a)</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">    <span class="built_in">console</span>.log(a) <span class="comment">// 20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的这段代码将会直接报错。因为 ES6 中单独的作用域内使用 let 或者是 const 声明的变量将会形成一个封闭的作用域，这直接导致重名的变量无法访问到父级作用域的变量，进而报错。</p>
-</li>
-</ol>
-<h1 id="const-常量"><a href="#const-常量" class="headerlink" title="const 常量"></a>const 常量</h1><ol>
-<li><p>声明常量<br>const 声明时与 let 声明并没有什么区别，唯一的区别是使用 const 声明常量时需要在声明的同时初始化。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line"><span class="keyword">const</span> a <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不能修改<br>声明的既然是常量，那么当然是不允许被修改的。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line">a = <span class="number">20</span> <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-<p> <strong>如果声明的是一个引用类型的数据，那么它将可以被修改</strong></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// lisi</span></span><br></pre></td></tr></table></figure>
-<p>实际上 const 声明的常量仅仅只是「锁定」了<strong>栈内存</strong>中的值，而引用数据类型实际存放的地方是在<strong>堆内存</strong>中的。所以对象类型的值是可以被修改的。</p>
-<p> 那么我们既然是声明了一个常量的话当然是不希望这个常量能够被修改，如果是一个对象类型的常量的话，我们必须通过 <code>Object.freeze()</code> 这个方法来「冻结」这个对象类型的常量。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 冻结</span></span><br><span class="line"><span class="built_in">Object</span>.freeze(obj)</span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br></pre></td></tr></table></figure>
-<p>在上面这个例子中两次的输出都是 <code>zhangsan</code> 这说明了我们并没有修改到 <code>obj</code> 这个对象，这样子就是声明了一个对象类型的常量表了。</p>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>JavaScript基础</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【ES6】扩展知识</title>
     <url>/posts/18551/</url>
     <content><![CDATA[<blockquote>
@@ -229,6 +83,79 @@
       </tags>
   </entry>
   <entry>
+    <title>【ES6】var、let、const</title>
+    <url>/posts/37909/</url>
+    <content><![CDATA[<blockquote>
+<p>let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。</p>
+</blockquote>
+<a id="more"></a>
+
+
+<h1 id="let-amp-var"><a href="#let-amp-var" class="headerlink" title="let &amp; var"></a>let &amp; var</h1><h4 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h4><p>「块级作用域」这个概念是在 ES6 中新引入的概念，就是一个 <code>{}</code> 「花括号」而已。所有的花括号之内都是一个单独的块级作用域，但是有一种特殊情况不是，那就是在声明对象的时候字面式声明一个对象的时候不是。</p>
+<h4 id="let和var的区别"><a href="#let和var的区别" class="headerlink" title="let和var的区别"></a>let和var的区别</h4><ol>
+<li><p>let 和 var 最大的区别就是 <strong>let声明的对象只在当前作用域生效</strong><br>例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不能重复声明</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">20</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">20</span> </span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br></pre></td></tr></table></figure>
+<p>上面的代码将会直接报错</p>
+</li>
+<li><p>let 不存在「变量提升」<br>使用 var 关键字声明的变量在执行上下文中会有一个变量提升的现象，但是使用 let 声明的变量将不会出现这个现象，比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a)  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>暂存死区</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a)</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">    <span class="built_in">console</span>.log(a) <span class="comment">// 20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的这段代码将会直接报错。因为 ES6 中单独的作用域内使用 let 或者是 const 声明的变量将会形成一个封闭的作用域，这直接导致重名的变量无法访问到父级作用域的变量，进而报错。</p>
+</li>
+</ol>
+<h1 id="const-常量"><a href="#const-常量" class="headerlink" title="const 常量"></a>const 常量</h1><ol>
+<li><p>声明常量<br>const 声明时与 let 声明并没有什么区别，唯一的区别是使用 const 声明常量时需要在声明的同时初始化。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line"><span class="keyword">const</span> a <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不能修改<br>声明的既然是常量，那么当然是不允许被修改的。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line">a = <span class="number">20</span> <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+<p> <strong>如果声明的是一个引用类型的数据，那么它将可以被修改</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// lisi</span></span><br></pre></td></tr></table></figure>
+<p>实际上 const 声明的常量仅仅只是「锁定」了<strong>栈内存</strong>中的值，而引用数据类型实际存放的地方是在<strong>堆内存</strong>中的。所以对象类型的值是可以被修改的。</p>
+<p> 那么我们既然是声明了一个常量的话当然是不希望这个常量能够被修改，如果是一个对象类型的常量的话，我们必须通过 <code>Object.freeze()</code> 这个方法来「冻结」这个对象类型的常量。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 冻结</span></span><br><span class="line"><span class="built_in">Object</span>.freeze(obj)</span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br></pre></td></tr></table></figure>
+<p>在上面这个例子中两次的输出都是 <code>zhangsan</code> 这说明了我们并没有修改到 <code>obj</code> 这个对象，这样子就是声明了一个对象类型的常量表了。</p>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【JavaScript】作用域</title>
+    <url>/posts/1709/</url>
+    <content><![CDATA[<p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
+<a id="more"></a>
+
+<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
+<blockquote>
+<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
+</blockquote>
+<p><strong>来看一个例子：</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
+<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【JavaScript】创建对象</title>
     <url>/posts/15655/</url>
     <content><![CDATA[<p>这篇博客将会记录一下js中创建对象的几种不同的方式，分别是字面式声明、<code>new</code>关键字声明、构造函数声明、工厂模式声明、原型声明。</p>
@@ -263,6 +190,79 @@
       <tags>
         <tag>JavaScript</tag>
         <tag>面向对象</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【ES6】解构赋值</title>
+    <url>/posts/53099/</url>
+    <content><![CDATA[<blockquote>
+<p>解构赋值语法是一个 JavaScript 表达式，这使得可以将 <strong>值从数组</strong> 或 <strong>属性从对象</strong> 提取到不同变量中。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h1><p>数组的解构赋值是有序的，将会按照顺序去匹配</p>
+<h4 id="简单的解构赋值"><a href="#简单的解构赋值" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 的值将会对应上数组中的 1 2 3 4</span></span><br></pre></td></tr></table></figure>
+<p>在 ES6 之前，「解构赋值」还没出现的时候，想要实现以上功能只能够一个个的去定义 <code>a b c d</code> 这四个变量。因此，「解构赋值」的出现就是为了简化一些代码的编写，实现更加高效的开发。</p>
+<h4 id="数组嵌套的解构赋值"><a href="#数组嵌套的解构赋值" class="headerlink" title="数组嵌套的解构赋值"></a>数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, [<span class="string">'c'</span>, <span class="string">'d'</span>, [<span class="string">'e'</span>, <span class="string">'f'</span><span class="string">'g'</span>]]]</span><br><span class="line"><span class="keyword">let</span> [, , [, , [, , g]]] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 g 将对应 arr 中的字符 g</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="扩展运算符："><a href="#扩展运算符：" class="headerlink" title="扩展运算符： ..."></a>扩展运算符： <code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">const</span> arr3 = [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr4 = [...arr1, ...arr2, ...arr3]</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr4 = [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br><span class="line"><span class="comment">// 注意：arr4 将是一个一维数组而不是二维数组</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 c 将对应数组中 c 之后的所有值组成的新数组</span></span><br><span class="line"><span class="comment">// 注意：这种写法扩展运算符必须放在最后一位</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="literal">undefined</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> [a, b = <span class="number">2</span>, c, d] = arr</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b c d 将对应成[1, 2, 3, undefined]</span></span><br><span class="line"><span class="comment">// 没有匹配到的值将会默认为 undefined，匹配到 undefined 将会自动赋为默认值</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="数组解构赋值的使用"><a href="#数组解构赋值的使用" class="headerlink" title="数组解构赋值的使用"></a>数组解构赋值的使用</h4><ol>
+<li><p><strong>交换变量</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">[a, b] = [b, a];</span><br><span class="line"></span><br><span class="line"><span class="comment">// a = 10</span></span><br><span class="line"><span class="comment">// b = 20</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>接收函数中的数组返回值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="literal">true</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">            age: <span class="number">18</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'请求成功'</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> [status, data, msg] = getUserInfo()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h1 id="对象的解构赋值"><a href="#对象的解构赋值" class="headerlink" title="对象的解构赋值"></a>对象的解构赋值</h1><p>对象的解构赋值是无序的，将直接按照属性名称去匹配</p>
+<h4 id="简单的解构赋值-1"><a href="#简单的解构赋值-1" class="headerlink" title="简单的解构赋值"></a>简单的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;<span class="attr">name</span>: <span class="string">'zhangsan'</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name : 'zhangsan'</span></span><br><span class="line"><span class="comment">// age : 18</span></span><br><span class="line"><span class="comment">// 按照属性名称匹配对应的值</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对象与数组嵌套的解构赋值"><a href="#对象与数组嵌套的解构赋值" class="headerlink" title="对象与数组嵌套的解构赋值"></a>对象与数组嵌套的解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    hobby: [&#123;</span><br><span class="line">        hobbyName: <span class="string">'听歌'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        hobbyName: <span class="string">'看电影'</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;</span><br><span class="line">    hobby:</span><br><span class="line">    [</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name1 &#125;,</span><br><span class="line">        &#123; <span class="attr">hobbyName</span>: name2 &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// name1: '听歌'</span></span><br><span class="line"><span class="comment">// name2: '看电影'</span></span><br></pre></td></tr></table></figure>
+<p>注意：<code>hobby</code> 后的“:”跟着的是 <code>obj</code> 对象中的 <code>hobby</code> 数组，<code>hobbyName</code> 后的“:”跟着的是为了区分两个同名的 <code>hobbyName</code> 所起的别名</p>
+<h4 id="扩展运算符：-1"><a href="#扩展运算符：-1" class="headerlink" title="扩展运算符：..."></a>扩展运算符：<code>...</code></h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, ...obj1&#125; = obj;</span><br><span class="line"></span><br><span class="line"><span class="comment">// obj 对象中的 age 和 sex 属性将会被封装成 obj1 对象</span></span><br><span class="line"><span class="comment">// 注意：这种方式使用的扩展运算符只能够放在最后一位</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj2 = &#123;</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj3 = &#123;</span><br><span class="line">    sex: <span class="string">'男'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;...obj1, ...obj2, ...obj3&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象 obj 中会有 obj1-3 的全部属性</span></span><br><span class="line"><span class="comment">// 注意：如果存在重名属性，后面的会覆盖掉前面的</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对已经声明的变量进行解构赋值"><a href="#对已经声明的变量进行解构赋值" class="headerlink" title="对已经声明的变量进行解构赋值"></a>对已经声明的变量进行解构赋值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> age;</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="number">18</span></span><br><span class="line">&#125;;</span><br><span class="line">(&#123; age &#125; = obj)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：以上的解构赋值语句如果没有加 () 会被视为是一个作用域而报错</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="默认值-1"><a href="#默认值-1" class="headerlink" title="默认值"></a>默认值</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span>,</span><br><span class="line">    age: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> &#123;name, age = <span class="number">18</span>, sex = <span class="string">'男'</span>&#125; = obj</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在匹配时，如果匹配不到对应的属性或者是对应的属性为 undefined 时，将会寻找默认值自动匹配</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="对象解构赋值的使用"><a href="#对象解构赋值的使用" class="headerlink" title="对象解构赋值的使用"></a>对象解构赋值的使用</h4><ol>
+<li><p><strong>传递乱序参数和设置默认值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params">option</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: option.url,</span><br><span class="line">        type: option.type || <span class="string">'get'</span>,</span><br><span class="line">        data: option.data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用解构赋值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AJAX</span>(<span class="params"> &#123; url, data, type = <span class="string">'get'</span> &#125; </span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: url,</span><br><span class="line">        type: type,</span><br><span class="line">        data: data</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">AJAX(&#123;</span><br><span class="line">    url: <span class="string">'/getUserInfo'</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        id: <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>获取一个函数中的多个返回值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserInfo</span> (<span class="params">userId</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...ajax</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        status: <span class="literal">true</span>,</span><br><span class="line">        data: &#123;</span><br><span class="line">            name: <span class="string">'zhangsan'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        msg: <span class="string">'请求成功'</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123;status, data, msg&#125; = getUserInfo(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="字符串的解构赋值"><a href="#字符串的解构赋值" class="headerlink" title="字符串的解构赋值"></a>字符串的解构赋值</h1><ol>
+<li><p><strong>直接取值</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a b c 三个变量将会分别对应字符串 str 的前三个字符</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扩展运算符：<code>...</code></strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [a, b, ...c] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量 a b 依旧对应前两个字符，变量 c 则对应的是后面的每个字符所组成的数组</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>分割字符串</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> [ ...spStr1 ] = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的代码效果等同于：let spStr1 = str.split('');</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>提取属性</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="string">"Hello,World!"</span>;</span><br><span class="line"><span class="keyword">let</span> &#123; length &#125; = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">// length = 12</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>JavaScript基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -381,113 +381,6 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Java并发】Synchronized关键字</title>
-    <url>/posts/10492/</url>
-    <content><![CDATA[<p><strong>一句话说明 Synchronized 关键字的作用：</strong></p>
-<blockquote>
-<p>能够保证在 <strong>「同一时刻」</strong> 最多只有 <strong>「一个」</strong> 线程执行该段代码，以达到保证 <strong>「并发安全」</strong> 的效果</p>
-</blockquote>
-<a id="more"></a>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h4 id="地位"><a href="#地位" class="headerlink" title="地位"></a>地位</h4><ul>
-<li>Synchronized 是 Java 的关键字，被 Java 语言原生支持</li>
-<li>是最基本的互斥同步手段</li>
-<li>并发编程中的必学内容</li>
-</ul>
-<h4 id="线程不安全的后果"><a href="#线程不安全的后果" class="headerlink" title="线程不安全的后果"></a>线程不安全的后果</h4><p>我们来演示一个“消失的请求”的小例子</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; syn(); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable();</span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">        <span class="comment">// 两个join方法是为了保证两个线程能够执行完毕</span></span><br><span class="line">        thread1.join();</span><br><span class="line">        thread2.join();</span><br><span class="line">        <span class="comment">// 介绍一下另一种方式保证两个线程能够执行完毕</span></span><br><span class="line">        <span class="comment">// while (thread1.isAlive() || thread2.isAlive()) &#123; &#125;</span></span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：178233</span></span><br></pre></td></tr></table></figure>
-<p>很明显，如果是两个线程同时在竞争一个资源并且没有加 synchronized 关键字的修饰的话就会出现这样数据错误的情况。<br>实际上，上面代码 <code>i++</code> 的这行语句在执行的时候是有三个步骤的。</p>
-<ul>
-<li><strong>步骤一：</strong>将 i 的值读到内存中</li>
-<li><strong>步骤二：</strong>将 i 的值加1</li>
-<li><strong>步骤三：</strong>将 i 的值写回去</li>
-</ul>
-<p>但是现在有两个线程在同时执行这三个步骤，比如在 <code>i=10</code> 的时候线程 <code>thread1</code> 执行了<strong>步骤一</strong>，此时线程 <code>thread2</code> 也执行了 <strong>步骤一</strong>，那么线程 <code>thread2</code> 拿到的 <code>i</code> 的值也是10，然后这两个线程正常执行<strong>步骤二</strong>和<strong>步骤三</strong>这样子就会导致两个线程同时将 <code>i</code> 的值从 10 加到 11。这就是线程不安全的后果，本文介绍的 Synchronized 关键字的作用就是为了解决这样的问题而存在的。</p>
-<h1 id="Synchronized-关键字的用法"><a href="#Synchronized-关键字的用法" class="headerlink" title="Synchronized 关键字的用法"></a>Synchronized 关键字的用法</h1><p>既然上面的例子已经是出现了这样的问题，那么接下来就介绍一下如何使用 Synchronized 关键字来解决类似的问题。将以下几个例子的 syn 方法应用在上面「线程不安全的后果」中即可解决“消失的请求”的问题</p>
-<blockquote>
-<p>实际上，我们可以将 Synchronized 关键字理解成「<strong>锁</strong>」的概念，当一个线程去获取一些要执行的资源的时候，我们就把这个资源的锁给这个线程，线程拿到锁了便可以执行。这时候如果其他线程也想要获取这个执行资源的话，由于拿不到锁便无法执行，只能是陷入 BLOKCKED 阻塞状态。从而保证了线程安全<br>但是，Java 为 Synchronized 关键字提供了几种不同的加锁的方式，我们可以根据具体的业务场景选择使用不同的方式来加锁。依据使用方式的不同，在这里将其分为 <strong>对象锁</strong> 和 <strong>类锁</strong></p>
-</blockquote>
-<h3 id="对象锁"><a href="#对象锁" class="headerlink" title="对象锁"></a>对象锁</h3><p>synchronized 修饰普通方法和代码块的形式都称之为对象锁。<br>以下是我的个人理解：</p>
-<ul>
-<li><strong>代码块</strong><br> 修饰代码块的形式是需要我们为这个代码块去手动的指定一个对象作为锁传进去的，线程想要执行代码块中的代码就必须要拿到这把锁也就是我们指定的对象才可以执行。</li>
-<li><strong>普通方法</strong><br> 我认为普通方法和代码块的形式实际上原理相同，Java 中我们在调用普通方法时是这样的：<code>Object.method()</code> 是通过类对象去调用的方法，这里的类对象实际上就是传入的锁，如果是通过相同的对象去调用这个方法，那么就需要拿到这个对象作为的锁才可以调用这个方法，在这里也就是将这个对象作为了锁，因此将 synchronized 关键字的这种方式分类在对象锁之下。</li>
-</ul>
-<h5 id="同步代码块形式"><a href="#同步代码块形式" class="headerlink" title="同步代码块形式"></a>同步代码块形式</h5><p>同步代码块的形式就是直接把 synchronized 关键字加在代码块上，并且指定一个对象作为锁。这样当线程访问代码块时就可以拿到这个对象作为锁，其他线程再想访问就拿不到这个对象了。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// main 方法执行结果：20000</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>扩展：一个方法中可以有多个同步代码块，并且使用不同的锁对象。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Object lock1 = <span class="keyword">new</span> Object();</span><br><span class="line">Object lock2 = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (lock1) &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock1 开始执行"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock1 执行完毕"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (lock2) &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock2 开始执行"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock2 执行完毕"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line">Thread-<span class="number">0</span>  lock1 开始执行</span><br><span class="line">Thread-<span class="number">0</span>  lock1 执行完毕</span><br><span class="line">Thread-<span class="number">0</span>  lock2 开始执行</span><br><span class="line">Thread-<span class="number">1</span>  lock1 开始执行</span><br><span class="line">Thread-<span class="number">0</span>  lock2 执行完毕</span><br><span class="line">Thread-<span class="number">1</span>  lock1 执行完毕</span><br><span class="line">Thread-<span class="number">1</span>  lock2 开始执行</span><br><span class="line">Thread-<span class="number">1</span>  lock2 执行完毕</span><br></pre></td></tr></table></figure>
-
-<h5 id="普通方法形式"><a href="#普通方法形式" class="headerlink" title="普通方法形式"></a>普通方法形式</h5><p>直接将 synchronized 关键字加在普通方法上（以调用方法的对象作为锁，也就是 <code>this</code> ），这样这个方法就是只能同时被一个线程执行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="类锁"><a href="#类锁" class="headerlink" title="类锁"></a>类锁</h3><p>synchronized 修饰静态方法和修饰代码块时指定（*.class）对象都称之为类锁<br>以下是我的个人理解：</p>
-<ul>
-<li><strong>静态方法</strong><br> Java 中一个类的静态方法只会随着类的加载而加载，在创建类对象时是不会加载静态方法的。这意味着一个类的静态方法在内存中只有一份，这与类的实例无关。当 synchronized 修饰了静态方法时，这个静态方法是在同一个时间内是绝对只会有一个线程在执行的。这与修饰普通方法的对象锁不同，对象锁的话是将调用方法的对象作为锁的，如果执行这个对象的方法被阻塞时，可以再新建一个对象去执行这个方法。而修饰静态方法的类锁是不同的，由于静态方法在内存中只有一份，所以<strong>在同一时间段内只能有一个线程执行</strong></li>
-<li><strong>指定（*.class）对象</strong><br> 首先必须明白一个概念，Java 中的类无论被实例化多少次 <code>class</code> 对象都始终只有一个，所以修饰代码块时指定一个 <code>类名.class</code> 的类对象作为锁传入的话，那么由于锁在内存中的唯一性，那么这个代码块也是<strong>在同一时间段内只能有一个线程执行的</strong>。同样的这与对象锁中指定对象的形式不同，指定一个对象作为锁的话，在阻塞时实际上也可以通过重新创建一个对象来执行代码块中的代码。</li>
-</ul>
-<h5 id="静态方法形式"><a href="#静态方法形式" class="headerlink" title="静态方法形式"></a>静态方法形式</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="指定（-class）对象的形式"><a href="#指定（-class）对象的形式" class="headerlink" title="指定（*.class）对象的形式"></a>指定（*.class）对象的形式</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (Runnable<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h3><blockquote>
-<p>synchronized 关键字就是将指定的对象作为锁去保护某一段代码的机制，这个指定的对象可以是普通对象也可以是类对象。根据指定的对象的功能不同可以分为对象锁和类锁，对象锁和类锁的区别就是在内存中，类锁是只有一个的，而对象锁可以创建多个，从而在某种特定的条件下可能在同一个时间段内多个线程都在执行同一个方法。</p>
-</blockquote>
-<h1 id="多线程访问同步方法的7种情况"><a href="#多线程访问同步方法的7种情况" class="headerlink" title="多线程访问同步方法的7种情况"></a>多线程访问同步方法的7种情况</h1><ol>
-<li><p>两个线程同时访问<strong>一个对象</strong>的同步方法<br> 同一个对象同一个锁，先访问先执行，后访问被阻塞</p>
-</li>
-<li><p>两个线程访问的是<strong>两个对象</strong>的同步方法<br> 两个对象两个锁，两个线程各一个，各自执行，互不干扰</p>
-</li>
-<li><p>两个线程访问的是 synchronized 的静态方法<br> 静态方法持类锁，两个线程一个锁，先访问先执行，后访问阻塞</p>
-</li>
-<li><p>同时访问<strong>同步</strong>方法与<strong>非同步</strong>方法<br> 非同步方法的执行并不受同步方法的影响</p>
-</li>
-<li><p>访问同一个对象的<strong>不同的</strong>普通同步方法<br> 普通同步方法默认以 <code>this</code> 作为锁对象，所以同个对象同个锁，先访问先执行，后访问被阻塞</p>
-</li>
-<li><p>同时访问<strong>静态</strong> synchronized 和<strong>非静态</strong> synchronized 方法<br> 静态方法用类锁，非静态方法用对象锁，两个线程各一个，各自执行，互不干扰</p>
-</li>
-<li><p>方法抛出<strong>异常</strong>后，会释放<strong>锁</strong><br> 代码演示：</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable();</span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (Thread.currentThread().getName().equals(<span class="string">"Thread-0"</span>)) &#123;</span><br><span class="line">            method1();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            method2();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"   开始执行"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"   开始执行"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"   执行完毕"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Thread-0   开始执行</span></span><br><span class="line"><span class="comment">// 等待3秒...</span></span><br><span class="line"><span class="comment">Exception in thread "Thread-0" java.lang.RuntimeException</span></span><br><span class="line"><span class="comment">    at createthreads.Runnable.method1(Runnable.java:29)</span></span><br><span class="line"><span class="comment">    at createthreads.Runnable.run(Runnable.java:16)</span></span><br><span class="line"><span class="comment">    at java.lang.Thread.run(Thread.java:748)</span></span><br><span class="line"><span class="comment">Thread-1   开始执行</span></span><br><span class="line"><span class="comment">Thread-1   执行完毕</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="小结：-1"><a href="#小结：-1" class="headerlink" title="小结："></a>小结：</h3><ol>
-<li>一把锁只能同时被一个线程获取，没有拿到锁的线程必须等待。</li>
-<li>每个实例都对应自己的一把锁，不同实例之间互不影响。</li>
-<li>锁对象是是 <code>*.class</code> 以及 synchronized 修饰的是 static 方法的时候，所有对象共用一把锁。</li>
-<li>无论方法正常执行完毕或者方法抛出异常，都会释放锁。</li>
-</ol>
-<h1 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h1><h3 id="可重入"><a href="#可重入" class="headerlink" title="可重入"></a>可重入</h3><ul>
-<li><strong>概念</strong>：指的是同一线程的外层函数获取锁之后，内层函数可以直接再次获取该锁。</li>
-<li><strong>好处</strong>：避免死锁，提升封装性。</li>
-</ul>
-<p>可重入的意思是，当前获得锁的线程去再次调用被 synchronized 修饰的方法时，可以把当前已经获得的锁直接传递给该方法。这样的机制的好处是可以避免死锁的发生，也就是当前方法在等待的锁正好是自己已经获得的锁，陷入死循环不断等待。另一个好处是提升封装性，由于可传入的性质，避免了在调用其他方法时的解锁和加锁步骤，简化了并发编程的难度。</p>
-<p><strong>示例：三个可重入场景</strong></p>
-<blockquote>
-<p>递归调用被 synchronized 关键字修饰的方法</p>
-</blockquote>
-<blockquote>
-<p>在 synchronized 方法中调用另外一个 synchronized 方法（必须使用同一个锁）</p>
-</blockquote>
-<blockquote>
-<p>子类 synchronized 方法中调用父类 synchronized 方法</p>
-</blockquote>
-<h3 id="不可中断"><a href="#不可中断" class="headerlink" title="不可中断"></a>不可中断</h3><p>当线程访问一个拿不到锁的 synchronized 方法时，只能是被阻塞。直到别的线程释放锁为止，如果别的线程永远不释放锁的话，那么就只能永远等待下去。</p>
-<hr>
-<p>参考：<br><a href="https://www.cnblogs.com/wpf-7/p/9639671.html" target="_blank" rel="noopener">https://www.cnblogs.com/wpf-7/p/9639671.html</a></p>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>并发</tag>
-        <tag>synchronized</tag>
-        <tag>锁</tag>
       </tags>
   </entry>
   <entry>
@@ -717,25 +610,100 @@
 ]]></content>
   </entry>
   <entry>
-    <title>【Java并发】wait()、notify()、notifyAll()</title>
-    <url>/posts/29010/</url>
-    <content><![CDATA[<p><code>wait()、notify()和notifyAll()</code> 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。<br>同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。<br>Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多线程可以更好的配合、协同工作。</p>
-<a id="more"></a>
-
-<h1 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h1><h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>想要执行 wait 方法必须要在 synchronized 方法或者是代码块中才可以执行，执行 wait方法会使得当前线程释放掉 monitor 锁，强迫当前线程进入阻塞状态。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (Object) &#123;</span><br><span class="line">    object.wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果想要唤醒当前线程则必须是另外的一个线程去调用了 notiify 并且刚刚好唤醒的是本线程，或者是直接调用 notifyAll。</p>
+    <title>【Java并发】Synchronized关键字</title>
+    <url>/posts/10492/</url>
+    <content><![CDATA[<p><strong>一句话说明 Synchronized 关键字的作用：</strong></p>
 <blockquote>
-<p>假如现在有四个线程在运行，其中线程A、B、C都调用了<code>wait()</code>在等待同一个monitor锁，而线程D持有这个monitor锁。那么如果现在线程D调用了<code>notify()</code>方法，则会随机的从前面的线程A、B、C中去唤醒一个线程，如果调用的是<code>notifyAll()</code>方法的话，则会将线程A、B、C全部唤醒</p>
+<p>能够保证在 <strong>「同一时刻」</strong> 最多只有 <strong>「一个」</strong> 线程执行该段代码，以达到保证 <strong>「并发安全」</strong> 的效果</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Object object = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"开始执行"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    object.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"再次获取到monitor锁"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread2</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                object.notify();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"已经执行了 notify 方法"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread1 thread1 = <span class="keyword">new</span> Thread1();</span><br><span class="line">        Thread2 thread2 = <span class="keyword">new</span> Thread2();</span><br><span class="line">        thread1.start();</span><br><span class="line">        Thread.sleep(<span class="number">5</span>);</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法运行结果</span></span><br><span class="line">Thread-<span class="number">0</span>开始执行</span><br><span class="line">Thread-<span class="number">1</span>已经执行了 notify 方法</span><br><span class="line">Thread-<span class="number">0</span>再次获取到monitor锁</span><br></pre></td></tr></table></figure>
-<p>上面的这段代码就可以说明<code>wait()</code>方法和<code>notify</code>方法的执行过程。<br>首先是Thread-0线程执行<code>wait()</code>方法<strong>释放monitor锁之后</strong>进入等待状态，之后Thread-1线程执行了<code>notify()</code>方法去唤醒了Thread-0线程。<br>此时Thread-0线程已经是被唤醒的状态，但是并没有继续往下执行，这是因为没有获得monitor锁，唤醒Thread-0线程的Thread-1线程还没有释放这把锁。<br>等待Thread-1线程执行完毕也就是打印了「Thread-1已经执行了 notify 方法」这句语句之后，Thread-1线程执行完毕，释放monitor锁之后，Thread-0线程再次获取monitor锁之后开始执行剩余代码。</p>
-<p>注意：</p>
-<ol>
-<li>调用<code>wait()</code>方法的线程会主动释放monitor锁，上面的代码也正是因为Thread-0主动释放掉了monitor锁之后，Thread-1才可以执行</li>
-<li>当休息的线程被唤醒时并不是直接执行的，而是需要重新去竞争对应的锁，获取到锁之后才可以执行</li>
+<a id="more"></a>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h4 id="地位"><a href="#地位" class="headerlink" title="地位"></a>地位</h4><ul>
+<li>Synchronized 是 Java 的关键字，被 Java 语言原生支持</li>
+<li>是最基本的互斥同步手段</li>
+<li>并发编程中的必学内容</li>
+</ul>
+<h4 id="线程不安全的后果"><a href="#线程不安全的后果" class="headerlink" title="线程不安全的后果"></a>线程不安全的后果</h4><p>我们来演示一个“消失的请求”的小例子</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; syn(); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable();</span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">        <span class="comment">// 两个join方法是为了保证两个线程能够执行完毕</span></span><br><span class="line">        thread1.join();</span><br><span class="line">        thread2.join();</span><br><span class="line">        <span class="comment">// 介绍一下另一种方式保证两个线程能够执行完毕</span></span><br><span class="line">        <span class="comment">// while (thread1.isAlive() || thread2.isAlive()) &#123; &#125;</span></span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：178233</span></span><br></pre></td></tr></table></figure>
+<p>很明显，如果是两个线程同时在竞争一个资源并且没有加 synchronized 关键字的修饰的话就会出现这样数据错误的情况。<br>实际上，上面代码 <code>i++</code> 的这行语句在执行的时候是有三个步骤的。</p>
+<ul>
+<li><strong>步骤一：</strong>将 i 的值读到内存中</li>
+<li><strong>步骤二：</strong>将 i 的值加1</li>
+<li><strong>步骤三：</strong>将 i 的值写回去</li>
+</ul>
+<p>但是现在有两个线程在同时执行这三个步骤，比如在 <code>i=10</code> 的时候线程 <code>thread1</code> 执行了<strong>步骤一</strong>，此时线程 <code>thread2</code> 也执行了 <strong>步骤一</strong>，那么线程 <code>thread2</code> 拿到的 <code>i</code> 的值也是10，然后这两个线程正常执行<strong>步骤二</strong>和<strong>步骤三</strong>这样子就会导致两个线程同时将 <code>i</code> 的值从 10 加到 11。这就是线程不安全的后果，本文介绍的 Synchronized 关键字的作用就是为了解决这样的问题而存在的。</p>
+<h1 id="Synchronized-关键字的用法"><a href="#Synchronized-关键字的用法" class="headerlink" title="Synchronized 关键字的用法"></a>Synchronized 关键字的用法</h1><p>既然上面的例子已经是出现了这样的问题，那么接下来就介绍一下如何使用 Synchronized 关键字来解决类似的问题。将以下几个例子的 syn 方法应用在上面「线程不安全的后果」中即可解决“消失的请求”的问题</p>
+<blockquote>
+<p>实际上，我们可以将 Synchronized 关键字理解成「<strong>锁</strong>」的概念，当一个线程去获取一些要执行的资源的时候，我们就把这个资源的锁给这个线程，线程拿到锁了便可以执行。这时候如果其他线程也想要获取这个执行资源的话，由于拿不到锁便无法执行，只能是陷入 BLOKCKED 阻塞状态。从而保证了线程安全<br>但是，Java 为 Synchronized 关键字提供了几种不同的加锁的方式，我们可以根据具体的业务场景选择使用不同的方式来加锁。依据使用方式的不同，在这里将其分为 <strong>对象锁</strong> 和 <strong>类锁</strong></p>
+</blockquote>
+<h3 id="对象锁"><a href="#对象锁" class="headerlink" title="对象锁"></a>对象锁</h3><p>synchronized 修饰普通方法和代码块的形式都称之为对象锁。<br>以下是我的个人理解：</p>
+<ul>
+<li><strong>代码块</strong><br> 修饰代码块的形式是需要我们为这个代码块去手动的指定一个对象作为锁传进去的，线程想要执行代码块中的代码就必须要拿到这把锁也就是我们指定的对象才可以执行。</li>
+<li><strong>普通方法</strong><br> 我认为普通方法和代码块的形式实际上原理相同，Java 中我们在调用普通方法时是这样的：<code>Object.method()</code> 是通过类对象去调用的方法，这里的类对象实际上就是传入的锁，如果是通过相同的对象去调用这个方法，那么就需要拿到这个对象作为的锁才可以调用这个方法，在这里也就是将这个对象作为了锁，因此将 synchronized 关键字的这种方式分类在对象锁之下。</li>
+</ul>
+<h5 id="同步代码块形式"><a href="#同步代码块形式" class="headerlink" title="同步代码块形式"></a>同步代码块形式</h5><p>同步代码块的形式就是直接把 synchronized 关键字加在代码块上，并且指定一个对象作为锁。这样当线程访问代码块时就可以拿到这个对象作为锁，其他线程再想访问就拿不到这个对象了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// main 方法执行结果：20000</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>扩展：一个方法中可以有多个同步代码块，并且使用不同的锁对象。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Object lock1 = <span class="keyword">new</span> Object();</span><br><span class="line">Object lock2 = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (lock1) &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock1 开始执行"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock1 执行完毕"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (lock2) &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock2 开始执行"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"  lock2 执行完毕"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line">Thread-<span class="number">0</span>  lock1 开始执行</span><br><span class="line">Thread-<span class="number">0</span>  lock1 执行完毕</span><br><span class="line">Thread-<span class="number">0</span>  lock2 开始执行</span><br><span class="line">Thread-<span class="number">1</span>  lock1 开始执行</span><br><span class="line">Thread-<span class="number">0</span>  lock2 执行完毕</span><br><span class="line">Thread-<span class="number">1</span>  lock1 执行完毕</span><br><span class="line">Thread-<span class="number">1</span>  lock2 开始执行</span><br><span class="line">Thread-<span class="number">1</span>  lock2 执行完毕</span><br></pre></td></tr></table></figure>
+
+<h5 id="普通方法形式"><a href="#普通方法形式" class="headerlink" title="普通方法形式"></a>普通方法形式</h5><p>直接将 synchronized 关键字加在普通方法上（以调用方法的对象作为锁，也就是 <code>this</code> ），这样这个方法就是只能同时被一个线程执行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="类锁"><a href="#类锁" class="headerlink" title="类锁"></a>类锁</h3><p>synchronized 修饰静态方法和修饰代码块时指定（*.class）对象都称之为类锁<br>以下是我的个人理解：</p>
+<ul>
+<li><strong>静态方法</strong><br> Java 中一个类的静态方法只会随着类的加载而加载，在创建类对象时是不会加载静态方法的。这意味着一个类的静态方法在内存中只有一份，这与类的实例无关。当 synchronized 修饰了静态方法时，这个静态方法是在同一个时间内是绝对只会有一个线程在执行的。这与修饰普通方法的对象锁不同，对象锁的话是将调用方法的对象作为锁的，如果执行这个对象的方法被阻塞时，可以再新建一个对象去执行这个方法。而修饰静态方法的类锁是不同的，由于静态方法在内存中只有一份，所以<strong>在同一时间段内只能有一个线程执行</strong></li>
+<li><strong>指定（*.class）对象</strong><br> 首先必须明白一个概念，Java 中的类无论被实例化多少次 <code>class</code> 对象都始终只有一个，所以修饰代码块时指定一个 <code>类名.class</code> 的类对象作为锁传入的话，那么由于锁在内存中的唯一性，那么这个代码块也是<strong>在同一时间段内只能有一个线程执行的</strong>。同样的这与对象锁中指定对象的形式不同，指定一个对象作为锁的话，在阻塞时实际上也可以通过重新创建一个对象来执行代码块中的代码。</li>
+</ul>
+<h5 id="静态方法形式"><a href="#静态方法形式" class="headerlink" title="静态方法形式"></a>静态方法形式</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="指定（-class）对象的形式"><a href="#指定（-class）对象的形式" class="headerlink" title="指定（*.class）对象的形式"></a>指定（*.class）对象的形式</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (Runnable<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100000</span>; j++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：200000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h3><blockquote>
+<p>synchronized 关键字就是将指定的对象作为锁去保护某一段代码的机制，这个指定的对象可以是普通对象也可以是类对象。根据指定的对象的功能不同可以分为对象锁和类锁，对象锁和类锁的区别就是在内存中，类锁是只有一个的，而对象锁可以创建多个，从而在某种特定的条件下可能在同一个时间段内多个线程都在执行同一个方法。</p>
+</blockquote>
+<h1 id="多线程访问同步方法的7种情况"><a href="#多线程访问同步方法的7种情况" class="headerlink" title="多线程访问同步方法的7种情况"></a>多线程访问同步方法的7种情况</h1><ol>
+<li><p>两个线程同时访问<strong>一个对象</strong>的同步方法<br> 同一个对象同一个锁，先访问先执行，后访问被阻塞</p>
+</li>
+<li><p>两个线程访问的是<strong>两个对象</strong>的同步方法<br> 两个对象两个锁，两个线程各一个，各自执行，互不干扰</p>
+</li>
+<li><p>两个线程访问的是 synchronized 的静态方法<br> 静态方法持类锁，两个线程一个锁，先访问先执行，后访问阻塞</p>
+</li>
+<li><p>同时访问<strong>同步</strong>方法与<strong>非同步</strong>方法<br> 非同步方法的执行并不受同步方法的影响</p>
+</li>
+<li><p>访问同一个对象的<strong>不同的</strong>普通同步方法<br> 普通同步方法默认以 <code>this</code> 作为锁对象，所以同个对象同个锁，先访问先执行，后访问被阻塞</p>
+</li>
+<li><p>同时访问<strong>静态</strong> synchronized 和<strong>非静态</strong> synchronized 方法<br> 静态方法用类锁，非静态方法用对象锁，两个线程各一个，各自执行，互不干扰</p>
+</li>
+<li><p>方法抛出<strong>异常</strong>后，会释放<strong>锁</strong><br> 代码演示：</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable();</span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (Thread.currentThread().getName().equals(<span class="string">"Thread-0"</span>)) &#123;</span><br><span class="line">            method1();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            method2();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"   开始执行"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"   开始执行"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"   执行完毕"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main 方法执行结果：</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Thread-0   开始执行</span></span><br><span class="line"><span class="comment">// 等待3秒...</span></span><br><span class="line"><span class="comment">Exception in thread "Thread-0" java.lang.RuntimeException</span></span><br><span class="line"><span class="comment">    at createthreads.Runnable.method1(Runnable.java:29)</span></span><br><span class="line"><span class="comment">    at createthreads.Runnable.run(Runnable.java:16)</span></span><br><span class="line"><span class="comment">    at java.lang.Thread.run(Thread.java:748)</span></span><br><span class="line"><span class="comment">Thread-1   开始执行</span></span><br><span class="line"><span class="comment">Thread-1   执行完毕</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+</li>
 </ol>
+<h3 id="小结：-1"><a href="#小结：-1" class="headerlink" title="小结："></a>小结：</h3><ol>
+<li>一把锁只能同时被一个线程获取，没有拿到锁的线程必须等待。</li>
+<li>每个实例都对应自己的一把锁，不同实例之间互不影响。</li>
+<li>锁对象是是 <code>*.class</code> 以及 synchronized 修饰的是 static 方法的时候，所有对象共用一把锁。</li>
+<li>无论方法正常执行完毕或者方法抛出异常，都会释放锁。</li>
+</ol>
+<h1 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h1><h3 id="可重入"><a href="#可重入" class="headerlink" title="可重入"></a>可重入</h3><ul>
+<li><strong>概念</strong>：指的是同一线程的外层函数获取锁之后，内层函数可以直接再次获取该锁。</li>
+<li><strong>好处</strong>：避免死锁，提升封装性。</li>
+</ul>
+<p>可重入的意思是，当前获得锁的线程去再次调用被 synchronized 修饰的方法时，可以把当前已经获得的锁直接传递给该方法。这样的机制的好处是可以避免死锁的发生，也就是当前方法在等待的锁正好是自己已经获得的锁，陷入死循环不断等待。另一个好处是提升封装性，由于可传入的性质，避免了在调用其他方法时的解锁和加锁步骤，简化了并发编程的难度。</p>
+<p><strong>示例：三个可重入场景</strong></p>
+<blockquote>
+<p>递归调用被 synchronized 关键字修饰的方法</p>
+</blockquote>
+<blockquote>
+<p>在 synchronized 方法中调用另外一个 synchronized 方法（必须使用同一个锁）</p>
+</blockquote>
+<blockquote>
+<p>子类 synchronized 方法中调用父类 synchronized 方法</p>
+</blockquote>
+<h3 id="不可中断"><a href="#不可中断" class="headerlink" title="不可中断"></a>不可中断</h3><p>当线程访问一个拿不到锁的 synchronized 方法时，只能是被阻塞。直到别的线程释放锁为止，如果别的线程永远不释放锁的话，那么就只能永远等待下去。</p>
 <hr>
+<p>参考：<br><a href="https://www.cnblogs.com/wpf-7/p/9639671.html" target="_blank" rel="noopener">https://www.cnblogs.com/wpf-7/p/9639671.html</a></p>
 <p>大家加油：）</p>
 ]]></content>
       <categories>
@@ -744,60 +712,8 @@
       <tags>
         <tag>Java</tag>
         <tag>并发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Java并发】创建线程</title>
-    <url>/posts/9740/</url>
-    <content><![CDATA[<blockquote>
-<p>本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。</p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="一、实现线程的两种方式"><a href="#一、实现线程的两种方式" class="headerlink" title="一、实现线程的两种方式"></a>一、实现线程的两种方式</h1><p>在 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html" target="_blank" rel="noopener">Oracle官方文档</a> 中，明确说明了Java实现线程的方式就只有两种。一种是 <strong>实现 Runnable 接口</strong>，另一种是 <strong>继承 Thread 类</strong></p>
-<ol>
-<li><p><strong>实现 Runnable 接口</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Runnable 方式创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableStyle</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建新线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> RunnableStyle());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Runnable 方式实现线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>继承 Thread 类</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Thread 创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadStyle</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> ThreadStyle();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Thread 方式创建线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="二、两种实现方式的比较"><a href="#二、两种实现方式的比较" class="headerlink" title="二、两种实现方式的比较"></a>二、两种实现方式的比较</h1><p>通常情况下我们需要去创建一个线程的时候会选择实现<strong>Runnable 接口</strong>的方式，事实上 「实现 Runnable 接口」 的方式确实优于 「继承 Thread 类」 的方式。</p>
-<ol>
-<li><p><strong>程序架构的角度</strong><br>创建线程的工作和线程要做的工作应该是分开的，也就是解耦的。<strong>实现 Runnable 接口</strong> 的方式就将线程要执行的代码也就是 <code>run</code> 方法里面的内容以及创建线程的机制也就是 <code>Thread</code> 类进行分离了，从而解耦。而 <strong>继承 Thread 类</strong> 的方式就没有做到这一点。</p>
-</li>
-<li><p><strong>执行效率的角度</strong><br> <strong>实现 Runnable 接口</strong> 的方式也是优于 <strong>继承 Thread 类</strong> 的方式的。如果使用 <strong>继承 Thread 类</strong> 的方式去创建线程每次新建一个任务时都要去创建一个新的线程，而创建线程的消耗是比较大的。<strong>实现 Runnable 接口</strong> 的方式可以让我们在后续利用一些线程池之类的工具，减少对资源的损耗。</p>
-</li>
-<li><p><strong>代码设计的角度</strong><br>由于 Java 是不支持多继承的，实现接口的方式肯定是优于继承类的方式。</p>
-</li>
-</ol>
-<h1 id="三、run-方法源码"><a href="#三、run-方法源码" class="headerlink" title="三、run 方法源码"></a>三、run 方法源码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">        target.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// target 为实现 Runnable 接口传入的 Runnable 对象</span></span><br></pre></td></tr></table></figure>
-<p>以上便是 Thread 类中 run 方法的全部代码，非常的精简。如果在构造 Thread 类时传入了 Runnable 对象则执行 Runnable 对象的 run 方法，如果没有传入 Runnable 对象则什么都不做。</p>
-<p>恰恰也是这三行代码为 Thread 类提供了两种创建线程执行单元的方式，也就是我们上面一直在讨论的方式。实际上两种创建线程的方式在执行具体的新线程中的代码时都是调用的 Thread 类的 run 方法，新线程要实现的功能也是在 run 方法中去编写的。</p>
-<p><strong>「实现 Runnable 接口」</strong>的方式也是在 run 方法中调用了在 Runnable 接口中定义的 run 方法，而并不是直接去调用了 Runnable 接口的 run 方法。</p>
-<p><strong>「继承 Thread 类」</strong>的方式则是通过重写 Thread 类中的 run 方法，在 run 方法中去编写要实现的功能，覆盖掉 Thread 类中的 run 方法，从而使得在调用时执行我们自己编写的新线程的执行单元。</p>
-<h1 id="思考题：如果同时使用两种方式会怎么样"><a href="#思考题：如果同时使用两种方式会怎么样" class="headerlink" title="思考题：如果同时使用两种方式会怎么样"></a>思考题：如果同时使用两种方式会怎么样</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"实现 Runnable 接口创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"继承 Thread 类创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// 继承 Thread 类创建的线程</span></span><br></pre></td></tr></table></figure>
-<p>如果已经对 run 方法的源码理解透彻的话，那么这道题是没有任何难度的。</p>
-<p>「实现 Runnable 接口」的方式是的执行单元是需要在 Thread 的 run 方法去调用的，但是我们已经重写了 Thread 中的 run 方法，自然无从去调用 Runnable 对象的执行单元了，也就不会被执行。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
-<li>实现线程的方式只有两种，分别是「实现 Runnable 接口」和「继承 Thread 类」</li>
-<li>准确的讲，创建线程的方式只有一种那就是构造 Thread 类，而 Thread 类中提供了两种实现线程的执行单元的方式<ul>
-<li>方式一：实现 Runnable 接口的 run 方法，并把 Runnable 实例传给 Thread 类</li>
-<li>方式二：重写 Thread 的 run 方法</li>
-</ul>
-</li>
-</ol>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>线程</tag>
+        <tag>synchronized</tag>
+        <tag>锁</tag>
       </tags>
   </entry>
   <entry>
@@ -864,6 +780,253 @@
       </tags>
   </entry>
   <entry>
+    <title>【Java并发】创建线程</title>
+    <url>/posts/9740/</url>
+    <content><![CDATA[<blockquote>
+<p>本文将介绍Java中创建线程的两种方式，以及两种方式的优缺点的比较。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="一、实现线程的两种方式"><a href="#一、实现线程的两种方式" class="headerlink" title="一、实现线程的两种方式"></a>一、实现线程的两种方式</h1><p>在 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html" target="_blank" rel="noopener">Oracle官方文档</a> 中，明确说明了Java实现线程的方式就只有两种。一种是 <strong>实现 Runnable 接口</strong>，另一种是 <strong>继承 Thread 类</strong></p>
+<ol>
+<li><p><strong>实现 Runnable 接口</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Runnable 方式创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableStyle</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建新线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> RunnableStyle());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Runnable 方式实现线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>继承 Thread 类</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用 Thread 创建线程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadStyle</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> ThreadStyle();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行线程</span></span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程中要做的事情</span></span><br><span class="line">        System.out.println(<span class="string">"用 Thread 方式创建线程"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="二、两种实现方式的比较"><a href="#二、两种实现方式的比较" class="headerlink" title="二、两种实现方式的比较"></a>二、两种实现方式的比较</h1><p>通常情况下我们需要去创建一个线程的时候会选择实现<strong>Runnable 接口</strong>的方式，事实上 「实现 Runnable 接口」 的方式确实优于 「继承 Thread 类」 的方式。</p>
+<ol>
+<li><p><strong>程序架构的角度</strong><br>创建线程的工作和线程要做的工作应该是分开的，也就是解耦的。<strong>实现 Runnable 接口</strong> 的方式就将线程要执行的代码也就是 <code>run</code> 方法里面的内容以及创建线程的机制也就是 <code>Thread</code> 类进行分离了，从而解耦。而 <strong>继承 Thread 类</strong> 的方式就没有做到这一点。</p>
+</li>
+<li><p><strong>执行效率的角度</strong><br> <strong>实现 Runnable 接口</strong> 的方式也是优于 <strong>继承 Thread 类</strong> 的方式的。如果使用 <strong>继承 Thread 类</strong> 的方式去创建线程每次新建一个任务时都要去创建一个新的线程，而创建线程的消耗是比较大的。<strong>实现 Runnable 接口</strong> 的方式可以让我们在后续利用一些线程池之类的工具，减少对资源的损耗。</p>
+</li>
+<li><p><strong>代码设计的角度</strong><br>由于 Java 是不支持多继承的，实现接口的方式肯定是优于继承类的方式。</p>
+</li>
+</ol>
+<h1 id="三、run-方法源码"><a href="#三、run-方法源码" class="headerlink" title="三、run 方法源码"></a>三、run 方法源码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">        target.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// target 为实现 Runnable 接口传入的 Runnable 对象</span></span><br></pre></td></tr></table></figure>
+<p>以上便是 Thread 类中 run 方法的全部代码，非常的精简。如果在构造 Thread 类时传入了 Runnable 对象则执行 Runnable 对象的 run 方法，如果没有传入 Runnable 对象则什么都不做。</p>
+<p>恰恰也是这三行代码为 Thread 类提供了两种创建线程执行单元的方式，也就是我们上面一直在讨论的方式。实际上两种创建线程的方式在执行具体的新线程中的代码时都是调用的 Thread 类的 run 方法，新线程要实现的功能也是在 run 方法中去编写的。</p>
+<p><strong>「实现 Runnable 接口」</strong>的方式也是在 run 方法中调用了在 Runnable 接口中定义的 run 方法，而并不是直接去调用了 Runnable 接口的 run 方法。</p>
+<p><strong>「继承 Thread 类」</strong>的方式则是通过重写 Thread 类中的 run 方法，在 run 方法中去编写要实现的功能，覆盖掉 Thread 类中的 run 方法，从而使得在调用时执行我们自己编写的新线程的执行单元。</p>
+<h1 id="思考题：如果同时使用两种方式会怎么样"><a href="#思考题：如果同时使用两种方式会怎么样" class="headerlink" title="思考题：如果同时使用两种方式会怎么样"></a>思考题：如果同时使用两种方式会怎么样</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"实现 Runnable 接口创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"继承 Thread 类创建的线程"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// 继承 Thread 类创建的线程</span></span><br></pre></td></tr></table></figure>
+<p>如果已经对 run 方法的源码理解透彻的话，那么这道题是没有任何难度的。</p>
+<p>「实现 Runnable 接口」的方式是的执行单元是需要在 Thread 的 run 方法去调用的，但是我们已经重写了 Thread 中的 run 方法，自然无从去调用 Runnable 对象的执行单元了，也就不会被执行。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>实现线程的方式只有两种，分别是「实现 Runnable 接口」和「继承 Thread 类」</li>
+<li>准确的讲，创建线程的方式只有一种那就是构造 Thread 类，而 Thread 类中提供了两种实现线程的执行单元的方式<ul>
+<li>方式一：实现 Runnable 接口的 run 方法，并把 Runnable 实例传给 Thread 类</li>
+<li>方式二：重写 Thread 的 run 方法</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java并发】wait()、notify()、notifyAll()</title>
+    <url>/posts/29010/</url>
+    <content><![CDATA[<p><code>wait()、notify()和notifyAll()</code> 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。<br>同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。<br>Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多线程可以更好的配合、协同工作。</p>
+<a id="more"></a>
+
+<h1 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h1><h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>想要执行 wait 方法必须要在 synchronized 方法或者是代码块中才可以执行，执行 wait方法会使得当前线程释放掉 monitor 锁，强迫当前线程进入阻塞状态。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (Object) &#123;</span><br><span class="line">    object.wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果想要唤醒当前线程则必须是另外的一个线程去调用了 notiify 并且刚刚好唤醒的是本线程，或者是直接调用 notifyAll。</p>
+<blockquote>
+<p>假如现在有四个线程在运行，其中线程A、B、C都调用了<code>wait()</code>在等待同一个monitor锁，而线程D持有这个monitor锁。那么如果现在线程D调用了<code>notify()</code>方法，则会随机的从前面的线程A、B、C中去唤醒一个线程，如果调用的是<code>notifyAll()</code>方法的话，则会将线程A、B、C全部唤醒</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Object object = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"开始执行"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    object.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"再次获取到monitor锁"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread2</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (object) &#123;</span><br><span class="line">                object.notify();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"已经执行了 notify 方法"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread1 thread1 = <span class="keyword">new</span> Thread1();</span><br><span class="line">        Thread2 thread2 = <span class="keyword">new</span> Thread2();</span><br><span class="line">        thread1.start();</span><br><span class="line">        Thread.sleep(<span class="number">5</span>);</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法运行结果</span></span><br><span class="line">Thread-<span class="number">0</span>开始执行</span><br><span class="line">Thread-<span class="number">1</span>已经执行了 notify 方法</span><br><span class="line">Thread-<span class="number">0</span>再次获取到monitor锁</span><br></pre></td></tr></table></figure>
+<p>上面的这段代码就可以说明<code>wait()</code>方法和<code>notify</code>方法的执行过程。<br>首先是Thread-0线程执行<code>wait()</code>方法<strong>释放monitor锁之后</strong>进入等待状态，之后Thread-1线程执行了<code>notify()</code>方法去唤醒了Thread-0线程。<br>此时Thread-0线程已经是被唤醒的状态，但是并没有继续往下执行，这是因为没有获得monitor锁，唤醒Thread-0线程的Thread-1线程还没有释放这把锁。<br>等待Thread-1线程执行完毕也就是打印了「Thread-1已经执行了 notify 方法」这句语句之后，Thread-1线程执行完毕，释放monitor锁之后，Thread-0线程再次获取monitor锁之后开始执行剩余代码。</p>
+<p>注意：</p>
+<ol>
+<li>调用<code>wait()</code>方法的线程会主动释放monitor锁，上面的代码也正是因为Thread-0主动释放掉了monitor锁之后，Thread-1才可以执行</li>
+<li>当休息的线程被唤醒时并不是直接执行的，而是需要重新去竞争对应的锁，获取到锁之后才可以执行</li>
+</ol>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java并发】启动线程</title>
+    <url>/posts/25097/</url>
+    <content><![CDATA[<blockquote>
+<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
+</blockquote>
+<a id="more"></a>
+
+<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
+<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
+<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
+<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
+<blockquote>
+<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
+</blockquote>
+<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
+<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
+<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
+<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【数据结构】动态数组</title>
+    <url>/posts/714/</url>
+    <content><![CDATA[<p>本文将讲述一个动态数组的实现过程，由于动态数组其实是一种比较简单的数据结构。所以本文将会以代码展示为主，当然，难点也是会重点讲述。有什么不明白的地方可以在评论区提问。</p>
+<a id="more"></a>
+
+<h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><blockquote>
+<p>将要实现一个Array类来承载动态数组这种数据结构。动态数组的底层也是使用Java中的静态数组去实现的，之所以动态是因为这其中可以自动的扩容和扩容和缩容的操作。</p>
+</blockquote>
+<ol>
+<li>准备一个静态的数组和一个记录动态数组大小的变量<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> E[] data;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> size;</span><br></pre></td></tr></table></figure></li>
+<li>准备构造方法<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Array</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">    data = (E[]) <span class="keyword">new</span> Object[capacity];</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Array</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>设计一些方便用户的方法<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取数组中元素的个数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取数组的容量</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> data.length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回数组是否为空</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+准备工作结束。</li>
+</ol>
+<h1 id="二、设计扩容和缩容的方法"><a href="#二、设计扩容和缩容的方法" class="headerlink" title="二、设计扩容和缩容的方法"></a>二、设计扩容和缩容的方法</h1><p>Java种的数组一旦被初始化之后就再也无法改变它的容量了，所以我们只能够是通过创建一个新的数组，在新数组中开辟出我们想要的空间，然后再将原来的数组全部搬到这个新数组中，以此来实现动态数组。严谨一些的话这并不是真正意义上的动态数组。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 实现动态的方法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> capacity 新数组的容量</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建新数组</span></span><br><span class="line">    E[] newData = (E[]) <span class="keyword">new</span> Object[capacity];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将元素复制到新数组中</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">        newData[i] = data[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将data指向新数组</span></span><br><span class="line">    data = newData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、添加元素"><a href="#三、添加元素" class="headerlink" title="三、添加元素"></a>三、添加元素</h1><p>向数组中的任意位置添加元素，需要将这个位置之后的所有元素都往后挪动一个位置，来腾出这个位置以供新的元素添加进来。<br>重点就是在于这个「挪」的实现，我们需要从最后一个元素开始一个个的往后挪一位，这样才不会覆盖到原有的元素。</p>
+<blockquote>
+<p>注意：在添加元素的时候我们是有可能会超出现有数组的边界的，不进行处理的话就会抛出下标越界的异常。<br>动态数组就是为了解决这个问题而存在的，自动的判断是否需要扩容操作，为用户屏蔽掉下标越界的问题，用户只管插入而不需要担心容量问题。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 向数组中的任意位置添加元素</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> index 任意位置的下标</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e 要添加的元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt; size) </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"数组下标 "</span> + index + <span class="string">" 不合法, 当前size = "</span> + size);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断是否需要进行扩容操作</span></span><br><span class="line">    <span class="keyword">if</span> (size == data.length) </span><br><span class="line">        resize(data.length * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 挪动元素</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size; i &gt; index; i--) </span><br><span class="line">        data[i] = data[i - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入元素，维护size变量</span></span><br><span class="line">    data[index] = e;</span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设计两个方便用户操作的方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 向所有元素后添加一个新元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span> </span>&#123; add(size, e); &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 向所有元素前添加一个新元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span> </span>&#123; add(<span class="number">0</span>, e); &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、删除元素"><a href="#四、删除元素" class="headerlink" title="四、删除元素"></a>四、删除元素</h1><p>这其实跟添加元素是一样的，只是反过来而已。删除数组中任意位置的元素，需要将这个位置之后的所有元素都往前挪动一个位置。一个个的覆盖掉前面的元素。<br>在这里需要从要删除元素的后一位开始挪，一直往后挪到最后一位元素。</p>
+<blockquote>
+<p>注意：在删除元素时，如果数组中剩下的空间太多了，这时我们需要触发缩容操作，以免造成太多内存的浪费。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除数组中的任意元素</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> index 要删除元素的下标</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> E 删除的元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt;= size) </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"数组下标 "</span> + index + <span class="string">" 不合法, 当前size = "</span> + size);</span><br><span class="line">    </span><br><span class="line">    E removeE = data[index];</span><br><span class="line">    <span class="comment">// 挪动元素</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; size - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        data[i] = data[i + <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    size--;</span><br><span class="line">    <span class="comment">// 判断是否缩容</span></span><br><span class="line">    <span class="keyword">if</span> (size == data.length / <span class="number">4</span> &amp;&amp; data.length / <span class="number">2</span> != <span class="number">0</span>) &#123;</span><br><span class="line">        resize(data.length / <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> removeE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们在扩容的时候是扩容成原来数组的两倍的大小，但是缩容时确实缩容成数组的四分之一大小。<br>这是为了防止用户在添加删除元素时刚好是在原来数组容量大小的附近进行的，则不断的会去触发扩容和缩容的操作，而这会更多的消耗资源。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。"><a href="#关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。" class="headerlink" title="关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。"></a>关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。</h2><p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>数据结构</tag>
+        <tag>动态数组</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【数据结构】栈</title>
+    <url>/posts/3177/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>【Java并发练习】两个线程交替打印0~100</title>
+    <url>/posts/45104/</url>
+    <content><![CDATA[<blockquote>
+<p>题目：<br>实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。</p>
+</blockquote>
+<blockquote>
+<p><strong>分析题目：</strong><br>题目关键字：<strong>两个线程</strong>、<strong>交替</strong>、<strong>0~100</strong>、<strong>专门打印奇数</strong>、<strong>专门打印偶数</strong></p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li>首先创建两个线程</li>
+<li>交替打印证明线程之间需要协同配合、考虑 synchronized、wait-notify</li>
+</ol>
+<h1 id="使用-sychronized"><a href="#使用-sychronized" class="headerlink" title="使用 sychronized"></a>使用 sychronized</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 打印奇数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"奇数"</span>).start();</span><br><span class="line">    <span class="comment">// 打印偶数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"偶数"</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 synchronized 的方法虽然也是能够完成题目的要求，但是效率上略差一些。<br>main 方法中的逻辑是，先判断是否满足打印 0~100 的要求，如果满足则进入同步代码块中，此时两个线程将会竞争同一把锁 <code>lock</code><br>竞争到锁的线程将判断是否满足打印条件，如果满足则打印，否则直接跳出，紧接着同步代码块执行完毕释放锁，两个线程重新进入竞争锁的步骤<br>如果在这个时候其中一个线程接连多次竞争到锁，但是却因为不满足打印条件而再次直接释放锁，这就是无意义的性能浪费</p>
+</blockquote>
+<h1 id="使用-wait-notify"><a href="#使用-wait-notify" class="headerlink" title="使用 wait-notify"></a>使用 wait-notify</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="comment">// 获取锁证明是符合打印条件，直接打印</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                <span class="comment">// 唤醒另外的线程</span></span><br><span class="line">                lock.notify();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 判断是否打印到最后的数字了，如果还没有则中断，把锁让给另外的线程去打印</span></span><br><span class="line">                    <span class="comment">// 做这层判断是为了预防在打印到最后一个数字时，中断后另外的线程已经执行完毕，而无法唤醒</span></span><br><span class="line">                    <span class="keyword">if</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test test = <span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">new</span> Thread(test, <span class="string">"偶数"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(test,<span class="string">"奇数"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 wait-notify 不需要去判断是否符合奇偶数的打印条件，而是当拿到锁则证明肯定是符合打印条件的，直接打印<br>打印完唤醒另外的线程准备执行下一次的打印，再中断本线程让渡锁</p>
+</blockquote>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>题解</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>并发</tag>
+        <tag>线程</tag>
+        <tag>练习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【Java并发】多线程异常处理器</title>
+    <url>/posts/29598/</url>
+    <content><![CDATA[<p>我们平时在处理异常的时候，如果是主线程抛出了一个未处理的异常，那么我们可以轻松的使用 <code>try-catch</code> 捕获这个异常。但是如果这个异常是在子线程中抛出的，那么主线程实际上对于子线程的异常是不敏感的，虽然可以正常的抛出，但是却很难去发现。就算是在主线程中使用 <code>try-catch</code> 去捕获子线程的异常那也是没用的，因为 <code>try-catch</code> 只会捕获本线程中的异常。</p>
+<a id="more"></a>
+<p>简单对比一下主线程和子线程之间抛异常的不同之处：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是子线程抛出来的异常"</span>);</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是主线程抛出来的异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码就可以清晰的展现这个问题。我们使用一个for循环来模拟程序的正常执行过程，这其中，子线程的异常大概是在控制台打印到500的时候抛出来，但这完全不会影响到主线程的正常执行，但是主线程的异常却每次都准确的在程序打印到5000的时候去抛出来，然后程序终止运行。如果是在真实的开发环境中，子线程抛出来的异常并不会被主线程捕获并处理，而在茫茫的日志文件中，我们想要去发现子线程的异常，简直是大海捞针。今天的主题就是要来说一说如何去处理子线程中的异常。</p>
+<p>演示「主线程」<strong>无法捕获</strong>「子线程」中的异常</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程1"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程2"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程3"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程4"</span>).start();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">            System.out.println(<span class="string">"捕获了异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"子线程抛出的异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面演示的在主线程中使用 <code>try-catch</code> 去捕获异常也是无法处理的，但是把 <code>try-catch</code> 放到子线程中去就可以处理这个异常了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是子线程抛出来的异常"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeExeception e) &#123;</span><br><span class="line">            <span class="comment">// 处理异常逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是主线程抛出来的异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>像上面这样在子线程中使用 <code>try-catch</code> 去捕获异常这是解决问题的办法之一。这也不可避免的带来一个弊端，那就是我们需要在每个run方法中都手动的去编写 <code>try-catch</code> 来处理异常，而且我们也不知道具体可能出现什么类型的异常。我们有更好的办法——UncaughtExceptionHandler</p>
+<h1 id="Thread类中的接口UncaughtExceptionHandler"><a href="#Thread类中的接口UncaughtExceptionHandler" class="headerlink" title="Thread类中的接口UncaughtExceptionHandler"></a>Thread类中的接口UncaughtExceptionHandler</h1><p>java.lang 包中有一个ThreadGroup的类实现了这个接口，这里就简单的称之为线程的异常处理器。我们来看看这处理了什么内容</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 接口中仅定义了这一个方法，以下是实现类</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    通过接口的参数我们大致可以猜出，当子线程中抛出异常时，将会通过某种方式（个人猜测是反射）回调这个方法</span></span><br><span class="line"><span class="comment">    也清晰明了的告诉了我们是哪个线程抛出的哪个异常</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        parent 的定义：private final ThreadGroup parent;</span></span><br><span class="line"><span class="comment">        首先检查是否存在一个父线程的这个异常处理器，如果存在则调用父线程的异常处理器进行处理，这里是一个递归的操作</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">        parent.uncaughtException(t, e);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            当调用完毕发现并没有一个可以处理异常的处理器之后</span></span><br><span class="line"><span class="comment">            尝试获取全局的异常处理器“这里的 ueh”</span></span><br><span class="line"><span class="comment">            如果存在一个全局的异常处理器，则使用这个处理器处理异常</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        Thread.UncaughtExceptionHandler ueh =</span><br><span class="line">            Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        <span class="keyword">if</span> (ueh != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ueh.uncaughtException(t, e);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!(e <span class="keyword">instanceof</span> ThreadDeath)) &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">                不存在的情况，直接将异常的堆栈信息打印出来</span></span><br><span class="line"><span class="comment">                也就是本文开头子线程中抛出的“我是子线程抛出来的异常”</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            System.err.print(<span class="string">"Exception in thread \""</span></span><br><span class="line">                            + t.getName() + <span class="string">"\" "</span>);</span><br><span class="line">            e.printStackTrace(System.err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看完这个线程处理器之后来看看要如何实现这个线程处理器</p>
+<ul>
+<li><p>首先我们需要编写一个类实现 Thread.UncaughtExceptionHandler 接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyUncaughtExceptionHandler</span> <span class="keyword">implements</span> <span class="title">Thread</span>.<span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyUncaughtExceptionHandler</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">        System.out.println(name + <span class="string">"已经成功捕获了异常。抛出异常的线程是："</span> + t.getName() + <span class="string">"。抛出的异常是："</span> + e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其次我们需要将自己编写的异常处理器织入到主线程中，让它自动去处理子线程的异常。（这里使用开篇中「演示主线程中无法捕获子线程中的异常」的例子并作对比）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">new</span> MyUncaughtExceptionHandler(<span class="string">"线程异常处理器"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程1"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程2"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程3"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程4"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"子线程抛出的异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法执行结果</span></span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">1</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">2</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">3</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">4</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br></pre></td></tr></table></figure>
+
+<p>  至此，多线程异常处理器介绍完毕。</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>插一句题外话，我认为本文的例子中很形象的向我们展示了线程的工作过程。线程在执行期间是互相不打扰的，各自干着各自的事情，这期间并不会互相影响。就像是一个团队在协同工作一样，每个人都是一个独立的线程，各自在完成自己的工作，并不会互相打扰。每个线程领取到自己的任务（run方法）之后，等待开始执行（调用start方法）。之后便是一直闷头干下去，直到把工作做完（run方法执行完毕）</p>
+</blockquote>
+<p>大家加油：）</p>
+]]></content>
+      <categories>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>并发</tag>
+        <tag>线程</tag>
+        <tag>异常</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【Java并发】线程生命周期</title>
     <url>/posts/43936/</url>
     <content><![CDATA[<blockquote>
@@ -914,116 +1077,9 @@
       </tags>
   </entry>
   <entry>
-    <title>【Java并发】启动线程</title>
-    <url>/posts/25097/</url>
-    <content><![CDATA[<blockquote>
-<p>本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别</p>
-</blockquote>
-<a id="more"></a>
-
-<p><strong>首先直接抛出启动线程的正确姿势：start 方法！！！</strong></p>
-<h1 id="start-方法"><a href="#start-方法" class="headerlink" title="start 方法"></a>start 方法</h1><h4 id="含义（启动新线程）"><a href="#含义（启动新线程）" class="headerlink" title="含义（启动新线程）"></a>含义（启动新线程）</h4><p>当我们创建完一个线程调用了 start 方法时，这个线程并<strong>不会直接执行</strong>，而是<strong>等待执行</strong>，也就是进入了<strong>就绪</strong>状态。</p>
-<p>实际上调用 start 方法的这个动作仅仅只是去通知了 JVM 「我有一个线程已经准备好执行了，你有空的话帮我执行一下」</p>
-<p>至于这个线程将要在什么时刻运行，这并不是我们能够决定的，这得由 CPU 的线程调度器去决定。</p>
-<blockquote>
-<p>注意：start 方法的调用过程是「一个父线程去调用一个已经创建的子线程的 start 方法」所以 start 方法的执行实际上是会牵扯到父子两个线程的。</p>
-</blockquote>
-<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 1. 检查线程状态 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 2. 添加到线程组 //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="comment">// 3. 调用start0  //</span></span><br><span class="line">        <span class="comment">////////////////////</span></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="start-方法和-run-方法"><a href="#start-方法和-run-方法" class="headerlink" title="start 方法和 run 方法"></a>start 方法和 run 方法</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Runnable runnable = () -&gt; &#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line"></span><br><span class="line">    thread.run();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">// Thread-0</span></span><br></pre></td></tr></table></figure>
-<p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
-<p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
-<p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Java并发】多线程异常处理器</title>
-    <url>/posts/29598/</url>
-    <content><![CDATA[<p>我们平时在处理异常的时候，如果是主线程抛出了一个未处理的异常，那么我们可以轻松的使用 <code>try-catch</code> 捕获这个异常。但是如果这个异常是在子线程中抛出的，那么主线程实际上对于子线程的异常是不敏感的，虽然可以正常的抛出，但是却很难去发现。就算是在主线程中使用 <code>try-catch</code> 去捕获子线程的异常那也是没用的，因为 <code>try-catch</code> 只会捕获本线程中的异常。</p>
-<a id="more"></a>
-<p>简单对比一下主线程和子线程之间抛异常的不同之处：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是子线程抛出来的异常"</span>);</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是主线程抛出来的异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的代码就可以清晰的展现这个问题。我们使用一个for循环来模拟程序的正常执行过程，这其中，子线程的异常大概是在控制台打印到500的时候抛出来，但这完全不会影响到主线程的正常执行，但是主线程的异常却每次都准确的在程序打印到5000的时候去抛出来，然后程序终止运行。如果是在真实的开发环境中，子线程抛出来的异常并不会被主线程捕获并处理，而在茫茫的日志文件中，我们想要去发现子线程的异常，简直是大海捞针。今天的主题就是要来说一说如何去处理子线程中的异常。</p>
-<p>演示「主线程」<strong>无法捕获</strong>「子线程」中的异常</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程1"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程2"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程3"</span>).start();</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程4"</span>).start();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">            System.out.println(<span class="string">"捕获了异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"子线程抛出的异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面演示的在主线程中使用 <code>try-catch</code> 去捕获异常也是无法处理的，但是把 <code>try-catch</code> 放到子线程中去就可以处理这个异常了。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是子线程抛出来的异常"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeExeception e) &#123;</span><br><span class="line">            <span class="comment">// 处理异常逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"我是主线程抛出来的异常"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>像上面这样在子线程中使用 <code>try-catch</code> 去捕获异常这是解决问题的办法之一。这也不可避免的带来一个弊端，那就是我们需要在每个run方法中都手动的去编写 <code>try-catch</code> 来处理异常，而且我们也不知道具体可能出现什么类型的异常。我们有更好的办法——UncaughtExceptionHandler</p>
-<h1 id="Thread类中的接口UncaughtExceptionHandler"><a href="#Thread类中的接口UncaughtExceptionHandler" class="headerlink" title="Thread类中的接口UncaughtExceptionHandler"></a>Thread类中的接口UncaughtExceptionHandler</h1><p>java.lang 包中有一个ThreadGroup的类实现了这个接口，这里就简单的称之为线程的异常处理器。我们来看看这处理了什么内容</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 接口中仅定义了这一个方法，以下是实现类</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    通过接口的参数我们大致可以猜出，当子线程中抛出异常时，将会通过某种方式（个人猜测是反射）回调这个方法</span></span><br><span class="line"><span class="comment">    也清晰明了的告诉了我们是哪个线程抛出的哪个异常</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        parent 的定义：private final ThreadGroup parent;</span></span><br><span class="line"><span class="comment">        首先检查是否存在一个父线程的这个异常处理器，如果存在则调用父线程的异常处理器进行处理，这里是一个递归的操作</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">        parent.uncaughtException(t, e);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            当调用完毕发现并没有一个可以处理异常的处理器之后</span></span><br><span class="line"><span class="comment">            尝试获取全局的异常处理器“这里的 ueh”</span></span><br><span class="line"><span class="comment">            如果存在一个全局的异常处理器，则使用这个处理器处理异常</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        Thread.UncaughtExceptionHandler ueh =</span><br><span class="line">            Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        <span class="keyword">if</span> (ueh != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ueh.uncaughtException(t, e);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!(e <span class="keyword">instanceof</span> ThreadDeath)) &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">                不存在的情况，直接将异常的堆栈信息打印出来</span></span><br><span class="line"><span class="comment">                也就是本文开头子线程中抛出的“我是子线程抛出来的异常”</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            System.err.print(<span class="string">"Exception in thread \""</span></span><br><span class="line">                            + t.getName() + <span class="string">"\" "</span>);</span><br><span class="line">            e.printStackTrace(System.err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>看完这个线程处理器之后来看看要如何实现这个线程处理器</p>
-<ul>
-<li><p>首先我们需要编写一个类实现 Thread.UncaughtExceptionHandler 接口</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyUncaughtExceptionHandler</span> <span class="keyword">implements</span> <span class="title">Thread</span>.<span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyUncaughtExceptionHandler</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> </span>&#123;</span><br><span class="line">        System.out.println(name + <span class="string">"已经成功捕获了异常。抛出异常的线程是："</span> + t.getName() + <span class="string">"。抛出的异常是："</span> + e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>其次我们需要将自己编写的异常处理器织入到主线程中，让它自动去处理子线程的异常。（这里使用开篇中「演示主线程中无法捕获子线程中的异常」的例子并作对比）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">new</span> MyUncaughtExceptionHandler(<span class="string">"线程异常处理器"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程1"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程2"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程3"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Test(),<span class="string">"线程4"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"子线程抛出的异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main方法执行结果</span></span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">1</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">2</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">3</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br><span class="line">线程异常处理器已经成功捕获了异常。抛出异常的线程是：线程<span class="number">4</span>。抛出的异常是：java.lang.RuntimeException: 子线程抛出的异常</span><br></pre></td></tr></table></figure>
-
-<p>  至此，多线程异常处理器介绍完毕。</p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p>插一句题外话，我认为本文的例子中很形象的向我们展示了线程的工作过程。线程在执行期间是互相不打扰的，各自干着各自的事情，这期间并不会互相影响。就像是一个团队在协同工作一样，每个人都是一个独立的线程，各自在完成自己的工作，并不会互相打扰。每个线程领取到自己的任务（run方法）之后，等待开始执行（调用start方法）。之后便是一直闷头干下去，直到把工作做完（run方法执行完毕）</p>
-</blockquote>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>并发</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>并发</tag>
-        <tag>线程</tag>
-        <tag>异常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【Java并发练习】两个线程交替打印0~100</title>
-    <url>/posts/45104/</url>
-    <content><![CDATA[<blockquote>
-<p>题目：<br>实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。</p>
-</blockquote>
-<blockquote>
-<p><strong>分析题目：</strong><br>题目关键字：<strong>两个线程</strong>、<strong>交替</strong>、<strong>0~100</strong>、<strong>专门打印奇数</strong>、<strong>专门打印偶数</strong></p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
-<li>首先创建两个线程</li>
-<li>交替打印证明线程之间需要协同配合、考虑 synchronized、wait-notify</li>
-</ol>
-<h1 id="使用-sychronized"><a href="#使用-sychronized" class="headerlink" title="使用 sychronized"></a>使用 sychronized</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 打印奇数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"奇数"</span>).start();</span><br><span class="line">    <span class="comment">// 打印偶数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"偶数"</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>使用 synchronized 的方法虽然也是能够完成题目的要求，但是效率上略差一些。<br>main 方法中的逻辑是，先判断是否满足打印 0~100 的要求，如果满足则进入同步代码块中，此时两个线程将会竞争同一把锁 <code>lock</code><br>竞争到锁的线程将判断是否满足打印条件，如果满足则打印，否则直接跳出，紧接着同步代码块执行完毕释放锁，两个线程重新进入竞争锁的步骤<br>如果在这个时候其中一个线程接连多次竞争到锁，但是却因为不满足打印条件而再次直接释放锁，这就是无意义的性能浪费</p>
-</blockquote>
-<h1 id="使用-wait-notify"><a href="#使用-wait-notify" class="headerlink" title="使用 wait-notify"></a>使用 wait-notify</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="comment">// 获取锁证明是符合打印条件，直接打印</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                <span class="comment">// 唤醒另外的线程</span></span><br><span class="line">                lock.notify();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 判断是否打印到最后的数字了，如果还没有则中断，把锁让给另外的线程去打印</span></span><br><span class="line">                    <span class="comment">// 做这层判断是为了预防在打印到最后一个数字时，中断后另外的线程已经执行完毕，而无法唤醒</span></span><br><span class="line">                    <span class="keyword">if</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test test = <span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">new</span> Thread(test, <span class="string">"偶数"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(test,<span class="string">"奇数"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>使用 wait-notify 不需要去判断是否符合奇偶数的打印条件，而是当拿到锁则证明肯定是符合打印条件的，直接打印<br>打印完唤醒另外的线程准备执行下一次的打印，再中断本线程让渡锁</p>
-</blockquote>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-      <categories>
-        <category>题解</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>并发</tag>
-        <tag>线程</tag>
-        <tag>练习</tag>
-      </tags>
+    <title>【数据结构】链表</title>
+    <url>/posts/29990/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>【随笔01】Linux 切换阿里云 yum 源</title>
@@ -1067,6 +1123,11 @@
         <tag>阿里云</tag>
         <tag>yum</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>【数据结构】队列</title>
+    <url>/posts/52039/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>【随笔02】Linux 安装 Nginx</title>
