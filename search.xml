@@ -942,11 +942,6 @@
       </tags>
   </entry>
   <entry>
-    <title>【数据结构】栈</title>
-    <url>/posts/3177/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>【Java并发练习】两个线程交替打印0~100</title>
     <url>/posts/45104/</url>
     <content><![CDATA[<blockquote>
@@ -1079,7 +1074,51 @@
   <entry>
     <title>【数据结构】链表</title>
     <url>/posts/29990/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p>本文将讲述一个链表的实现过程，以及如何使用递归操作一个链表。还会实现几种不同的链表，分别是双向链表和循环链表。</p>
+<a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的<strong>动态的</strong>数据结构的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。</p>
+<p>我还记得在读书时老师曾经给我们举过一个非常好的例子用于演示链表和数组在增删改查种各自的优缺点。在这里我把它分享出来给大家</p>
+<blockquote>
+<p>一个班级假设有50个学生，现在使用数组和链表来分别承载这50个学生。<br>然后模拟两种场景来分别对比这两种数据结构的优缺点<br><strong>数组：</strong>将这50个学生按照顺序排号，从0开始到49（这里模拟的是数组的下标）<br><strong><em>像这样 [0, 1, 2, 3, …, 49]</em></strong><br><strong>链表：</strong>将50个学生叫到操场排好队，每个学生去记住自己后面一个学生，记录排第一的同学（链表头）。<br><strong><em>像这样 (0) -&gt; (1) -&gt; (2) -&gt; (3) -&gt; … -&gt; (49)</em></strong><br>原谅我懒得画图。。。</p>
+</blockquote>
+<p><strong>场景一：</strong>老师在办公室想要叫某个学生到办公室去（模拟数据的查询）<br><strong>数组：</strong>直接在班级表种去查这个学生对应的序号，根据序号就可以很快速的找到这个学生。<br><strong>链表：</strong>由于没有序号，需要一个个学生去查找，首先找到链表头同学，比较是不是老师叫的学生，如果是则去办公室找老师。如果不是，则去找链表头同学所记住的后面一个同学，再进行对比。如果还不是则再去寻找这个同学记忆的下一个同学之后再进行比对，直到找到这个同学为止。</p>
+<p><strong>场景二：</strong>班上来了一个新的插班生，插班生必须安排在班级的第一个位置（模拟数据的添加和删除）<br><strong>数组：</strong>由于每个学生的序号都是按照顺序排好的，所以不能直接插入在第一个学生之前，必须是要占用第一个学生的位置。所以要将全部的学生重新排号，插班生排0号，剩下的学生按照原来的号码依次加1往后排序。<br><strong>链表：</strong>让这个插班生去记住第一个同学也就是原理啊的链表头，再成为新的链表头。其他的学生完全不受影响。</p>
+<p>通过以上两个场景的展现可以很清晰的看出来链表和数组各自的优缺点在哪里。链表增删快，而数组查询快。</p>
+<h1 id="设计节点类"><a href="#设计节点类" class="headerlink" title="设计节点类"></a>设计节点类</h1><p>链表中的数据实际上是一个个的节点，在Java中使用一个节点类（Node）来表示。在节点类中有两个变量，一个是当前节点的值，另一个是指向下一个节点的指针。<br>由此每个节点中都有一个指向下一个节点的指针，最后一个节点指向下一个节点的指针就置为空。以此一节一节的链接起来，也就成了链表。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 节点本身的值（支持泛型）</span></span><br><span class="line">    <span class="keyword">public</span> E e;</span><br><span class="line">    <span class="comment">// 指向下一个节点的指针</span></span><br><span class="line">    <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e, Node next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.e = e;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span> </span>&#123; <span class="keyword">this</span>(e, <span class="keyword">null</span>); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123; <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> e.toString(); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="设计链表的成员变量和构造方法"><a href="#设计链表的成员变量和构造方法" class="headerlink" title="设计链表的成员变量和构造方法"></a>设计链表的成员变量和构造方法</h1><p>我们先来考虑一下怎么去设计链表类中的成员变量再来看看怎么设计构造函数</p>
+<p>首先我们需要一个变量可以表示当前链表中共有多少个节点，也就是链表的大小。size变量是没跑了。<br>另外回顾一下刚刚的例子，在哪个班级中如果老师需要找到一个班级中的某个确定的学生时，第一个找的其实是链表头同学，根据链表头去一个个找下去直到找到为止。<br>所以在我们设计的链表类中需要一个头节点的指针，定义一个<strong>Node变量</strong>作为指针。</p>
+<p>刚刚的例子中场景二来一个插班生我们将插班生插在了第一个位置。直接让插班生去记住原来的链表头再将链表头指向插班生。设想一下，如果是插入在链表的中间呢？<br>比如插入在第二个学生的位置。需要插班生去记住原来的第二个同学，再让原来的第一个同学把记忆的第二个同学换成插班生同学。也就是说如果是插入在中间的元素要多一步让前面的同学去记插班生同学，而插入在第一个则不需要。</p>
+<p>针对上面的情况我们可以设置一个虚拟的头节点来解决这个问题。这个虚拟的节点来指向我们链表中真正的第一个节点，对外呢，屏蔽这个节点的存在。故此我们将上面决定要定义的<strong>Node变量</strong>改成<strong>dummyHead</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"><span class="keyword">private</span> Node dummyHead; <span class="comment">// 虚拟头节点</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    dummyHead = <span class="keyword">new</span> Node(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方便用户传入一个数组将其转换成链表的构造方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">(E[] arrayE)</span> </span>&#123;</span><br><span class="line">    dummyHead = <span class="keyword">new</span> Node(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    size = arrayE.length;</span><br><span class="line"></span><br><span class="line">    Node cur = dummyHead;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = arrayE.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        cur.next = <span class="keyword">new</span> Node(arrayE[i], cur.next);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设计两个方便使用的方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> size; &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> size == <span class="number">0</span>; &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="链表中插入元素"><a href="#链表中插入元素" class="headerlink" title="链表中插入元素"></a>链表中插入元素</h1><p>我们来研究一下前面的例子是怎么在一个班级中插入插班生的。</p>
+<blockquote>
+<p>首先，得要有一个插班生，这个不用想肯定是必须的，好了，插入功能核心代码的<strong>第一步</strong>也就出来了。<br>然后我们得要去找到插班生要插入的位置，在这里呢我们虚拟一个index（下标）的概念出来，方便用户指定要插入的位置，核心功能的<strong>第二步</strong>也就出来了。<br>找到位置也有插班生之后的问题就是要把插班生插入到班级里面去啦，这个事情要怎么做呢。<br>比方说我现在是要插入到第二个位置去，那么我需要先让插班生去记忆原来的第二个位置的同学，这也是<strong>第三步</strong>。<br>然后让第一个同学不要去记原来的第二个同学了，换成是插班生同学，<strong>第四步</strong>。<br>到此为止，这个插入的动作就完成了。</p>
+</blockquote>
+<p>将上面的各个步骤以程序的方式重新梳理一遍<br>第一步：创建一个新的节点 <code>new Node()</code><br>第二步：使用一个for循环找到要插入位置的前一个节点和后一个节点<br>第三步：将第一步创建出来的节点的<code>next</code>指针指向第二步找出来的后一个节点<br>第四步：将第二步找出来的前一个节点的<code>next</code>指针指向第一步创建的节点</p>
+<p>将上面的逻辑组织一下换成Java语言</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 下标的校验，不属于插入的核心代码</span></span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt; size) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"index "</span> + index + <span class="string">" 不合法, 当前size = "</span> + size);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第一步</span></span><br><span class="line">    Node node= <span class="keyword">new</span> Node(e);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第二步：</span></span><br><span class="line">    <span class="comment">// 使用一个prev变量去作为一个中间量去寻找要插入的节点位置</span></span><br><span class="line">    <span class="comment">// 这里的prev就是前一个节点，由于还没有插入，所以prev.next就是要插入的后一个节点</span></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++) &#123;</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第三步</span></span><br><span class="line">    node.next = prev.next;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第四步</span></span><br><span class="line">    prev.next = node;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 维护一下size变量</span></span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上便是添加操作的方法，但这还不是最好。</p>
+<p>上面的代码虽说是完成了这个添加动作的逻辑，也能够顺顺利利的运行起来，但这还不够优雅。<br>实际上我们可以将第一步、第三步和第四步合并成一行代码<br>创建一个新的节点直接将<code>prev.next</code>赋值给新节点的<code>next</code>，再直接赋值给<code>prev.next</code>。<br>像下面这个样子</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt; size) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"index "</span> + index + <span class="string">" 不合法, 当前size = "</span> + size);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++) &#123;</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原来的第一步、第二步和第四步</span></span><br><span class="line">    prev.next = <span class="keyword">new</span> Node(e, prev.next);</span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p>插一句题外话<br>其实编写程序，就是像上面这样子一步一步去考虑出这个程序核心代码的步骤。<br>然后再把这个简单的按照程序逻辑梳理一遍，再开始实际编码。也恰恰是这两步才是最关键的，而不是编码，有了梳理完的逻辑实际编码起来码随心动倒还是个挺舒服的过程。<br>最后再审视一遍自己写出来的代码，看看有没有地方可以改进，可以写的更加的优雅一些</p>
+</blockquote>
+<hr>
+<h1 id="删除链表中的元素"><a href="#删除链表中的元素" class="headerlink" title="删除链表中的元素"></a>删除链表中的元素</h1>]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>数据结构</tag>
+        <tag>链表</tag>
+      </tags>
   </entry>
   <entry>
     <title>【随笔01】Linux 切换阿里云 yum 源</title>
@@ -1123,11 +1162,6 @@
         <tag>阿里云</tag>
         <tag>yum</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>【数据结构】队列</title>
-    <url>/posts/52039/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>【随笔02】Linux 安装 Nginx</title>
