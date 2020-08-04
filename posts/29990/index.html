@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="本文将讲述一个链表的实现过程，以及如何使用递归操作一个链表。还会实现几种不同的链表，分别是双向链表和循环链表。">
+<meta name="description" content="前言如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的动态数据结构的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【数据结构】链表">
 <meta property="og:url" content="http://yoursite.com/posts/29990/index.html">
 <meta property="og:site_name" content="简笔">
-<meta property="og:description" content="本文将讲述一个链表的实现过程，以及如何使用递归操作一个链表。还会实现几种不同的链表，分别是双向链表和循环链表。">
+<meta property="og:description" content="前言如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的动态数据结构的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。">
 <meta property="article:published_time" content="2020-08-02T06:45:27.000Z">
-<meta property="article:modified_time" content="2020-08-02T15:12:00.739Z">
+<meta property="article:modified_time" content="2020-08-03T14:40:43.629Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="数据结构">
@@ -377,10 +377,8 @@
       
 
       
-        <p>本文将讲述一个链表的实现过程，以及如何使用递归操作一个链表。还会实现几种不同的链表，分别是双向链表和循环链表。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的<strong>动态数据结构</strong>的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。</p>
 <a id="more"></a>
-
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的<strong>动态的</strong>数据结构的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。</p>
 <p>我还记得在读书时老师曾经给我们举过一个非常好的例子用于演示链表和数组在增删改查种各自的优缺点。在这里我把它分享出来给大家</p>
 <blockquote>
 <p>一个班级假设有50个学生，现在使用数组和链表来分别承载这50个学生。<br>然后模拟两种场景来分别对比这两种数据结构的优缺点<br><strong>数组：</strong>将这50个学生按照顺序排号，从0开始到49（这里模拟的是数组的下标）<br><strong><em>像这样 [0, 1, 2, 3, …, 49]</em></strong><br><strong>链表：</strong>将50个学生叫到操场排好队，每个学生去记住自己后面一个学生，记录排第一的同学（链表头）。<br><strong><em>像这样 (0) -&gt; (1) -&gt; (2) -&gt; (3) -&gt; … -&gt; (49)</em></strong><br>原谅我懒得画图。。。</p>
@@ -413,7 +411,8 @@
 <p>插一句题外话<br>其实编写程序，就是像上面这样子一步一步去考虑出这个程序核心代码的步骤。<br>然后再把这个简单的按照程序逻辑梳理一遍，再开始实际编码。也恰恰是这两步才是最关键的，而不是编码，有了梳理完的逻辑实际编码起来码随心动倒还是个挺舒服的过程。<br>最后再审视一遍自己写出来的代码，看看有没有地方可以改进，可以写的更加的优雅一些</p>
 </blockquote>
 <hr>
-<h1 id="删除链表中的元素"><a href="#删除链表中的元素" class="headerlink" title="删除链表中的元素"></a>删除链表中的元素</h1>
+<h1 id="删除链表中的元素"><a href="#删除链表中的元素" class="headerlink" title="删除链表中的元素"></a>删除链表中的元素</h1><p>删除元素的话也就是添加元素的逆向操作，这里比如需要在链表中删除4号同学，那么直接让3号同学去记忆5号同学，这样一来原来的5号同学就变成了4号同学。<br>以此类推，4号同学就成功的在队伍中退出了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 找到要删除元素的前一个元素</span></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="keyword">while</span>(!prev.next.e.equals(e)) &#123;</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将要删除元素前一个元素的指针直接指向要删除元素的后一个元素</span></span><br><span class="line">    prev.next = prev.next.next;</span><br><span class="line"></span><br><span class="line">    size--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -643,6 +642,8 @@
 
 
 
+
+  <div class="footer-custom"><a target="_blank" href="http://beian.miit.gov.cn/">粤ICP备19093360号</a></div>
 
 
         
