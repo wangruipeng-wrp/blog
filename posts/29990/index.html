@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="简笔">
 <meta property="og:description" content="前言如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的动态数据结构的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。">
 <meta property="article:published_time" content="2020-08-02T06:45:27.000Z">
-<meta property="article:modified_time" content="2020-08-03T14:40:43.629Z">
+<meta property="article:modified_time" content="2020-08-04T13:04:50.713Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="数据结构">
@@ -411,8 +411,16 @@
 <p>插一句题外话<br>其实编写程序，就是像上面这样子一步一步去考虑出这个程序核心代码的步骤。<br>然后再把这个简单的按照程序逻辑梳理一遍，再开始实际编码。也恰恰是这两步才是最关键的，而不是编码，有了梳理完的逻辑实际编码起来码随心动倒还是个挺舒服的过程。<br>最后再审视一遍自己写出来的代码，看看有没有地方可以改进，可以写的更加的优雅一些</p>
 </blockquote>
 <hr>
-<h1 id="删除链表中的元素"><a href="#删除链表中的元素" class="headerlink" title="删除链表中的元素"></a>删除链表中的元素</h1><p>删除元素的话也就是添加元素的逆向操作，这里比如需要在链表中删除4号同学，那么直接让3号同学去记忆5号同学，这样一来原来的5号同学就变成了4号同学。<br>以此类推，4号同学就成功的在队伍中退出了。</p>
+<h1 id="删除链表中的元素"><a href="#删除链表中的元素" class="headerlink" title="删除链表中的元素"></a>删除链表中的元素</h1><p>我们来换个方式写删除操作，在前面的添加操作中我们设置了一个虚拟的index表示的是下标，作用是方便用户操作。在删除的这一小节我们不使用这个index我们假设用户能够直到自己要删除的元素，直接传入待删除元素，然后程序将其删除即可。</p>
+<p>删除元素实际上就是添加元素的逆向操作，找到待删除节点的前一个节点，将这个节点直接指向待删除元素的后一个节点即可删除。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 找到要删除元素的前一个元素</span></span><br><span class="line">    Node prev = dummyHead;</span><br><span class="line">    <span class="keyword">while</span>(!prev.next.e.equals(e)) &#123;</span><br><span class="line">        prev = prev.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将要删除元素前一个元素的指针直接指向要删除元素的后一个元素</span></span><br><span class="line">    prev.next = prev.next.next;</span><br><span class="line"></span><br><span class="line">    size--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将上面的代码使用递归的方式写出来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    remove(e, dummyHead);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e, Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node.next.e.equlas(e)) &#123;</span><br><span class="line">        node.next = node.next.next;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    remove(e, node.next);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上链表这样的数据结构天然的适合递归，在很多场合都可以使用递归去操作一个链表。</p>
+<hr>
+<p>以上代码都是笔者自己写的，并没有执行过。如果有些错误的地方，还烦请在评论区指出。<br>大家加油：）</p>
+
       
     </div>
     
