@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Spring,IOC,控制反转," />
 
 
 
@@ -81,13 +81,16 @@
 
 <meta name="description" content="控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IoC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。以上内容出自b站（狂神说Java）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Spring】IOC理论推导">
+<meta property="og:title" content="【Spring】IOC">
 <meta property="og:url" content="http://yoursite.com/posts/5741/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IoC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。以上内容出自b站（狂神说Java）">
 <meta property="article:published_time" content="2020-08-22T20:18:18.000Z">
-<meta property="article:modified_time" content="2020-08-30T08:14:37.010Z">
+<meta property="article:modified_time" content="2020-08-30T13:53:55.377Z">
 <meta property="article:author" content="王瑞鹏">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="IOC">
+<meta property="article:tag" content="控制反转">
 <meta name="twitter:card" content="summary">
 
 
@@ -124,7 +127,7 @@
 
 
 
-  <title>【Spring】IOC理论推导 | 知更</title>
+  <title>【Spring】IOC | 知更</title>
   
 
 
@@ -292,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【Spring】IOC理论推导</h1>
+          <h1 class="post-title" itemprop="name headline">【Spring】IOC</h1>
         
 
         <div class="post-meta">
@@ -314,6 +317,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -354,6 +379,7 @@
       
         <p>控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IoC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。<br><em>以上内容出自b站（<a href="https://www.bilibili.com/video/BV1WE411d7Dv?p=3" target="_blank" rel="noopener">狂神说Java</a>）</em></p>
 <a id="more"></a>
+
 <hr>
 <p><strong>演示传统开发模式</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* dao 接口 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IUserDao</span> </span>&#123; <span class="function"><span class="keyword">void</span> <span class="title">getUser</span><span class="params">()</span></span>; &#125;</span><br><span class="line"><span class="comment">/* dao 实现 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MysqlUserDaoImpl</span> <span class="keyword">implements</span> <span class="title">IUserDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getUser</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        System.out.println(<span class="string">"从MySQL数据库中取出的User对象"</span>); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OracleUserDaoImpl</span> <span class="keyword">implements</span> <span class="title">IUserDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getUser</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        System.out.println(<span class="string">"从Oracle数据库中取出来的User对象"</span>); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -362,7 +388,7 @@
 
 <p><strong>小结：</strong><br>传统的开发模式中，各个类之间的耦合度过高，如果在service层中要调用dao层的接口，必须在代码中new一个dao层接口的实现类才可以使用。<br>但是以这样的方式去编写代码一旦需要切换dao层的实现则必须去修改service层的代码，去修改接口的实现类才可以。<br>如果现在需要修改一个dao层的实现类，但是这个实现类在service层中很多地方都去new了的话，修改就会变得非常麻烦。不符合开闭原则的设计思想，也大大提高了代码之间的耦合度。</p>
 <blockquote>
-<p>注意：此处其实可以使用在上一篇博客中所讲述的工厂模式解决，但本文重点在于IOC推导，关于工厂模式的内容则不详细展开。</p>
+<p>注意：此处其实可以使用在上一篇博客中所讲述的工厂模式解决，但本文重点在于IOC，关于工厂模式的内容则不详细展开。</p>
 </blockquote>
 <hr>
 <p><strong>演示IOC开发模式</strong> <em>（此处dao层模式使用传统开发模式中的dao层）</em></p>
@@ -376,7 +402,22 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* service 实现 */</span></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">IUserService</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建spring上下文对象</span></span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br><span class="line">        IUserDao userDao = (IUserDao) context.getBean(<span class="string">"userDao"</span>);</span><br><span class="line">        userDao.getUser();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 客户端 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        IUserService userService = <span class="keyword">new</span> UserServiceImpl();</span><br><span class="line">        userService.getUser();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以上演示的就是Spring的最简单的一个应用。</p>
-<p>Spring是以一种配置加工厂方式来实现IOC，Spring中有一个专业的名词叫做IOC容器。Spring的IOC容器通过配置文件去读取要创建的bean（个人猜测是将这个bean存放在一个Map集合之中）。之后通过上下文对象的<code>getBean()</code>方法去获取到我们想要的bean对象。实际上应该将Spring理解为一个巨大的工厂。<br>以上将对象的创建完全交由Spring负责，在客户端中也不需要去传入实际的对象。所谓的控制反转就是将创建对象的这一步动作交给第三方去完成。不需要在程序中去创建对象，也不需要用户去创建对象，而是通过Spring的工厂创建完成之后我们自己根据需要去取出对象来使用。控制就是控制对象的创建，反转就是将控制对象的创建这一步骤反转给Spring。</p>
+<p>Spring是以一种配置加工厂方式来实现IOC，Spring中有一个专业的名词叫做IOC容器。Spring的IOC容器通过配置文件去读取要创建的bean。之后通过上下文对象的<code>getBean()</code>方法去获取到我们想要的bean对象。实际上应该将Spring理解为一个巨大的工厂。<br>以上将对象的创建完全交由Spring负责，在客户端中也不需要去传入实际的对象。所谓的控制反转就是将创建对象的这一步动作交给第三方去完成。不需要在程序中去创建对象，也不需要用户去创建对象，而是通过Spring的工厂创建完成之后我们自己根据需要去取出对象来使用。控制就是控制对象的创建，反转就是将控制对象的创建这一步骤反转给Spring。</p>
+<h1 id="Spring如何创建对象"><a href="#Spring如何创建对象" class="headerlink" title="Spring如何创建对象"></a>Spring如何创建对象</h1><p>上文讲了Spring会自动的帮我们去创建好一个个的对象，我们只需要去调用即可，接下来讲一下使用Spring创建对象的几种方式</p>
+<p><strong>通过构造方法创建对象</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 默认调用无参构造 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user1"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.ioc.User"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 下标的形式调用有参构造 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user2"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.ioc.User"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">value</span>=<span class="string">"user2"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 参数类型调用有参构造 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user3"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.ioc.User"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value</span>=<span class="string">"user3"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 参数名调用有参构造 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user4"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.ioc.User"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"user4"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>通过静态工厂方法创建对象</strong><br>自己编写一个创造想要的类的静态工厂类，然后将这个静态工厂类注册到Spring中去，再告诉Spring要通过这其中的哪个静态方法去创建我们想要的对象，这样子Spring就可以根据我们想要的方式去创建对象了。<br>这样一来可以实现在创建类时根据我们具体的想法去做一些行为。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 目标类 */</span></span><br><span class="line"><span class="keyword">public</span> User &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="comment">// 此处由于篇幅限制，省略构造方法、get和set方法、toString方法</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 创建类的静态工厂类 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="string">"张三"</span>, <span class="number">18</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 将静态工厂类注册到Spring中，并通过factory-method属性告诉Spring要使用哪个方法创建对象 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactory"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.createObject.UserFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getUser"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用实例工厂方法实例化</strong><br>实例工厂相比起静态工厂就是工厂类中创建对象的方法不是静态的，只是普通的方法。这样子不能直接调用创建类的静态方法，就必须要在配置文件中注册一下工厂类然后再通过工厂类去调用工厂创建对象的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="string">"张三"</span>, <span class="number">18</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactory"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.createObject.UserFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user"</span> <span class="attr">factory-bean</span>=<span class="string">"userFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getUser"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
 <hr>
 <p>大家加油：）</p>
 
@@ -393,6 +434,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/IOC/" rel="tag"># IOC</a>
+          
+            <a href="/tags/%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/" rel="tag"># 控制反转</a>
+          
+        </div>
       
 
       
@@ -506,7 +557,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -517,7 +568,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -564,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring中的IOC"><span class="nav-text">Spring中的IOC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring中的IOC"><span class="nav-text">Spring中的IOC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring如何创建对象"><span class="nav-text">Spring如何创建对象</span></a></li></ol></div>
             
 
           </div>
