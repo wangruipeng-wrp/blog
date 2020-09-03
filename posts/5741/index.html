@@ -85,13 +85,25 @@
 <meta property="og:url" content="http://yoursite.com/posts/5741/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IoC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。以上内容出自b站（狂神说Java）">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232348.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232634.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232859.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901203712.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901205115.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214249.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214315.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214537.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214554.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214656.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901215755.png">
 <meta property="article:published_time" content="2020-08-22T20:18:18.000Z">
-<meta property="article:modified_time" content="2020-08-30T13:55:24.431Z">
+<meta property="article:modified_time" content="2020-09-01T14:05:07.188Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Spring">
 <meta property="article:tag" content="IOC">
 <meta property="article:tag" content="控制反转">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232348.png">
 
 
 
@@ -418,6 +430,25 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="string">"张三"</span>, <span class="number">18</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactory"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.createObject.UserFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user"</span> <span class="attr">factory-bean</span>=<span class="string">"userFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getUser"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
 
+<h1 id="DI（Dependency-Injection）依赖注入"><a href="#DI（Dependency-Injection）依赖注入" class="headerlink" title="DI（Dependency Injection）依赖注入"></a>DI（Dependency Injection）依赖注入</h1><p><strong>概念</strong><br><strong>依赖：</strong>指Bean对象的创建依赖于IOC容器，Bean对象的依赖资源。<br><strong>注入：</strong>指Bean对象所依赖的资源，由容器来设置和装配。</p>
+<h4 id="构造器注入"><a href="#构造器注入" class="headerlink" title="构造器注入"></a>构造器注入</h4><p>构造器注入与前文「通过构造方法创建对象」相同，这里不再赘述。</p>
+<h4 id="set方法注入"><a href="#set方法注入" class="headerlink" title="set方法注入"></a>set方法注入</h4><p><strong>基本数据类型和字符串注入</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232348.png" alt="20200831232348"></p>
+<p><strong>使用更加简便的P名称空间</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232634.png" alt="20200831232634"></p>
+<p><strong>甚至是java.util.Properties类也可以注入</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200831232859.png" alt="20200831232859"></p>
+<p><strong>注入一些其他bean</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901203712.png" alt="20200901203712"></p>
+<blockquote>
+<p>注意上面加了颜色的这句话<code>但是销毁回调允许它参与请求作用域的生命周期。</code><br>这句话的意思是，当Bean被销毁时，这个Bean所注入的其他的Bean并不会被一同销毁，也就是会继续驻留在内存中。如果我们要销毁这个Bean，需要进一步的销毁操作。差不多就像是闭包的意思。</p>
+</blockquote>
+<p><strong>集合类型的注入</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901205115.png" alt="20200901205115"></p>
+<p><strong>注入空字符串</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214249.png" alt="20200901214249"></p>
+<p><strong>注入null</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214315.png" alt="20200901214315"></p>
+<h4 id="p名称空间注入"><a href="#p名称空间注入" class="headerlink" title="p名称空间注入"></a>p名称空间注入</h4><p><strong>普通属性</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214537.png" alt="20200901214537"><br><strong>其他bean引用</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214554.png" alt="20200901214554"></p>
+<h4 id="c名称空间注入"><a href="#c名称空间注入" class="headerlink" title="c名称空间注入"></a>c名称空间注入</h4><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901214656.png" alt="20200901214656"></p>
+<h1 id="Bnan的作用域"><a href="#Bnan的作用域" class="headerlink" title="Bnan的作用域"></a>Bnan的作用域</h1><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901215755.png" alt="20200901215755"><br>以上是Spring官网对于Bean作用域的描述。</p>
+<p>其中的单例和原型是都可用的，而其余的几个则是需要在web环境下使用。</p>
+<blockquote>
+<p>注意：单例下的Bean在加载配置文件时就会被创建，而原型模式下的Bean则在获取时才会创建，并且每次都创建。</p>
+</blockquote>
 <hr>
 <p>大家加油：）</p>
 
@@ -615,7 +646,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring中的IOC"><span class="nav-text">Spring中的IOC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring如何创建对象"><span class="nav-text">Spring如何创建对象</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring中的IOC"><span class="nav-text">Spring中的IOC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring如何创建对象"><span class="nav-text">Spring如何创建对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DI（Dependency-Injection）依赖注入"><span class="nav-text">DI（Dependency Injection）依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造器注入"><span class="nav-text">构造器注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set方法注入"><span class="nav-text">set方法注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#p名称空间注入"><span class="nav-text">p名称空间注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c名称空间注入"><span class="nav-text">c名称空间注入</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bnan的作用域"><span class="nav-text">Bnan的作用域</span></a></li></ol></div>
             
 
           </div>
