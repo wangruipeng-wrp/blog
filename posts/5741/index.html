@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Spring,IOC,控制反转,依赖注入,Bean的作用域," />
+  <meta name="keywords" content="Spring,IOC,控制反转,Bean的作用域," />
 
 
 
@@ -85,15 +85,16 @@
 <meta property="og:url" content="http://yoursite.com/posts/5741/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IOC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。以上内容出自b站（狂神说Java）">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901215755.png">
 <meta property="article:published_time" content="2020-08-22T20:18:18.000Z">
-<meta property="article:modified_time" content="2020-09-08T12:36:23.072Z">
+<meta property="article:modified_time" content="2020-09-08T13:51:22.992Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Spring">
 <meta property="article:tag" content="IOC">
 <meta property="article:tag" content="控制反转">
-<meta property="article:tag" content="依赖注入">
 <meta property="article:tag" content="Bean的作用域">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901215755.png">
 
 
 
@@ -405,6 +406,15 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        IUserService userService = <span class="keyword">new</span> UserServiceImpl();</span><br><span class="line">        userService.getUser();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以上演示的就是一个简单的Spring应用。</p>
 <p>Spring是以一种配置加工厂方式来实现IOC，这在Spring中有一个专业的名词叫做IOC容器。Spring的IOC容器通过配置文件去读取要创建的bean。之后通过上下文对象的<code>getBean()</code>方法去获取到我们想要的bean对象。实际上应该将Spring理解为一个巨大的工厂。<br>以上将对象的创建完全交由Spring负责，在客户端中也不需要去传入实际的对象。所谓的控制反转就是将创建对象的这一步动作交给第三方去完成。不需要在程序中去创建对象，也不需要用户去创建对象，而是通过Spring的工厂创建完成之后我们自己根据需要去取出对象来使用。控制就是控制对象的创建，反转就是将控制对象的创建这一步骤反转给Spring。</p>
+<h1 id="Bnan的作用域"><a href="#Bnan的作用域" class="headerlink" title="Bnan的作用域"></a>Bnan的作用域</h1><p>Spring官网对Bean作用域的描述<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901215755.png" alt="20200901215755"></p>
+<blockquote>
+<p>这里我们来聊聊singleton和prototype，单例和原型。另外的几种作用域等以后有用到再研究</p>
+</blockquote>
+<p>Spring中Bean默认的作用域范围就是单例的，也就是在整个IOC容器中只有一个Bean实例存在，相对应的原型模式就是在IOC容器中存在多个Bean实例的。单例的Bean在创建上下文时就创建了，然后每次去获取的时候都是获取的同一个，而原型的Bean则是当需要用到再去创建，每次需要都会去创建一个新的Bean。</p>
+<p><strong>演示单例和原型</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"singletonStu"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.createObject.Student"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"prototypeStu"</span> <span class="attr">class</span>=<span class="string">"cool.wrp.createObject.Student"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);<span class="comment">// 创建singletonStu</span></span><br><span class="line">        <span class="comment">// 演示单例</span></span><br><span class="line">        Student stu1 = context.getBean(<span class="string">"singletonStu"</span>, Student<span class="class">.<span class="keyword">class</span>)</span>;<span class="comment">// 取出singletonStu</span></span><br><span class="line">        Student stu2 = context.getBean(<span class="string">"singletonStu"</span>, Student<span class="class">.<span class="keyword">class</span>)</span>;<span class="comment">// 取出singletonStu</span></span><br><span class="line">        System.out.println(stu1 == stu2);<span class="comment">// true</span></span><br><span class="line">        <span class="comment">// 演示原型</span></span><br><span class="line">        Student stu3 = context.getBean(<span class="string">"prototypeStu"</span>, Student<span class="class">.<span class="keyword">class</span>)</span>;<span class="comment">// 创建singletonStu</span></span><br><span class="line">        Student stu4 = context.getBean(<span class="string">"prototypeStu"</span>, Student<span class="class">.<span class="keyword">class</span>)</span>;<span class="comment">// 创建singletonStu</span></span><br><span class="line">        System.out.println(stu3 == stu4);<span class="comment">// false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <hr>
 <p>大家加油：）</p>
 
@@ -429,8 +439,6 @@
             <a href="/tags/IOC/" rel="tag"># IOC</a>
           
             <a href="/tags/%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/" rel="tag"># 控制反转</a>
-          
-            <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" rel="tag"># 依赖注入</a>
           
             <a href="/tags/Bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="tag"># Bean的作用域</a>
           
@@ -541,7 +549,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -563,7 +571,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -610,7 +618,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring中的IOC"><span class="nav-text">Spring中的IOC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring中的IOC"><span class="nav-text">Spring中的IOC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bnan的作用域"><span class="nav-text">Bnan的作用域</span></a></li></ol></div>
             
 
           </div>
