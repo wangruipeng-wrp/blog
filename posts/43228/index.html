@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="自动装配是使用spring满足bean依赖的一种方法spring会在应用上下文中为某个bean寻找其依赖的bean。以上内容出自b站（狂神说Java）">
 <meta property="article:published_time" content="2020-09-03T12:20:58.000Z">
-<meta property="article:modified_time" content="2020-09-06T15:59:54.504Z">
+<meta property="article:modified_time" content="2020-09-10T12:14:32.204Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Spring">
 <meta property="article:tag" content="Bean">
@@ -433,6 +433,7 @@
 <li>都不成功，则报异常</li>
 </ol>
 <p><code>@Resource</code>注解也是可以应用在成员变量、构造器、set方法上的，相比起<code>@Autowired</code>注解，是jdk自带的注解而不是Spring提供的，这其中的一个好处是使得程序在依赖注入方面与Spring框架解耦，但我个人觉得并不是很必要。另外一个就是上面提到的注入方式的不同，<code>@Autowired</code>是byType方式而<code>@Resource</code>是先使用byName方式，byName方式注入失败再使用byType方式。还有新版本的jdk已经不再支持<code>@Resource</code>注解了，故了解即可。</p>
+<h4 id="Component、-Repository、-Service、-Controller"><a href="#Component、-Repository、-Service、-Controller" class="headerlink" title="@Component、@Repository、@Service、@Controller"></a>@Component、@Repository、@Service、@Controller</h4><p>这些注解是为了让我们更加进一步的简化xml文件中的配置而存在的，将这些注解应用在类上，则可以将该类交由IOC容器去管理。相当于在xml文件中定义了这个类的bean节点。<br>默认使用的id是类名的小驼峰写法，自定义id则只需要指定value属性即可。四个注解的功能都是相同的，之所以有四个只是为了区分开各个类的层级。<code>@Repository</code>、<code>@Service</code>、<code>@Controller</code>这三个注解分别对应MVC三层设计中的<code>dao</code>、<code>service</code>、<code>controller</code>，另外的<code>@Component</code>注解则是使用在一些其他的类中，例如工具类。</p>
 <hr>
 <p>大家加油：）</p>
 
@@ -565,7 +566,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -634,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#配置文件方式自动装配"><span class="nav-text">配置文件方式自动装配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#byName"><span class="nav-text">byName</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#byType"><span class="nav-text">byType</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注解方式自动装配"><span class="nav-text">注解方式自动装配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Autowired"><span class="nav-text">@Autowired</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Resource"><span class="nav-text">@Resource</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#配置文件方式自动装配"><span class="nav-text">配置文件方式自动装配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#byName"><span class="nav-text">byName</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#byType"><span class="nav-text">byType</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注解方式自动装配"><span class="nav-text">注解方式自动装配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Autowired"><span class="nav-text">@Autowired</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Resource"><span class="nav-text">@Resource</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Component、-Repository、-Service、-Controller"><span class="nav-text">@Component、@Repository、@Service、@Controller</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
