@@ -374,7 +374,10 @@
 
       
         
-          <p>难懂的反射，简单的学</p>
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>首先来看一下百度百科中对于Java反射的定义，<a href="https://baike.baidu.com/item/JAVA%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/6015990?fr=aladdin" target="_blank" rel="noopener">JAVA反射机制，百度百科</a></p>
+<blockquote>
+<p>Java的反射（reflection）机制是指在程序的运行状态中，可以构造任意一个类的对象，可以了解任意一个对象所属的类，可以了解任意一个类的成员变量和方法，可以调用任意一个对象的属性和方法。这种动态获取程序信息以及动态调用对象的功能称为Java语言的反射机制。反射被视为动态语言的关键。</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/posts/25346/#more" rel="contents">
@@ -530,7 +533,8 @@
 
       
         
-          <p>简单的注解，快快的学</p>
+          <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> "我的注解"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> "name"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是Java自定义注解的格式，其中的四个注解就是元注解，也就是我们接下注解部分来的重点。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/posts/28807/#more" rel="contents">
