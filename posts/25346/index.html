@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="注解,元注解,反射," />
+  <meta name="keywords" content="反射," />
 
 
 
@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="简单的注解我们快快的学难懂的反射我们简单的学  引用自“深深的话我们浅浅的说，长长的路我们慢慢的走”">
+<meta name="description" content="难懂的反射，简单的学">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Java基础】注解和反射">
+<meta property="og:title" content="【Java基础】反射">
 <meta property="og:url" content="http://yoursite.com/posts/25346/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="简单的注解我们快快的学难懂的反射我们简单的学  引用自“深深的话我们浅浅的说，长长的路我们慢慢的走”">
+<meta property="og:description" content="难懂的反射，简单的学">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200921203210.png">
-<meta property="article:published_time" content="2020-09-13T03:11:52.000Z">
-<meta property="article:modified_time" content="2020-10-02T09:41:58.438Z">
+<meta property="article:published_time" content="2020-10-02T11:45:30.000Z">
+<meta property="article:modified_time" content="2020-10-02T11:51:15.406Z">
 <meta property="article:author" content="王瑞鹏">
-<meta property="article:tag" content="注解">
-<meta property="article:tag" content="元注解">
 <meta property="article:tag" content="反射">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200921203210.png">
@@ -129,7 +127,7 @@
 
 
 
-  <title>【Java基础】注解和反射 | 知更</title>
+  <title>【Java基础】反射 | 知更</title>
   
 
 
@@ -297,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【Java基础】注解和反射</h1>
+          <h1 class="post-title" itemprop="name headline">【Java基础】反射</h1>
         
 
         <div class="post-meta">
@@ -309,8 +307,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-13T11:11:52+08:00">
-                2020-09-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-02T19:45:30+08:00">
+                2020-10-02
               </time>
             
 
@@ -379,34 +377,10 @@
       
 
       
-        <p>简单的注解我们快快的学<br>难懂的反射我们简单的学</p>
-<blockquote>
-<p>引用自“深深的话我们浅浅的说，长长的路我们慢慢的走”</p>
-</blockquote>
+        <p>难懂的反射，简单的学</p>
 <a id="more"></a>
-<hr>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> "我的注解"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> "name"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上就是Java自定义注解的格式，其中的四个注解就是元注解，也就是我们接下注解部分来的重点。</p>
-<h1 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h1><p>普通的注解就是用来修饰例如变量、方法和类的。而元注解是用来修饰注解的，是修饰注解的注解。下面的四个注解就是元注解。</p>
-<p><strong>@Target</strong><br>目标的意思，表示的是注解可以修饰的目标。参数是一个<code>java.lang.annotation.ElementType</code>类型的数组。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;</span><br><span class="line">        ElementType.TYPE,               <span class="comment">// 类、接口、枚举类</span></span><br><span class="line">        ElementType.FIELD,              <span class="comment">// 成员变量、枚举常量</span></span><br><span class="line">        ElementType.METHOD,             <span class="comment">// 成员方法</span></span><br><span class="line">        ElementType.PARAMETER,          <span class="comment">// 方法参数</span></span><br><span class="line">        ElementType.CONSTRUCTOR,        <span class="comment">// 构造方法</span></span><br><span class="line">        ElementType.LOCAL_VARIABLE,     <span class="comment">// 局部变量</span></span><br><span class="line">        ElementType.ANNOTATION_TYPE,    <span class="comment">// 注解类</span></span><br><span class="line">        ElementType.PACKAGE,            <span class="comment">// 包</span></span><br><span class="line">        ElementType.TYPE_PARAMETER,     <span class="comment">// 类型参数，jdk1.8新增</span></span><br><span class="line">        ElementType.TYPE_USE            <span class="comment">// 使用类型的任何地方，jdk1.8新增</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="meta">@interface</span> MyAnnotation &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>@Retention</strong><br>有点类似于生命周期的意思，表示的是注解在程序中作用的范围，参数是<code>java.lang.annotation.RetentionPolicy</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)      <span class="comment">// 源文件保留</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)       <span class="comment">// 编译后保留</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)     <span class="comment">// 运行时保留</span></span><br><span class="line"><span class="meta">@interface</span> MyAnnotation &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>@Inherited</strong><br>Inherited注解的作用是：使被它修饰的注解具有继承性（如果某个类使用了被@Inherited修饰的注解，则其子类将自动具有该注解）。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyInheritedAnnotation &#123; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MyInheritedAnnotation</span>(name=<span class="string">"parent"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">Parent</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Class&lt;Child&gt; child = Child<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">		MyInheritedAnnotation annotation = child.getAnnotation(MyInheritedAnnotation<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">		System.out.println(annotation.name());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行main方法打印结果：<code>parent</code></p>
-<p><strong>@Documented</strong><br>Documented注解的作用是：描述在使用 javadoc 工具为类生成帮助文档时是否要保留其注解信息。</p>
-<blockquote>
-<p>以上内容参考：<a href="https://blog.csdn.net/pengjunlee/article/details/79683621#meta-annotation%EF%BC%88%E5%85%83%E6%B3%A8%E8%A7%A3%EF%BC%89" target="_blank" rel="noopener">JAVA核心知识点–元注解详解</a></p>
-</blockquote>
-<p><strong>彩蛋：</strong><br>将名称定义成value的值在使用时是可以省略value属性不写的。<br>例如上面定义的<code>MyAnnotation</code>注解，在设置值时<code>value</code>属性是可以省略属性名称的，而<code>name</code>属性则不可以省略属性名称。</p>
-<p><code>@MyAnnotation(&quot;value&quot;)</code> 表示指定了value的值<br><code>@MyAnnotation(name = &quot;name&quot;)</code> 表示指定了name的值<br><code>@MyAnnotation(value = &quot;value&quot;, name = &quot;name&quot;)</code> 表示指定了value和name的值，如果指定了多个值则属性名不可以省略</p>
-<hr>
-<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>首先来看一下百度百科中对于Java反射的定义，<a href="https://baike.baidu.com/item/JAVA%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/6015990?fr=aladdin" target="_blank" rel="noopener">JAVA反射机制，百度百科</a></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>首先来看一下百度百科中对于Java反射的定义，<a href="https://baike.baidu.com/item/JAVA%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/6015990?fr=aladdin" target="_blank" rel="noopener">JAVA反射机制，百度百科</a></p>
 <blockquote>
 <p>Java的反射（reflection）机制是指在程序的运行状态中，可以构造任意一个类的对象，可以了解任意一个对象所属的类，可以了解任意一个类的成员变量和方法，可以调用任意一个对象的属性和方法。这种动态获取程序信息以及动态调用对象的功能称为Java语言的反射机制。反射被视为动态语言的关键。</p>
 </blockquote>
@@ -423,7 +397,7 @@
 <p>尽管在这样的定义与分类下Java不是动态语言，它却有着一个非常突出的动态相关机制：Reflection。这个字的意思是“反射、映象、倒影”，用在Java身上指的是我们可以于运行时加载、探知、使用编译期间完全未知的classes。换句话说，Java程序可以加载一个运行时才得知名称的class，获悉其完整构造（但不包括methods定义），并生成其对象实体、或对其fields设值、或唤起其methods。这种“看透class”的能力（the ability of the program to examine itself）被称为introspection（内省、内观、反省）。Reflection和introspection是常被并提的两个术语。</p>
 </blockquote>
 <p>上面这几段话出自百度百科，由此可以看出，Java反射机制的重要性。由于反射机制的存在使得Java语言变身成为一门准动态语言。很多主流框架中也是大量的使用了反射技术，像是我们说的Spring就是基于反射 + 配置 + 工厂的形式实现的。</p>
-<h2 id="Class类"><a href="#Class类" class="headerlink" title="Class类"></a>Class类</h2><p>想要了解反射机制，首先来了解一个类<code>java.lang.Class</code>反射机制中最重要的一个类，Class类（描述类的类）。</p>
+<h1 id="Class类"><a href="#Class类" class="headerlink" title="Class类"></a>Class类</h1><p>想要了解反射机制，首先来了解一个类<code>java.lang.Class</code>反射机制中最重要的一个类，Class类（描述类的类）。</p>
 <p><strong>Java中的类：</strong>可以继承某个类，可以实现某一些接口，可以在类中定义类的属性，方法，和构造器。</p>
 <p>由此，Class类（描述类的类）主要就是描述了类继承了哪个父类，实现了那些接口，定义了那些方法和属性，以及类中的构造器。</p>
 <p><strong>小结：</strong>类的声明、类中的属性和方法、类的构造器是 <code>Class</code> 类主要的描述对象。</p>
@@ -432,11 +406,11 @@
 <p>来分析一下Class类，首先看一下构造函数。<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200921203210.png" alt="20200921203210"><br>这是jdk1.8中Class类的构造函数，这是一个私有化的构造函数，意味着在外界是不能直接创建Class类的实例的。</p>
 <p>实际上，Class类的实例也并不是创建出来的，Class类的实例是JVM在加载每个class字节码文件时自动生成的实例。</p>
 <p>每个Class类对应的都是被JVM所加载的一个个class文件，相同的，每个class文件也都有一个唯一与之对应的Class实例。</p>
-<h2 id="如何获取Class类的实例"><a href="#如何获取Class类的实例" class="headerlink" title="如何获取Class类的实例"></a>如何获取Class类的实例</h2><p>这里将通过一个User类来演示四种获取Class实例的方式。</p>
+<h1 id="如何获取Class类的实例"><a href="#如何获取Class类的实例" class="headerlink" title="如何获取Class类的实例"></a>如何获取Class类的实例</h1><p>这里将通过一个User类来演示四种获取Class实例的方式。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cool.wrp.reflex;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line">        <span class="comment">// 1.类名.class</span></span><br><span class="line">        Class&lt;User&gt; userClass1 = User<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.实例.getClass()</span></span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        Class userClass2 = user.getClass();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.Class.forName("全限定类名")</span></span><br><span class="line">        Class userClass3 = Class.forName(<span class="string">"cool.wrp.reflex.User"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4.类加载器</span></span><br><span class="line">        ClassLoader classLoader = user.getClass().getClassLoader();</span><br><span class="line">        Class userClass4  = classLoader.loadClass(<span class="string">"cool.wrp.reflex.User"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(userClass1.hashCode());</span><br><span class="line">        System.out.println(userClass2.hashCode());</span><br><span class="line">        System.out.println(userClass3.hashCode());</span><br><span class="line">        System.out.println(userClass4.hashCode());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>运行main方法可以发现，四个Class实例的hashCode都是相同的，这证明了每个class字节码文件都有且仅有唯一一个与之对应的Class实例。</p>
 <p>以上的四种方式，我们在实际开发中应该尽可能的使用第一种方式去获得Class类的实例，因为这种方式的效率是最高的。</p>
-<h2 id="Class类是怎么描述类的"><a href="#Class类是怎么描述类的" class="headerlink" title="Class类是怎么描述类的"></a>Class类是怎么描述类的</h2><p style="text-indent:2em">
+<h1 id="Class类是怎么描述类的"><a href="#Class类是怎么描述类的" class="headerlink" title="Class类是怎么描述类的"></a>Class类是怎么描述类的</h1><p style="text-indent:2em">
 在这里引用 <b>Java核心技术卷一 5.7.4</b> 中的内容来讲述Class类是怎么描述类的。
 </p>
 
@@ -463,7 +437,7 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <p>有兴趣的同学可以执行一遍以上的代码，可以更清楚的展示Class对象是如何去描述一个类的。</p>
 <hr>
 <p>书中的这个例子已经是很详细的讲明白了Class类是如何去描述一个类的，但这里还有一点补充，就是<strong>Class类是如何去描述类中的注解的</strong>。</p>
-<p>我们使用文章一开头的注解例子做演示。</p>
+<p>我们使用 <a href="">【Java基础】</a> 注解一文开头的注解例子做演示。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MyAnnotation</span>(value = <span class="string">"MyAnnotation's value"</span>, name = <span class="string">"MyAnnotation's name"</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TargetClass</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mainn</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Class&lt;?&gt; cl = TargetClass<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 获取注解对象</span></span><br><span class="line">        MyAnnotation myAnnotation = cl.getAnnotation(MyAnnotation<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="comment">// 打印注解中的内容</span></span><br><span class="line">        System.out.println(myAnnotation.value());</span><br><span class="line">        System.out.println(myAnnotation.name());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>运行main方法：<br><code>MyAnnotation&#39;s value</code><br><code>MyAnnotation&#39;s name</code></p>
@@ -471,7 +445,7 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <blockquote>
 <p>同样的 <code>Constructor、Method、Field</code> 对象也有 <code>getAnnotation</code> 方法。</p>
 </blockquote>
-<h2 id="Class类是怎么操作类的"><a href="#Class类是怎么操作类的" class="headerlink" title="Class类是怎么操作类的"></a>Class类是怎么操作类的</h2><p>操作类也是分别对应着Java中对类的操作，首先是类的实例化，然后可以<strong>设置类的属性、获取类的属性、调用类的方法</strong>。而属性和方法又分为<strong>公共、私有和静态</strong></p>
+<h1 id="Class类是怎么操作类的"><a href="#Class类是怎么操作类的" class="headerlink" title="Class类是怎么操作类的"></a>Class类是怎么操作类的</h1><p>操作类也是分别对应着Java中对类的操作，首先是类的实例化，然后可以<strong>设置类的属性、获取类的属性、调用类的方法</strong>。而属性和方法又分为<strong>公共、私有和静态</strong></p>
 <h3 id="类的实例化"><a href="#类的实例化" class="headerlink" title="类的实例化"></a>类的实例化</h3><p>通过反射实例化的类也是需要调用构造器的，构造方法分为有参构造器和无参构造器。</p>
 <p>使用反射实例化一个类有两种方式，一个是调用<strong>Class对象的newInstance()方法</strong>，另一个是调用<strong>Constructor对象的newInstance()方法</strong>。</p>
 <p><strong>实验环境</strong></p>
@@ -544,10 +518,6 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag"># 注解</a>
-          
-            <a href="/tags/%E5%85%83%E6%B3%A8%E8%A7%A3/" rel="tag"># 元注解</a>
-          
             <a href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag"># 反射</a>
           
         </div>
@@ -561,8 +531,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/47506/" rel="next" title="【Spring】依赖注入">
-                <i class="fa fa-chevron-left"></i> 【Spring】依赖注入
+              <a href="/posts/28807/" rel="next" title="【Java基础】注解">
+                <i class="fa fa-chevron-left"></i> 【Java基础】注解
               </a>
             
           </div>
@@ -653,7 +623,7 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -726,7 +696,7 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#元注解"><span class="nav-text">元注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反射"><span class="nav-text">反射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class类"><span class="nav-text">Class类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何获取Class类的实例"><span class="nav-text">如何获取Class类的实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class类是怎么描述类的"><span class="nav-text">Class类是怎么描述类的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class类是怎么操作类的"><span class="nav-text">Class类是怎么操作类的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例化"><span class="nav-text">类的实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作属性"><span class="nav-text">操作属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作方法"><span class="nav-text">操作方法</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class类"><span class="nav-text">Class类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何获取Class类的实例"><span class="nav-text">如何获取Class类的实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class类是怎么描述类的"><span class="nav-text">Class类是怎么描述类的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class类是怎么操作类的"><span class="nav-text">Class类是怎么操作类的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例化"><span class="nav-text">类的实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作属性"><span class="nav-text">操作属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作方法"><span class="nav-text">操作方法</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
