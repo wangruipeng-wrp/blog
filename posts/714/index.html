@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="本文将讲述一个动态数组的实现过程，由于动态数组其实是一种比较简单的数据结构。所以本文将会以代码展示为主，当然，难点也是会重点讲述。有什么不明白的地方可以在评论区提问。">
 <meta property="article:published_time" content="2020-07-31T13:31:50.000Z">
-<meta property="article:modified_time" content="2020-07-31T15:50:36.217Z">
+<meta property="article:modified_time" content="2020-10-25T10:33:42.443Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="数据结构">
@@ -409,7 +409,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除数组中的任意元素</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> index 要删除元素的下标</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> E 删除的元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; <span class="number">0</span> || index &gt;= size) </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"数组下标 "</span> + index + <span class="string">" 不合法, 当前size = "</span> + size);</span><br><span class="line">    </span><br><span class="line">    E removeE = data[index];</span><br><span class="line">    <span class="comment">// 挪动元素</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; size - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        data[i] = data[i + <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    size--;</span><br><span class="line">    <span class="comment">// 判断是否缩容</span></span><br><span class="line">    <span class="keyword">if</span> (size == data.length / <span class="number">4</span> &amp;&amp; data.length / <span class="number">2</span> != <span class="number">0</span>) &#123;</span><br><span class="line">        resize(data.length / <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> removeE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>我们在扩容的时候是扩容成原来数组的两倍的大小，但是缩容时确实缩容成数组的四分之一大小。<br>这是为了防止用户在添加删除元素时刚好是在原来数组容量大小的附近进行的，则不断的会去触发扩容和缩容的操作，而这会更多的消耗资源。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。"><a href="#关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。" class="headerlink" title="关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。"></a>关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。</h2><p>大家加油：）</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。</p>
+<hr>
+<p>大家加油：）</p>
 
       
     </div>
@@ -615,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、准备工作"><span class="nav-text">一、准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、设计扩容和缩容的方法"><span class="nav-text">二、设计扩容和缩容的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、添加元素"><span class="nav-text">三、添加元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、删除元素"><span class="nav-text">四、删除元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。"><span class="nav-text">关于动态数组，以上的几个方法就是其中最主要的方法了，其他的一些例如查询元素和修改元素相对而言比较简单，也没什么好说的，本文也就省略不提。</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、准备工作"><span class="nav-text">一、准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、设计扩容和缩容的方法"><span class="nav-text">二、设计扩容和缩容的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、添加元素"><span class="nav-text">三、添加元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、删除元素"><span class="nav-text">四、删除元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
