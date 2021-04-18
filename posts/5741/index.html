@@ -82,7 +82,7 @@
 <meta name="description" content="控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IOC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。以上内容出自b站（狂神说Java）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Spring】IOC理论推导">
-<meta property="og:url" content="http://yoursite.com/posts/5741/index.html">
+<meta property="og:url" content="https://blog.wrp.cool/posts/5741/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="控制反转IOC（Inversion of Control)，是一种设计思想，DI（依赖注入）是实现IOC的一种方法，也有人认为DI只是IOC的另一种说法。没有IOC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。以上内容出自b站（狂神说Java）">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200901215755.png">
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/posts/5741/"/>
+  <link rel="canonical" href="https://blog.wrp.cool/posts/5741/"/>
 
 
 
@@ -291,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/5741/">
+    <link itemprop="mainEntityOfPage" href="https://blog.wrp.cool/posts/5741/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="王瑞鹏">
@@ -391,7 +391,7 @@
 
 <p><strong>小结：</strong><br>传统的开发模式中，各个类之间的耦合度过高，如果在service层中要调用dao层的接口，必须在代码中new一个dao层接口的实现类才可以使用。<br>但是以这样的方式去编写代码一旦需要切换dao层的实现则必须去修改service层的代码，去修改接口的实现类才可以。<br>如果现在需要修改一个dao层的实现类，但是这个实现类在service层中很多地方都去new了的话，修改就会变得非常麻烦。不符合开闭原则的设计思想，也大大提高了代码之间的耦合度。</p>
 <blockquote>
-<p>此处其实可以使用在上一篇博客 <a href="http://blog.wrp.cool/posts/34268/" target="_blank" rel="noopener">【创建型设计模式】工厂模式</a> 中所讲述的工厂模式解决，但本文重点在于IOC，关于工厂模式的内容则不详细展开。</p>
+<p>此处其实可以使用在上一篇博客 <a href="http://blog.wrp.cool/posts/34268/">【创建型设计模式】工厂模式</a> 中所讲述的工厂模式解决，但本文重点在于IOC，关于工厂模式的内容则不详细展开。</p>
 </blockquote>
 <hr>
 <p><strong>演示IOC开发模式</strong> <em>（此处dao层模式使用传统开发模式中的dao层）</em></p>
@@ -428,6 +428,25 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    <a href="https://blog.wrp.cool/about/" title="博主介绍">王瑞鹏</a>（欢迎打扰）
+    <!--王瑞鹏-->
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://blog.wrp.cool/posts/5741/" title="【Spring】IOC理论推导">https://blog.wrp.cool/posts/5741/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
