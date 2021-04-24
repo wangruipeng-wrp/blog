@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,设计模式,创建型,建造者模式," />
+  <meta name="keywords" content="Java,设计模式,创建型,单例模式,懒汉式单例模式,饿汉式单例模式,双重检查锁,重排序," />
 
 
 
@@ -81,17 +81,21 @@
 
 <meta name="description" content="概述单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。可能懒汉式这个词会比较陌生一些，实际上也是很好理解：在需要使用到这个实例的时候再去创建这个实例。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【创建型设计模式】懒汉式单例模式">
+<meta property="og:title" content="【创建型设计模式】单例模式">
 <meta property="og:url" content="https://blog.wrp.cool/posts/29125/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="概述单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。可能懒汉式这个词会比较陌生一些，实际上也是很好理解：在需要使用到这个实例的时候再去创建这个实例。">
 <meta property="article:published_time" content="2021-04-23T13:51:13.000Z">
-<meta property="article:modified_time" content="2021-04-24T10:54:29.311Z">
+<meta property="article:modified_time" content="2021-04-24T15:20:38.917Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="设计模式">
 <meta property="article:tag" content="创建型">
-<meta property="article:tag" content="建造者模式">
+<meta property="article:tag" content="单例模式">
+<meta property="article:tag" content="懒汉式单例模式">
+<meta property="article:tag" content="饿汉式单例模式">
+<meta property="article:tag" content="双重检查锁">
+<meta property="article:tag" content="重排序">
 <meta name="twitter:card" content="summary">
 
 
@@ -128,7 +132,7 @@
 
 
 
-  <title>【创建型设计模式】懒汉式单例模式 | 知更</title>
+  <title>【创建型设计模式】单例模式 | 知更</title>
   
 
 
@@ -306,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【创建型设计模式】懒汉式单例模式</h1>
+          <h1 class="post-title" itemprop="name headline">【创建型设计模式】单例模式</h1>
         
 
         <div class="post-meta">
@@ -328,6 +332,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -359,11 +385,35 @@
         <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。<br>当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。<br>可能懒汉式这个词会比较陌生一些，实际上也是很好理解：在需要使用到这个实例的时候再去创建这个实例。</p>
 <a id="more"></a>
 
-<h1 id="单线程中的单例模式"><a href="#单线程中的单例模式" class="headerlink" title="单线程中的单例模式"></a>单线程中的单例模式</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazeSingleCase</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LazeSingleCase lazeSingleCase = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazeSingleCase</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleCase <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazeSingleCase == <span class="keyword">null</span>) &#123;</span><br><span class="line">            lazeSingleCase = <span class="keyword">new</span> LazeSingleCase();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lazeSingleCase;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>单线程中的单例模式就只是这样子而已，非常简单。设计一个私有的构造函数是为了不让在外部创建这个类的实例，当然对外也需要提供一个可以获取类实例的方法。<br>这也是单例模式中最简单的实现，真正的难点在于多线程中如何保证多个线程运行过程中只创建一个实例。</p>
+<h1 id="单线程中的单例模式"><a href="#单线程中的单例模式" class="headerlink" title="单线程中的单例模式"></a>单线程中的单例模式</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazeSingleInstance</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LazeSingleInstance lazeSingleInstance = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazeSingleInstance</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleInstance <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazeSingleInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            lazeSingleInstance = <span class="keyword">new</span> LazeSingleInstance();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lazeSingleInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单线程中的单例模式就只是这样子而已，非常简单。设计一个私有的构造函数是为了不让在外部创建这个类的实例，当然对外也需要提供一个可以获取类实例的方法，这也是单例模式中核心的方法，接下来也将围绕这个方法展开讨论。</p>
+<p>这也是单例模式中最简单的实现，真正的难点在于多线程中如何保证多个线程运行过程中只创建一个实例。</p>
 <h1 id="多线程中的单例模式"><a href="#多线程中的单例模式" class="headerlink" title="多线程中的单例模式"></a>多线程中的单例模式</h1><p>首先复现一个单例模式中可能出现的线程不安全问题。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleCase <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (lazeSingleCase == <span class="keyword">null</span>) &#123;</span><br><span class="line">        lazeSingleCase = <span class="keyword">new</span> LazeSingleCase();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lazeSingleCase;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在上面的这段代码当中，我们假设线程A执行到了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleInstance <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (lazeSingleInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">        lazeSingleInstance = <span class="keyword">new</span> LazeSingleInstance();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lazeSingleInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>先介绍一下Java中new一个对象的过程都发生了什么事情：</strong><br>第一步：为这个对象分配内存。<br>第二步：初始化这个对象，也就是初始化对象里面的一些值。<br>第三步：将对象的地址赋值给创建这个对象的变量。</p>
+</blockquote>
+<p>在上面的这段代码当中，我们假设线程A执行到了第3行的第一步或者是第二步，而这时候刚刚好线程B执行到了第2行，由于线程A还没有为这个对象赋值，所以此时这个对象仍然是null的，那么线程B一样会执行到第三行代码。在这个过程当中，lazeSingleCase对象被创建了两次，违背了单例模式的设计原则。也就是发生了线程不安全的问题。</p>
+<p>感兴趣的同学可以去实际的使用两个线程debug一下这段代码。<br>具体的多线程debug应该怎么操作可以参考<a href="https://blog.wrp.cool/posts/29198/">【碎笔02】IDEA多线程调试</a>。</p>
+<h2 id="第一次演进：使用-synchronized-关键字解决线程安全的问题。"><a href="#第一次演进：使用-synchronized-关键字解决线程安全的问题。" class="headerlink" title="第一次演进：使用 synchronized 关键字解决线程安全的问题。"></a>第一次演进：使用 synchronized 关键字解决线程安全的问题。</h2><p>具体的 synchronized 关键字的用法可以参考<a href="https://blog.wrp.cool/posts/10492/">【Java并发】Synchronized关键字</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> LazeSingleInstance <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (lazeSingleInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">        lazeSingleInstance = <span class="keyword">new</span> LazeSingleInstance();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lazeSingleInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 getInstance() 方法上加了 synchronized 关键字之后保证了同一时间内只有一个线程能够执行方法内的代码，这样就解决了上述的线程不安全的问题。</p>
+<p>但是 synchronized 关键字是加在 static 修饰的方法上的，这意味着锁住了这个类的class文件，这锁的范围太广了，消耗的资源太多。<br>这显然不是一个好的办法。</p>
+<h2 id="第二次演进：将-synchronized-关键字移动至方法内部"><a href="#第二次演进：将-synchronized-关键字移动至方法内部" class="headerlink" title="第二次演进：将 synchronized 关键字移动至方法内部"></a>第二次演进：将 synchronized 关键字移动至方法内部</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleInstance <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (LazeSingleInstance<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazeSingleInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            lazeSingleInstance = <span class="keyword">new</span> LazeSingleInstance();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lazeSingleInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以类锁的形式将创建单例对象的代码锁起来，这也保证了同一段时间内只有一个线程能够执行到创建对象的代码，也同样能够实现单例模式。<br>比起上面将 synchronized 直接加在方法上还得跟其他的加了 LazeSingleInstance.class 类锁的代码去竞争锁的情况在性能上已经是提升了很多了。</p>
+<p><strong>思考一个问题：</strong><br>每个调用 getInstance() 方法的线程都得先等待拿到了锁才能够执行，懒汉式单例模式在仅仅只是在第一次调用这个对象时候才需要去创建这个对象，而现在每次都需要去判断对象是否存在，这显然是不合理的。</p>
+<h2 id="第三次演进：双重检查锁"><a href="#第三次演进：双重检查锁" class="headerlink" title="第三次演进：双重检查锁"></a>第三次演进：双重检查锁</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleInstance <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (lazeSingleInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (LazeSingleInstance<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (lazeSingleInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                lazeSingleInstance = <span class="keyword">new</span> LazeSingleInstance();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lazeSingleInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有兴趣的同学建议先自己分析一下上面的这段代码，这个也是一个比较取巧的一个设计了。</p>
+<p>在外面加多一层 if 的判断，这样就不用每次调用 getInstance() 方法就得去等待 synchronized 锁了。<br>至此，双重检查锁也就设计完毕了。</p>
+<blockquote>
+<p><strong>介绍一个重排序的问题</strong><br>jvm 为了能够让 Java 的执行效率能够提高一些，在上面的 new 一个对象的过程，其中的第二步和第三步是有可能会颠倒过来的。也就是先为对象赋上地址值，再初始化这个对象。</p>
+<p>看到这里的同学建议思考一个问题：双重检查锁中如果在创建对象的时候发生了重排序的问题，可能会导致什么情况。</p>
+</blockquote>
+<p><strong>答案揭晓：</strong><br>如果是在创建对象的时候先为对象赋上地址值，这个时候对象就已经不是 null 了，那么如果在还没有初始化的情况下，另外一个线程走到了第一个 if 的判断就会直接返回一个还没有初始化的对象。</p>
+<h2 id="第四次演进：使用-volatile-关键字"><a href="#第四次演进：使用-volatile-关键字" class="headerlink" title="第四次演进：使用 volatile 关键字"></a>第四次演进：使用 volatile 关键字</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazeSingleInstance lazeSingleInstance;</span><br></pre></td></tr></table></figure>
+<p>将这个单例对象使用 volatile 关键字去修饰即可解决重排序的问题。具体的 volatile 关键字的作用不久会聊到。<br>在这里先了解到 volatile 关键字可以限制在创建这个对象的时候禁止重排序即可。</p>
+<h2 id="另外一种解决重排序的办法：使用静态内部类实现单例模式"><a href="#另外一种解决重排序的办法：使用静态内部类实现单例模式" class="headerlink" title="另外一种解决重排序的办法：使用静态内部类实现单例模式"></a>另外一种解决重排序的办法：使用静态内部类实现单例模式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazeSingleInstance</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazeSingleInstance</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerClass</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> LazeSingleInstance lazeSingleInstance = <span class="keyword">new</span> LazeSingleInstance();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleInstance <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> InnerClass.lazeSingleInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这其实也是另外的一种实现单例模式的方式。<br>由于Java中每个类对应唯一的Class文件，所以类的静态属性实际上只会随着类的加载而加载，之后就再也不会去创建这个对象了。也就实现了单例模式。<br>Java中类的加载肯定是只有唯一一次的，所以不管在创建这个类的时候有没有发生重排序，这个过程对外都是不可见的。也就解决了重排序的问题。</p>
 <hr>
 <p>未完待续：）</p>
 
@@ -387,7 +437,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://blog.wrp.cool/posts/29125/" title="【创建型设计模式】懒汉式单例模式">https://blog.wrp.cool/posts/29125/</a>
+    <a href="https://blog.wrp.cool/posts/29125/" title="【创建型设计模式】单例模式">https://blog.wrp.cool/posts/29125/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -408,7 +458,15 @@
           
             <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B/" rel="tag"># 创建型</a>
           
-            <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag"># 建造者模式</a>
+            <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="tag"># 单例模式</a>
+          
+            <a href="/tags/%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="tag"># 懒汉式单例模式</a>
+          
+            <a href="/tags/%E9%A5%BF%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="tag"># 饿汉式单例模式</a>
+          
+            <a href="/tags/%E5%8F%8C%E9%87%8D%E6%A3%80%E6%9F%A5%E9%94%81/" rel="tag"># 双重检查锁</a>
+          
+            <a href="/tags/%E9%87%8D%E6%8E%92%E5%BA%8F/" rel="tag"># 重排序</a>
           
         </div>
       
@@ -532,7 +590,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -579,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单线程中的单例模式"><span class="nav-text">单线程中的单例模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多线程中的单例模式"><span class="nav-text">多线程中的单例模式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单线程中的单例模式"><span class="nav-text">单线程中的单例模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多线程中的单例模式"><span class="nav-text">多线程中的单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一次演进：使用-synchronized-关键字解决线程安全的问题。"><span class="nav-text">第一次演进：使用 synchronized 关键字解决线程安全的问题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二次演进：将-synchronized-关键字移动至方法内部"><span class="nav-text">第二次演进：将 synchronized 关键字移动至方法内部</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三次演进：双重检查锁"><span class="nav-text">第三次演进：双重检查锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四次演进：使用-volatile-关键字"><span class="nav-text">第四次演进：使用 volatile 关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另外一种解决重排序的办法：使用静态内部类实现单例模式"><span class="nav-text">另外一种解决重排序的办法：使用静态内部类实现单例模式</span></a></li></ol></li></ol></div>
             
 
           </div>
