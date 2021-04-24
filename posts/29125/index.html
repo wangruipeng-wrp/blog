@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="JavaScript," />
+  <meta name="keywords" content="Java,设计模式,创建型,建造者模式," />
 
 
 
@@ -79,16 +79,19 @@
 
 
 
-<meta name="description" content="let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。">
+<meta name="description" content="概述单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。可能懒汉式这个词会比较陌生一些，实际上也是很好理解：在需要使用到这个实例的时候再去创建这个实例。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【ES6】var、let、const">
-<meta property="og:url" content="https://blog.wrp.cool/posts/37909/index.html">
+<meta property="og:title" content="【创建型设计模式】懒汉式单例模式">
+<meta property="og:url" content="https://blog.wrp.cool/posts/29125/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。">
-<meta property="article:published_time" content="2020-06-15T12:40:22.000Z">
-<meta property="article:modified_time" content="2020-06-27T12:02:31.621Z">
+<meta property="og:description" content="概述单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。可能懒汉式这个词会比较陌生一些，实际上也是很好理解：在需要使用到这个实例的时候再去创建这个实例。">
+<meta property="article:published_time" content="2021-04-23T13:51:13.000Z">
+<meta property="article:modified_time" content="2021-04-24T10:49:20.701Z">
 <meta property="article:author" content="王瑞鹏">
-<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="设计模式">
+<meta property="article:tag" content="创建型">
+<meta property="article:tag" content="建造者模式">
 <meta name="twitter:card" content="summary">
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://blog.wrp.cool/posts/37909/"/>
+  <link rel="canonical" href="https://blog.wrp.cool/posts/29125/"/>
 
 
 
 
 
-  <title>【ES6】var、let、const | 知更</title>
+  <title>【创建型设计模式】懒汉式单例模式 | 知更</title>
   
 
 
@@ -286,7 +289,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.wrp.cool/posts/37909/">
+    <link itemprop="mainEntityOfPage" href="https://blog.wrp.cool/posts/29125/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="王瑞鹏">
@@ -303,7 +306,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【ES6】var、let、const</h1>
+          <h1 class="post-title" itemprop="name headline">【创建型设计模式】懒汉式单例模式</h1>
         
 
         <div class="post-meta">
@@ -315,8 +318,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-15T20:40:22+08:00">
-                2020-06-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-04-23T21:51:13+08:00">
+                2021-04-23
               </time>
             
 
@@ -325,28 +328,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -375,45 +356,16 @@
       
 
       
-        <blockquote>
-<p>let 这个关键字都是在 ES6 中新出现的，作用与 var 是一样的，可以用来声明变量。const 关键字也是在 ES6 中新出现的，不同的是 const 是用来声明常量。</p>
-</blockquote>
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。<br>当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。<br>可能懒汉式这个词会比较陌生一些，实际上也是很好理解：在需要使用到这个实例的时候再去创建这个实例。</p>
 <a id="more"></a>
 
+<h1 id="单线程中的单例模式"><a href="#单线程中的单例模式" class="headerlink" title="单线程中的单例模式"></a>单线程中的单例模式</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazeSingleCase</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LazeSingleCase lazeSingleCase = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazeSingleCase</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleCase <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazeSingleCase == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> LazeSingleCase();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lazeSingleCase;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单线程中的单例模式就只是这样子而已，非常简单。设计一个私有的构造函数是为了不让在外部创建这个类的实例，当然对外也需要提供一个可以获取类实例的方法。<br>这也是单例模式中最简单的实现，真正的难点在于多线程中如何保证多个线程运行过程中只创建一个实例。</p>
+<h1 id="多线程中的单例模式"><a href="#多线程中的单例模式" class="headerlink" title="多线程中的单例模式"></a>多线程中的单例模式</h1><p>首先复现一个单例模式中可能出现的线程不安全问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazeSingleCase <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (lazeSingleCase == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LazeSingleCase();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lazeSingleCase;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="let-amp-var"><a href="#let-amp-var" class="headerlink" title="let &amp; var"></a>let &amp; var</h1><h4 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h4><p>「块级作用域」这个概念是在 ES6 中新引入的概念，就是一个 <code>{}</code> 「花括号」而已。所有的花括号之内都是一个单独的块级作用域，但是有一种特殊情况不是，那就是在声明对象的时候字面式声明一个对象的时候不是。</p>
-<h4 id="let和var的区别"><a href="#let和var的区别" class="headerlink" title="let和var的区别"></a>let和var的区别</h4><ol>
-<li><p>let 和 var 最大的区别就是 <strong>let声明的对象只在当前作用域生效</strong><br>例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不能重复声明</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">20</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">20</span> </span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br></pre></td></tr></table></figure>
-<p>上面的代码将会直接报错</p>
-</li>
-<li><p>let 不存在「变量提升」<br>使用 var 关键字声明的变量在执行上下文中会有一个变量提升的现象，但是使用 let 声明的变量将不会出现这个现象，比如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a)  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">10</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>暂存死区</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a)</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">20</span></span><br><span class="line">    <span class="built_in">console</span>.log(a) <span class="comment">// 20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的这段代码将会直接报错。因为 ES6 中单独的作用域内使用 let 或者是 const 声明的变量将会形成一个封闭的作用域，这直接导致重名的变量无法访问到父级作用域的变量，进而报错。</p>
-</li>
-</ol>
-<h1 id="const-常量"><a href="#const-常量" class="headerlink" title="const 常量"></a>const 常量</h1><ol>
-<li><p>声明常量<br>const 声明时与 let 声明并没有什么区别，唯一的区别是使用 const 声明常量时需要在声明的同时初始化。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line"><span class="keyword">const</span> a <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>不能修改<br>声明的既然是常量，那么当然是不允许被修改的。例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">10</span></span><br><span class="line">a = <span class="number">20</span> <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-<p> <strong>如果声明的是一个引用类型的数据，那么它将可以被修改</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name)  <span class="comment">// lisi</span></span><br></pre></td></tr></table></figure>
-<p>实际上 const 声明的常量仅仅只是「锁定」了<strong>栈内存</strong>中的值，而引用数据类型实际存放的地方是在<strong>堆内存</strong>中的。所以对象类型的值是可以被修改的。</p>
-<p> 那么我们既然是声明了一个常量的话当然是不希望这个常量能够被修改，如果是一个对象类型的常量的话，我们必须通过 <code>Object.freeze()</code> 这个方法来「冻结」这个对象类型的常量。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    name: <span class="string">'zhangsan'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 冻结</span></span><br><span class="line"><span class="built_in">Object</span>.freeze(obj)</span><br><span class="line"></span><br><span class="line">obj.name = <span class="string">'lisi'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// zhangsan</span></span><br></pre></td></tr></table></figure>
-<p>在上面这个例子中两次的输出都是 <code>zhangsan</code> 这说明了我们并没有修改到 <code>obj</code> 这个对象，这样子就是声明了一个对象类型的常量表了。</p>
-</li>
-</ol>
 <hr>
-<p>大家加油：）</p>
+<p>未完待续：）</p>
 
       
     </div>
@@ -435,7 +387,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://blog.wrp.cool/posts/37909/" title="【ES6】var、let、const">https://blog.wrp.cool/posts/37909/</a>
+    <a href="https://blog.wrp.cool/posts/29125/" title="【创建型设计模式】懒汉式单例模式">https://blog.wrp.cool/posts/29125/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -450,7 +402,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+          
+            <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B/" rel="tag"># 创建型</a>
+          
+            <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag"># 建造者模式</a>
           
         </div>
       
@@ -463,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/47023/" rel="next" title="【JavaScript】闭包">
-                <i class="fa fa-chevron-left"></i> 【JavaScript】闭包
+              <a href="/posts/25434/" rel="next" title="【创建型设计模式】建造者模式">
+                <i class="fa fa-chevron-left"></i> 【创建型设计模式】建造者模式
               </a>
             
           </div>
@@ -472,10 +430,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/53099/" rel="prev" title="【ES6】解构赋值">
-                【ES6】解构赋值 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -625,7 +579,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#let-amp-var"><span class="nav-text">let &amp; var</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#块级作用域"><span class="nav-text">块级作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#let和var的区别"><span class="nav-text">let和var的区别</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#const-常量"><span class="nav-text">const 常量</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单线程中的单例模式"><span class="nav-text">单线程中的单例模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多线程中的单例模式"><span class="nav-text">多线程中的单例模式</span></a></li></ol></div>
             
 
           </div>
