@@ -6,7 +6,7 @@
   <link href="https://blog.wrp.cool/atom.xml" rel="self"/>
   
   <link href="https://blog.wrp.cool/"/>
-  <updated>2021-05-02T02:23:07.217Z</updated>
+  <updated>2021-05-02T15:39:44.220Z</updated>
   <id>https://blog.wrp.cool/</id>
   
   <author>
@@ -21,20 +21,7 @@
     <link href="https://blog.wrp.cool/posts/54363/"/>
     <id>https://blog.wrp.cool/posts/54363/</id>
     <published>2021-05-02T02:06:35.000Z</published>
-    <updated>2021-05-02T02:23:07.217Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>【C语言】结构体内存对齐</title>
-    <link href="https://blog.wrp.cool/posts/2396/"/>
-    <id>https://blog.wrp.cool/posts/2396/</id>
-    <published>2021-05-02T02:05:48.000Z</published>
-    <updated>2021-05-02T02:23:07.214Z</updated>
+    <updated>2021-05-02T15:39:44.220Z</updated>
     
     
     
@@ -396,11 +383,11 @@
     <category term="并发" scheme="https://blog.wrp.cool/categories/%E5%B9%B6%E5%8F%91/"/>
     
     
+    <category term="线程" scheme="https://blog.wrp.cool/tags/%E7%BA%BF%E7%A8%8B/"/>
+    
     <category term="Java" scheme="https://blog.wrp.cool/tags/Java/"/>
     
     <category term="并发" scheme="https://blog.wrp.cool/tags/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="线程" scheme="https://blog.wrp.cool/tags/%E7%BA%BF%E7%A8%8B/"/>
     
     <category term="异常" scheme="https://blog.wrp.cool/tags/%E5%BC%82%E5%B8%B8/"/>
     
@@ -468,11 +455,11 @@
     <category term="题解" scheme="https://blog.wrp.cool/categories/%E9%A2%98%E8%A7%A3/"/>
     
     
+    <category term="线程" scheme="https://blog.wrp.cool/tags/%E7%BA%BF%E7%A8%8B/"/>
+    
     <category term="Java" scheme="https://blog.wrp.cool/tags/Java/"/>
     
     <category term="并发" scheme="https://blog.wrp.cool/tags/%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="线程" scheme="https://blog.wrp.cool/tags/%E7%BA%BF%E7%A8%8B/"/>
     
     <category term="练习" scheme="https://blog.wrp.cool/tags/%E7%BB%83%E4%B9%A0/"/>
     
@@ -528,6 +515,33 @@
     <category term="synchronized" scheme="https://blog.wrp.cool/tags/synchronized/"/>
     
     <category term="锁" scheme="https://blog.wrp.cool/tags/%E9%94%81/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【碎笔01】Linux 安装 Nginx</title>
+    <link href="https://blog.wrp.cool/posts/62048/"/>
+    <id>https://blog.wrp.cool/posts/62048/</id>
+    <published>2020-07-06T13:28:40.000Z</published>
+    <updated>2020-08-29T14:32:36.313Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>记录点滴，分享世界。Hello World！：）</p></blockquote><a id="more"></a><p>首先需要安装 Nginx 的依赖包</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc pcre-devel zlib-devel openssl openssl-devel</span><br></pre></td></tr></table></figure><h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><h4 id="1-下载-Nginx-到-Linux-系统中"><a href="#1-下载-Nginx-到-Linux-系统中" class="headerlink" title="1.下载 Nginx 到 Linux 系统中"></a>1.下载 Nginx 到 Linux 系统中</h4><p>在 <a href="https://nginx.org/download/" target="_blank" rel="noopener">Nginx官网</a> 中选择自己合适的压缩包后使用 wget 下载。<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200708203138.png" alt="20200708203138"></p><h4 id="2-解压安装包"><a href="#2-解压安装包" class="headerlink" title="2.解压安装包"></a>2.解压安装包</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf nginx-1.9.9.tar.gz</span><br></pre></td></tr></table></figure><p>解压完成之后下载部分就结束了，可以进行安装</p><h4 id="3-编译"><a href="#3-编译" class="headerlink" title="3.编译"></a>3.编译</h4><p>首先进入 Nginx 的安装目录下，也就是刚刚解压的目录</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;nginx-1.9.9</span><br></pre></td></tr></table></figure><p>直接编译，运行 <code>configure</code> 文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;configure</span><br></pre></td></tr></table></figure><p>如果配置 https 访问则需要在编译时添加 <code>http_v2_module</code> 和 <code>http_ssl_module</code> 这两个模块</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;configure --with-http_v2_module --with-http_ssl_module</span><br></pre></td></tr></table></figure><h4 id="4-安装"><a href="#4-安装" class="headerlink" title="4.安装"></a>4.安装</h4><p>直接在 Nginx 的安装目录中执行以下两个命令</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure><p>至此，Nginx 就算是安装成功了，进入 <code>sbin</code> 目录下执行 <code>./ngnix</code> 就可以将 Nginx 的服务成功启动起来。<br>在有些环境下可能会报两个日志文件找不到，直接创建这两个文件即可</p><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>编辑 <code>/etc/profile</code> 文件，在最后添加以下代码即可</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin</span><br></pre></td></tr></table></figure><p>其中，要将 Nginx 的安装目录改为刚刚安装的目录</p><h4 id="5-常用命令"><a href="#5-常用命令" class="headerlink" title="5.常用命令"></a>5.常用命令</h4><p>启动 Nginx</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br></pre></td></tr></table></figure><p>停止 Nginx</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s stop</span><br></pre></td></tr></table></figure><p>重启 Nginx</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure><h2 id="6-常用配置"><a href="#6-常用配置" class="headerlink" title="6.常用配置"></a>6.常用配置</h2><p>Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 <code>nginx.conf</code> 配置文件。</p><p>为了使配置文件看起来更加舒服一些，我们选择把一些站点配置写到外面来，而不是直接写入 <code>nginx.conf</code> 文件中</p><p>在 conf 文件夹下创建一个 hosts 文件夹，之后将一些站点配置以 域名.conf 的形式写成新的文件保存在 hosts 文件夹中</p><p>之后在 nginx.conf 文件的 http 的大括号内引入自己写的配置文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include hosts&#x2F;*.conf;</span><br></pre></td></tr></table></figure><p>注意最后面要加分号 <code>;</code> </p><p>以上仅为本人习惯</p><h4 id="配置静态网站"><a href="#配置静态网站" class="headerlink" title="配置静态网站"></a>配置静态网站</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    listen 443 ssl http2;</span><br><span class="line">    server_name 你的域名;</span><br><span class="line"></span><br><span class="line">    ssl_certificate &quot;ssl证书 fullchain.crt 文件的位置&quot;;</span><br><span class="line">    ssl_certificate_key &quot;ssl证书 private.pem 文件的位置&quot;;</span><br><span class="line">    ssl_protocols TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_session_cache shared:SSL:10m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line"></span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        root 要转发的目录;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><hr><p>大家加油：）</p>]]></content>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;记录点滴，分享世界。Hello World！：）&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="碎笔" scheme="https://blog.wrp.cool/categories/%E7%A2%8E%E7%AC%94/"/>
+    
+    
+    <category term="随笔" scheme="https://blog.wrp.cool/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+    <category term="Linux" scheme="https://blog.wrp.cool/tags/Linux/"/>
+    
+    <category term="Nginx" scheme="https://blog.wrp.cool/tags/Nginx/"/>
     
   </entry>
   
