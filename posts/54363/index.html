@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="一点一滴也可以改变世界">
+<meta name="description" content="原型模式是一种相对比较简单的设计模式，这里也就不花大的篇幅来介绍。 长话短说，由于Java Object类中的clone方法以及java.lang包下的Cloneable接口，使用Java实现原型模式是非常简单快捷的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【创建型设计模式】原型模式">
 <meta property="og:url" content="https://blog.wrp.cool/posts/54363/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="一点一滴也可以改变世界">
+<meta property="og:description" content="原型模式是一种相对比较简单的设计模式，这里也就不花大的篇幅来介绍。 长话短说，由于Java Object类中的clone方法以及java.lang包下的Cloneable接口，使用Java实现原型模式是非常简单快捷的。">
 <meta property="article:published_time" content="2021-05-02T02:06:35.000Z">
-<meta property="article:modified_time" content="2021-05-05T11:23:31.647Z">
+<meta property="article:modified_time" content="2021-05-05T15:45:02.181Z">
 <meta property="article:author" content="王瑞鹏">
 <meta name="twitter:card" content="summary">
 
@@ -392,7 +392,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  941
                 </span>
               
 
@@ -417,7 +417,34 @@
       
 
       
-        
+        <p>原型模式是一种相对比较简单的设计模式，这里也就不花大的篇幅来介绍。</p>
+<p>长话短说，由于Java Object类中的clone方法以及java.lang包下的Cloneable接口，使用Java实现原型模式是非常简单快捷的。</p>
+<a id="more"></a>
+
+<h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p><strong>借《设计模式之禅》这本书中一个例子来简述一下原型模式：</strong></p>
+<p>先来想想一个业务场景，现在有一家银行想要对它的储户发送一封广告邮件，银行的储户比较多，大概几百万上千万个储户。每个储户发送一封邮件，其中邮件的内容都是一样的，不一样的是邮件的收件人邮箱，收件人称谓等一些属性不同，其他的属性都大同小异。其中将相同的部分抽取成一个邮件模板类。</p>
+<p><strong>模板类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Template</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String subject = <span class="string">"xxx银行国庆大酬宾！！！"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String content = <span class="string">"把你的钱全部存到我们银行，我们帮你花掉它"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>邮件类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mail</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String subject;</span><br><span class="line">    <span class="keyword">private</span> String content;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String addresseeAddress;</span><br><span class="line">    <span class="keyword">private</span> String addresseeName;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mail</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.subject = Template.subject;</span><br><span class="line">        <span class="keyword">this</span>.content = Template.content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// getter and setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>客户端：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Mail mail = <span class="keyword">new</span> Mail();</span><br><span class="line">        <span class="comment">// 发送一百万封邮件</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">1_000_000</span>; i++) &#123;</span><br><span class="line">            mail.setAddresseeAddress(randomAddresseeAddress());</span><br><span class="line">            mail.setAddresseeName(randomAddresseeName());</span><br><span class="line">            sendMail(mail);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码实际上已经能够基本的实现我们想要的功能了，当然这得要有个非常非常重要的前提，那就是这个项目的甲方是一个比较将就的甲方。</p>
+<p>看看上面的代码有什么问题，实际上没什么问题，就是慢了点，如果遇到这种百万级别千万级别的发送邮件的场景，使用单线程慢慢发的话可能得发一天甚至还不止。像这样的业务场景是必须使用多线程来发送邮件的，但是如果跟上面一样多个线程公用同一个mail对象的话那线程就不安全了。当然你可以选择创建多个mail对象来提供给每个线程，但是这真的大可不必，<strong>原型模式</strong>就是专门为了解决这样的业务场景而生的。</p>
+<p><strong>使用原型模式来改造一下上面邮件类的代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mail</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String subject;</span><br><span class="line">    <span class="keyword">private</span> String content;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String addresseeAddress;</span><br><span class="line">    <span class="keyword">private</span> String addresseeName;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mail</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.subject = Template.subject;</span><br><span class="line">        <span class="keyword">this</span>.content = Template.content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// getter and setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>对应的客户端实现：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">    Mail mail = <span class="keyword">new</span> Mail();</span><br><span class="line">    <span class="comment">// 发送一百万封邮件</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">1_000_000</span>; i++) &#123;</span><br><span class="line">        Mail cloneMail = (Mail) mail.clone();</span><br><span class="line">        cloneMail.setAddresseeAddress(randomAddresseeAddress());</span><br><span class="line">        cloneMail.setAddresseeName(randomAddresseeName());</span><br><span class="line">        sendMail(mail);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与原来的不同之处就是Mail类实现了覆盖了Object方法中的clone方法，客户端不再使用同一个对象发送邮件，而是通过clone方法获取一个新的对象。之所以不让客户端自己创建一个新对象是因为我们现在演示使用的Mail对象非常简单，如果是在真实的业务场景中，创建一个Mail邮件对象一定是一个相当复杂的过程，创建一个这样的对象对于计算机资源的开销也是非常大的。而现在我们需要创建的是百万甚至是千万级别的这样的对象，这对于资源的开销是相当巨大的。</p>
+<p><strong>小结原型模式的适用场景：</strong></p>
+<ul>
+<li>创建对象的开销巨大</li>
+<li>需要创建一定数量的对象</li>
+<li>所创建出来的大量属性具备一定程度的相同性</li>
+</ul>
+<hr>
+<p>未完待续。</p>
+
       
     </div>
     
@@ -520,8 +547,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -615,6 +651,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简述"><span class="nav-text">简述</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
