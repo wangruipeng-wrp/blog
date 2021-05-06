@@ -82,7 +82,7 @@
 <meta name="description" content="概述首先来看一下百度百科中对于Java反射的定义，JAVA反射机制，百度百科  Java的反射（reflection）机制是指在程序的运行状态中，可以构造任意一个类的对象，可以了解任意一个对象所属的类，可以了解任意一个类的成员变量和方法，可以调用任意一个对象的属性和方法。这种动态获取程序信息以及动态调用对象的功能称为Java语言的反射机制。反射被视为动态语言的关键。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java基础】反射">
-<meta property="og:url" content="https://blog.wrp.cool/posts/25346/index.html">
+<meta property="og:url" content="https://www.wrp.cool/posts/25346/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="概述首先来看一下百度百科中对于Java反射的定义，JAVA反射机制，百度百科  Java的反射（reflection）机制是指在程序的运行状态中，可以构造任意一个类的对象，可以了解任意一个对象所属的类，可以了解任意一个类的成员变量和方法，可以调用任意一个对象的属性和方法。这种动态获取程序信息以及动态调用对象的功能称为Java语言的反射机制。反射被视为动态语言的关键。">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20200921203210.png">
@@ -121,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="https://blog.wrp.cool/posts/25346/"/>
+  <link rel="canonical" href="https://www.wrp.cool/posts/25346/"/>
 
 
 
@@ -299,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.wrp.cool/posts/25346/">
+    <link itemprop="mainEntityOfPage" href="https://www.wrp.cool/posts/25346/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="王瑞鹏">
@@ -467,7 +467,7 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <p>有兴趣的同学可以执行一遍以上的代码，可以更清楚的展示Class对象是如何去描述一个类的。</p>
 <hr>
 <p>书中的这个例子已经是很详细的讲明白了Class类是如何去描述一个类的，但这里还有一点补充，就是<strong>Class类是如何去描述类中的注解的</strong>。</p>
-<p>我们使用 <a href="https://blog.wrp.cool/posts/28807/">【Java基础】</a> 注解一文开头的注解例子做演示。</p>
+<p>我们使用 <a href="https://blog.wrp.cool/posts/28807/" target="_blank" rel="noopener">【Java基础】</a> 注解一文开头的注解例子做演示。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MyAnnotation</span>(value = <span class="string">"MyAnnotation's value"</span>, name = <span class="string">"MyAnnotation's name"</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TargetClass</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mainn</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Class&lt;?&gt; cl = TargetClass<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 获取注解对象</span></span><br><span class="line">        MyAnnotation myAnnotation = cl.getAnnotation(MyAnnotation<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="comment">// 打印注解中的内容</span></span><br><span class="line">        System.out.println(myAnnotation.value());</span><br><span class="line">        System.out.println(myAnnotation.name());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>运行main方法：<br><code>MyAnnotation&#39;s value</code><br><code>MyAnnotation&#39;s name</code></p>
@@ -547,12 +547,12 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <ul class="post-copyright">
   <li class="post-copyright-author">
     <strong>本文作者：</strong>
-    王瑞鹏（<a href="https://www.wrp.cool/about/" target="_blank" rel="noopener" title="欢迎添加微信一起讨论！微信号：wangruipeng-wrp">欢迎打扰</a>）
+    王瑞鹏（<a href="https://www.wrp.cool/about/" title="欢迎添加微信一起讨论！微信号：wangruipeng-wrp">欢迎打扰</a>）
     <!--王瑞鹏-->
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://blog.wrp.cool/posts/25346/" title="【Java基础】反射">https://blog.wrp.cool/posts/25346/</a>
+    <a href="https://www.wrp.cool/posts/25346/" title="【Java基础】反射">https://www.wrp.cool/posts/25346/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -658,7 +658,7 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <a href="https://www.wrp.cool/about/" target="_blank" rel="noopener"><img class="site-author-image" itemprop="image"
+              <a href="https://www.wrp.cool/about/"><img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
                 alt="王瑞鹏" /></a>
             
