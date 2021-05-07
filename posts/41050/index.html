@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="正所谓上山容易下山难。我们创建启动一个线程并不是很困难，但是如何正确的停止一个线程就并不是那么简单。因为如果没有正确停止的线程的话，线程将继续消耗计算机的资源，对性能造成严重的损耗。">
 <meta property="article:published_time" content="2020-06-27T13:10:49.000Z">
-<meta property="article:modified_time" content="2020-07-19T13:10:25.015Z">
+<meta property="article:modified_time" content="2021-05-07T13:17:46.143Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="线程">
@@ -457,8 +457,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        TimeUnit.HOURS.sleep(<span class="number">1</span>);   <span class="comment">// 休眠1个小时</span></span><br><span class="line">        TimeUnit.MINUTES.sleep(<span class="number">1</span>); <span class="comment">// 休眠1分钟</span></span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>); <span class="comment">// 休眠1秒钟</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>以上使用 TimeUnit 类中的 sleep 方法可以让代码看起来更加舒服。直接休眠对应单位的时间，而不是去手动的计算要休眠的毫秒数。</p>
-<hr>
-<p>大家加油：）</p>
 
       
     </div>
@@ -469,6 +467,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -530,6 +542,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -721,7 +734,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

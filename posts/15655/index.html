@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="这篇博客将会记录一下js中创建对象的几种不同的方式，分别是字面式声明、new关键字声明、构造函数声明、工厂模式声明、原型声明。">
 <meta property="article:published_time" content="2020-06-08T13:12:26.000Z">
-<meta property="article:modified_time" content="2020-06-27T12:05:23.444Z">
+<meta property="article:modified_time" content="2021-05-07T13:18:45.484Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="面向对象">
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  593
+                  589
                 </span>
               
 
@@ -430,10 +430,6 @@
 <hr>
 <h1 id="混合模式"><a href="#混合模式" class="headerlink" title="混合模式"></a>混合模式</h1><p>混合模式是<strong>构造模式</strong>混合了<strong>原型模式</strong>一起创建的对象。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明一个构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Obj</span>(<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 原型添加属性和方法</span></span><br><span class="line">Obj.prototype = &#123;</span><br><span class="line">    run: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"姓名："</span> + <span class="keyword">this</span>.name + <span class="string">"年龄："</span> + <span class="keyword">this</span>.age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例化对象</span></span><br><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> Obj(<span class="string">'zhangsan'</span>, <span class="number">18</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用属性和方法</span></span><br><span class="line">obj.name;</span><br><span class="line">obj.age;</span><br><span class="line">obj.run();</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>大家加油：）</p>
-
       
     </div>
     
@@ -443,6 +439,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -504,6 +514,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -695,7 +706,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

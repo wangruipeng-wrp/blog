@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="本文将会介绍 Java 中如何正确的启动线程。以及对比一下 start 方法和 run 方法的区别">
 <meta property="article:published_time" content="2020-06-26T08:05:08.000Z">
-<meta property="article:modified_time" content="2020-06-27T12:02:06.527Z">
+<meta property="article:modified_time" content="2021-05-07T13:17:39.014Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="线程">
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  694
+                  690
                 </span>
               
 
@@ -426,8 +426,6 @@
 <p>以上的代码已经很明确的向我们展示了不同之处了，start 方法是开启一个新的线程去执行代码，而 run 方法还是在本线程之中去执行的，并没有开启新的线程。</p>
 <p>实际上 strat 方法和 run 方法从根本上来说就是不同的。start 方法是线程体系中的方法，而 run 方法并不属于线程体系，只是一个执行单元，这两者有着根本上的区别。</p>
 <p>执行单元和线程体系本质上并没有太大的关系。线程体系指的是一个线程的创建、启动、死亡等各种状态，而执行单元指的是我们编写的要让这个线程去执行的代码。在程序的设计中这两者应该是解耦的，这也是我们推荐使用「实现 Runnable 接口」的方式去实现一个线程的原因之一。</p>
-<hr>
-<p>大家加油：）</p>
 
       
     </div>
@@ -438,6 +436,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -499,6 +511,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -690,7 +703,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

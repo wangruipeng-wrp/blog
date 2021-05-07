@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="wait()、notify()和notifyAll() 这三个方法都是属于 Object 类的方法，这也就意味着在 Java 中的任何对象都可以调用这三个方法。同时这三个方法也是被 「volatile 和 final 修饰的方法」也就是没办法看到源码和重写。Object 作为所有类的基类，其地位不言而喻。而这三个方法能被定义在 Object 中自然也是非常重要的方法，借由这三个方法的配合可以使得多">
 <meta property="article:published_time" content="2020-07-14T15:50:07.000Z">
-<meta property="article:modified_time" content="2021-04-17T16:19:06.160Z">
+<meta property="article:modified_time" content="2021-05-07T13:18:14.216Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  777
+                  773
                 </span>
               
 
@@ -424,8 +424,6 @@
 <li>调用<code>wait()</code>方法的线程会主动释放monitor锁，上面的代码也正是因为Thread-0主动释放掉了monitor锁之后，Thread-1才可以执行</li>
 <li>当休息的线程被唤醒时并不是直接执行的，而是需要重新去竞争对应的锁，获取到锁之后才可以执行</li>
 </ol>
-<hr>
-<p>大家加油：）</p>
 
       
     </div>
@@ -436,6 +434,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -497,6 +509,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -688,7 +701,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

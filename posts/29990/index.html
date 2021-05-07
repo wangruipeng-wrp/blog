@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="前言如果上一篇文章实现的动态数组，由于底层任然是使用的静态数组，而不是真正意义上的动态数据结构的话。那么本文的链表则肯定是一个真真正正意义上的动态的数据结构了。">
 <meta property="article:published_time" content="2020-08-02T06:45:27.000Z">
-<meta property="article:modified_time" content="2020-08-04T13:04:50.713Z">
+<meta property="article:modified_time" content="2021-05-07T13:16:11.078Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="数据结构">
@@ -450,8 +450,6 @@
 <p>将上面的代码使用递归的方式写出来</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    remove(e, dummyHead);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e, Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node.next.e.equlas(e)) &#123;</span><br><span class="line">        node.next = node.next.next;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    remove(e, node.next);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>实际上链表这样的数据结构天然的适合递归，在很多场合都可以使用递归去操作一个链表。</p>
-<hr>
-<p>以上代码都是笔者自己写的，并没有执行过。如果有些错误的地方，还烦请在评论区指出。<br>大家加油：）</p>
 
       
     </div>
@@ -462,6 +460,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -525,6 +537,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -716,7 +729,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

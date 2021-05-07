@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="JavaScript有自动收集内存中已经废弃的变量的功能，称为垃圾回收机制">
 <meta property="article:published_time" content="2020-06-07T13:30:45.000Z">
-<meta property="article:modified_time" content="2020-06-27T12:03:58.353Z">
+<meta property="article:modified_time" content="2021-05-07T13:18:49.153Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="底层">
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  532
+                  528
                 </span>
               
 
@@ -418,10 +418,6 @@
 <h4 id="引用计数（不常用）"><a href="#引用计数（不常用）" class="headerlink" title="引用计数（不常用）"></a>引用计数（不常用）</h4><p>当一个<strong>堆内存中的对象</strong>被赋值给一个<strong>栈内存中的引用</strong>时，这个对象的计数 +1。<br>如果这个<strong>堆内存中的对象</strong>再次被赋值给一个<strong>栈内存中的引用</strong>时，这个对象的计数再 +1。<br>也就是现在这个对象的计数时2，即两个<strong>栈内存的应用</strong>指向同一个<strong>堆内存的对象</strong>。<br>如果两个<strong>栈内存中的引</strong>用其中一个发生了改变，也就是不再指向这个<strong>堆内存中的对象</strong>了，那么这个<strong>堆内存中的对象</strong>的计数 -1。<br>当这个<strong>堆内存中的对象</strong>的计数 =0 的时候，垃圾收集器将释放该对象所占用的内存。</p>
 <p><strong>循环引用的问题</strong><br>循环引用就是对象A中包含了一个指向对象B的指针，对象B中包含了一个指向对象A的指针。这样一来两个<strong>堆内存中的对象</strong>的计数都是2，当我们使用完这两个对象之后，垃圾收集器将无法回收这两个变量。需要我们手动的去将这两个对象置为 <code>null</code> 来释放内存。例如：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ObjA = &#123;&#125;;  <span class="comment">// ObjA计数1</span></span><br><span class="line"><span class="keyword">var</span> ObjB = &#123;&#125;;  <span class="comment">// ObjB计数1</span></span><br><span class="line"></span><br><span class="line">ObjA.obj = ObjB; <span class="comment">// ObjB计数2</span></span><br><span class="line">ObjB.obj = ObjA; <span class="comment">// ObjA计数2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 手动释放内存</span></span><br><span class="line">ObjA = <span class="literal">null</span>;</span><br><span class="line">ObjB = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>大家加油：）</p>
-
       
     </div>
     
@@ -431,6 +427,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -492,6 +502,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -683,7 +694,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

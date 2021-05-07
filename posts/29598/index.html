@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="我们平时在处理异常的时候，如果是主线程抛出了一个未处理的异常，那么我们可以轻松的使用 try-catch 捕获这个异常。但是如果这个异常是在子线程中抛出的，那么主线程实际上对于子线程的异常是不敏感的，虽然可以正常的抛出，但是却很难去发现。就算是在主线程中使用 try-catch 去捕获子线程的异常那也是没用的，因为 try-catch 只会捕获本线程中的异常。">
 <meta property="article:published_time" content="2020-07-23T13:31:05.000Z">
-<meta property="article:modified_time" content="2020-08-10T13:35:41.249Z">
+<meta property="article:modified_time" content="2021-05-07T13:17:33.526Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
@@ -439,7 +439,6 @@
 <blockquote>
 <p>插一句题外话，我认为本文的例子中很形象的向我们展示了线程的工作过程。线程在执行期间是互相不打扰的，各自干着各自的事情，这期间并不会互相影响。就像是一个团队在协同工作一样，每个人都是一个独立的线程，各自在完成自己的工作，并不会互相打扰。每个线程领取到自己的任务（run方法）之后，等待开始执行（调用start方法）。之后便是一直闷头干下去，直到把工作做完（run方法执行完毕）</p>
 </blockquote>
-<p>大家加油：）</p>
 
       
     </div>
@@ -450,6 +449,20 @@
     
 
     
+    
+    
+      <div>
+        <div>
+    <hr>
+    
+         
+            大家加油：）
+            <div style="text-align:left; color: #aaa; font-size:16px;">原创不易，<a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="text-align:center; color: #aaa;">点个Star呀</a>~~</div>
+        
+    
+</div>
+      </div>
+        
 
     
       <div>
@@ -515,6 +528,7 @@
 
       
       
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
     </footer>
   </div>
   
@@ -706,7 +720,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2020 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
