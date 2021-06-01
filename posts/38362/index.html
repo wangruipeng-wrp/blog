@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="大家应该都听过这么一个故事：  从前有座山，山上有座庙，庙里有个老和尚和一个小和尚，老和尚在给小和尚讲一个故事，故事是什么呢？故事就是：从前有座山，山上有座庙，庙里有个老和尚和一个小和尚，老和尚在给小和尚讲一个故事，故事是什么呢？故事就是：从前有座山，山上有座庙，庙里有个老和尚和一个小和尚，老和尚在给小和尚讲一个故事，故事是什么呢？故事就是：…..  也都应该经历过这么一个场景：  有一些理发店里">
 <meta property="article:published_time" content="2021-05-30T06:39:51.000Z">
-<meta property="article:modified_time" content="2021-06-01T14:05:33.004Z">
+<meta property="article:modified_time" content="2021-06-01T14:38:49.065Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="递归">
@@ -396,7 +396,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.3k
+                  3.4k
                 </span>
               
 
@@ -427,14 +427,14 @@
 </blockquote>
 <p>也都应该经历过这么一个场景：</p>
 <blockquote>
-<p>有一些理发店里面呢，会有两个镜子面对面的情况，镜子A里面可以看到镜子B，镜子B里面又可以看到镜子A，镜子A跟镜子B之间互相反射的循环反反复复的无穷无尽。</p>
+<p>有一些理发店里面呢，会有两个镜子相对的情况，镜子A里面可以看到镜子B，镜子B里面又可以看到镜子A，镜子A跟镜子B之间互相反射的循环反反复复的无穷无尽。</p>
 </blockquote>
-<p>我认为这可以算是现实世界中的递归模型。当然了，现实世界中类似于这样的现象并不少见。我觉得发明了递归算法的人一定也是在这其中的某一个场景或者是某一个故事下获得的灵感。</p>
+<p>我认为这可以算是现实世界中的递归现象。当然了，现实世界中类似于这样的现象并不少见。我觉得发明了递归算法的人一定也是在这其中的某一个场景或者是某一个故事下获得的灵感。</p>
 <p><font color=blue>毕竟，计算机科学就是一种对于现实世界的抽象。</font></p>
 <a id="more"></a>
 
 <hr>
-<p>学习计算机的同学所接触到的第一个递归算法应该都是<code>递归求阶乘</code>或者是<code>数组求和</code>这样的算法。其实这样的需求只需要简简单单一层循环就可以搞定，递归算法在这里反而是降低了代码的可读性，而并没有带来实际上的好处。<br><font color=#aaa>这里并不是不鼓励使用递归来编写逻辑代码，而是希望不要过度设计自己的代码，还是那句话，刚刚好的才是最美：）</font></p>
+<p>学习计算机的同学所接触到的第一个递归算法应该都是递归求阶乘或者是数组求和这样的算法。虽然求阶乘或者是求和这只是很简单的递归代码，但是递归算法该有的，它也一样都没有落下。其实这样的功能只需要一层简单的循环就可以搞定，递归算法在这里反而是降低了代码的可读性，并没有为我们带来实际上的好处。<br><font color=#aaa>这里并不是不鼓励同学们使用递归来编写逻辑代码，而是希望不要过度设计自己的代码，还是那句话，刚刚好的才是最美：）</font></p>
 <p><font size=5 ><strong>递归</strong></font> <a href="https://baike.baidu.com/item/%E9%80%92%E5%BD%92" target="_blank" rel="noopener">百度百科</a></p>
 <blockquote>
 <p>程序调用自身的编程技巧称为递归（ recursion）。递归做为一种算法在程序设计语言中广泛应用。 一个过程或函数在其定义或说明中有直接或间接调用自身的一种方法，它通常把一个大型复杂的问题层层转化为一个与原问题相似的规模较小的问题来求解，递归策略只需少量的程序就可描述出解题过程所需要的多次重复计算，大大地减少了程序的代码量。递归的能力在于用有限的语句来定义对象的无限集合。<strong>一般来说，递归需要有边界条件、递归前进段和递归返回段。当边界条件不满足时，递归前进；当边界条件满足时，递归返回。</strong></p>
@@ -457,7 +457,7 @@
 <hr>
 <p><font size=5 ><strong>递归函数的宏观语义</strong></font></p>
 <p>递归的本质实际上就是将一个问题不断的拆解成一个一个的小的问题，直到最后的一个问题小到不能再小了，这个时候我们可以很容易的解决这个问题，将这个问题的解决结果返回给上一个问题，解决掉上一个问题之后再解决上上个问题以此类推，最终解决我们的问题。<strong>拆解问题的过程也就是递归前进段，解决掉最基本问题开始返回的阶段也就是递归返回段。</strong></p>
-<p>更多的时候我喜欢把递归函数理解成一个单元，也就是递归单元。因为递归函数调用自身后还是走一遍自身的逻辑，在逻辑上并没有产生任何的变化，相应的我们只是改变了每次调用的参数而已。<strong>将递归函数拆解成的一个一个的小问题的这个步骤，就体现在每次调用递归函数的参数列表都要比上一次的参数列表要更简单一点点。</strong></p>
+<p>更多的时候我喜欢把递归函数理解成一个单元，也就是递归单元。因为递归函数调用自身后还是走一遍自身的逻辑，每次递归调用在逻辑上并没有产生任何的变化，相应的我们只是改变了每次调用的参数而已。<strong>将递归函数拆解成的一个一个的小问题的这个步骤，就体现在每次调用递归函数的参数列表都要比上一次的参数列表要更简单一点点。</strong></p>
 <p>很多时候编写递归逻辑的时候都是因为递归调用自身的这个动作会令我们感到很迷惑，没有办法理解到这一步操作是怎么执行的。我第一次接触二叉树前序遍历的代码的时候就是倒在了这一步。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二叉树前序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prevOrder</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    System.out.print(node);</span><br><span class="line">    prevOrder(node.left);</span><br><span class="line">    prevOrder(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -476,12 +476,12 @@
 <li><strong>Q：第7行的逻辑是什么？</strong></li>
 <li>A：输出当前节点。</li>
 <li><strong>Q：第8行的逻辑是什么？</strong></li>
-<li>A：按照中、左、右的顺序输出左子树。</li>
+<li>A：按照中、左、右的顺序输出当前节点的左子树。</li>
 <li><strong>Q：第9行的逻辑是什么？</strong></li>
-<li>A：按照中、左、右的顺序输出右子树。</li>
+<li>A：按照中、左、右的顺序输出当前节点的右子树。</li>
 </ul>
 <blockquote>
-<p>看到这里如果还不能够明白这个递归逻辑的话，我建议在纸上画一颗高度为3、7个节点的满二叉树然后按照上面 Q&amp;A 的顺序依次访问一下这棵二叉树上的各个节点，你也许能更加直观的感受什么是递归的宏观语义。</p>
+<p>看到这里如果还不能够明白这个递归逻辑的话，我建议在纸上画一棵高度为3，7个节点的满二叉树然后按照上面 Q&amp;A 再结合代码依次访问一下这棵二叉树上的各个节点，你也许能更加直观的感受什么是递归的宏观语义。</p>
 </blockquote>
 <p><font color=blue>我所理解的递归函数的宏观语义是：</font></p>
 <ul>
@@ -489,7 +489,7 @@
 </li>
 <li><p>在这个例子中，前序遍历当前节点、前序遍历当前节点的左子树、前序遍历当前节点的右子树，这是<strong>完完全全相同的逻辑。</strong></p>
 </li>
-<li><p>当我们能够按照这种思维来解读递归代码的话，我们可以完全不关心递归调用里面的逻辑是怎样的，递归调用也就成了普通的函数调用。</p>
+<li><p>当我们能够按照这种思维来解读递归代码的话，我们可以完全不关心递归调用里面的逻辑是怎样的，递归调用也就可以理解成为一种普通的函数调用。</p>
 </li>
 </ul>
 <hr>
@@ -499,13 +499,15 @@
 <p>给你<strong>单链表</strong>的头节点 <code>head</code> 请你反转链表，并返回反转后的链表<br><strong>示例一：</strong><br>输入：head = (1) -&gt; (2) -&gt; (3) -&gt; (4) -&gt; (5) -&gt; NULL<br>输出：head = (5) -&gt; (4) -&gt; (3) -&gt; (2) -&gt; (1) -&gt; NULL<br><strong>示例二：</strong><br>输入：head = (1) -&gt; (2) -&gt; NULL<br>输出：head = (2) -&gt; (1) -&gt; NULL<br><strong>示例三：</strong><br>输入：head = (1) -&gt; NULL<br>输出：head = (1) -&gt; NULL<br><strong>示例四：</strong><br>输入：head = NULL<br>输出：head = NULL</p>
 </blockquote>
 <p>如果一个问题已经明确了要使用递归来求解的话，我们第一步要做的就是找出这个拆解后最基本的那个问题，对于反转链表的这个问题来说，显而易见最基本的问题就是当链表为空或者是链表只有一个节点的情况。一个空链表反转过后还是一个空链表，一个只有一个节点的链表反转过后还是只有一个节点。找出最基本的问题只是递归函数中最基础的部分，如果连最基本的问题都找不出来的话，那么几乎可以断定这个问题无法使用递归求解。</p>
-<p>完成了最基本的部分接下来才是一个如何编写一个递归函数的重头戏，<font color=blue>将递归函数单元化，也就是找出这个递归函数的宏观语义，清楚这个递归函数要表达什么。</font>将递归函数看作是一个单元之后其实就不需要再考虑我们要求解的这个问题具体是什么了，解决问题的重点就放在了怎么解决一个一个拆解出来的中间问题了。</p>
-<blockquote>
-<p>这里我再次啰嗦一下解释一下示例一这个例子：<br>反转前：<code>head</code> 的值为1，指向了值为2的节点，值为2的节点指向了值为3的节点…最终指向NULL<br>反转后：<code>head</code> 的值为5，指向了值为4的节点，值为4的节点指向了值为3的节点…最终指向NULL</p>
-</blockquote>
+<p>完成了最基本的部分接下来才是一个如何编写一个递归函数的重头戏，<font color=blue>将递归函数单元化，也就是找出这个递归函数的宏观语义，清楚这个递归函数要表达什么。</font>将递归函数看作是一个单元之后其实就不需要再考虑我们要求解的这个问题具体是什么了，解决问题的重点就放在了怎么解决一个一个拆解出来的小问题了。</p>
+<ul>
+<li>这里我再啰嗦一下解释一下示例一这个例子：</li>
+<li>反转前：<code>head</code> 的值为1，指向了值为2的节点，值为2的节点指向了值为3的节点…最终指向NULL</li>
+<li>反转后：<code>head</code> 的值为5，指向了值为4的节点，值为4的节点指向了值为3的节点…最终指向NULL</li>
+</ul>
 <p>假如我们现在处于 <code>(3)</code> 这个节点，结合递归函数的宏观语义来看一下此时链表的状态。前面的 <code>(1)</code> 和 <code>(2)</code> 节点是没有变化的，因为我们现在处于 <code>(3)</code> 这个节点，还没有反转到 <code>(1)</code> 和 <code>(2)</code> 。<font color=blue>但是对于已经反转过的 <code>(4)</code> 和 <code>(5)</code> 来说，应该是 <code>NULL &lt;- (4) &lt;- (5)</code> 这个样子的。</font>而此时的 <code>(3)</code> 这个节点仍然是指向了 <code>(4)</code> 这个节点的。</p>
 <p>好了，分析到此为止，答案已经是显而易见的了。当我们处于 <code>(3)</code> 这个节点的时候，我们只需要将 <code>(3)</code> 这个节点当作是已经反转完成的链表的下一个待反转节点再将 <code>(3)</code> 这个节点反转过来就可以了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">reverseList</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>)  <span class="comment">// 递归函数最基本的问题</span></span><br><span class="line">            <span class="keyword">return</span> head;</span><br><span class="line"></span><br><span class="line">        ListNode rev = reverseList(head.next);  <span class="comment">// 得到已经反转完成的链表</span></span><br><span class="line">        head.next.next = head;                  <span class="comment">// 将当前节点挂接在已经反转完成的链表的下一个节点，注意：head.next此时指向的是已经反转完成的链表的尾节点。</span></span><br><span class="line">        head.next = <span class="keyword">null</span>;                       <span class="comment">// 执行到这一步的时候，head已经挂载到反转完成链表的尾节点的位置了，但是链表尾节点必须指向null，所以令 head.next = null</span></span><br><span class="line">        <span class="keyword">return</span> rev;                             <span class="comment">// 返回已经反转完成的链表</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">reverseList</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>)  <span class="comment">// 最基本的问题</span></span><br><span class="line">            <span class="keyword">return</span> head;</span><br><span class="line"></span><br><span class="line">        ListNode rev = reverseList(head.next);  <span class="comment">// 得到已经反转完成的链表</span></span><br><span class="line">        head.next.next = head;                  <span class="comment">// 将当前节点挂接在已经反转完成的链表的下一个节点，注意：head.next此时指向的是已经反转完成的链表的尾节点。</span></span><br><span class="line">        head.next = <span class="keyword">null</span>;                       <span class="comment">// 执行到这一步的时候，head已经挂载到反转完成链表的尾节点的位置了，但是链表尾节点必须指向null，所以令 head.next = null</span></span><br><span class="line">        <span class="keyword">return</span> rev;                             <span class="comment">// 返回已经反转完成的链表</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上面的这段代码也就是力扣上第206号问题的答案，有兴趣的同学可以将代码复制到力扣上第206号问题的解答区中去验证结果。</p>
 
