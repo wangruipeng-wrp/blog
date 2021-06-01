@@ -83,12 +83,12 @@
 
 
 
-<meta name="description" content="一点一滴也可以改变世界">
+<meta name="description" content="有人说我的代码像诗一样优雅">
 <meta property="og:type" content="website">
 <meta property="og:title" content="知更">
 <meta property="og:url" content="https://www.wrp.cool/categories/%E5%B9%B6%E5%8F%91/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="一点一滴也可以改变世界">
+<meta property="og:description" content="有人说我的代码像诗一样优雅">
 <meta property="article:author" content="王瑞鹏">
 <meta name="twitter:card" content="summary">
 
@@ -540,7 +540,7 @@
                 alt="王瑞鹏" /></a>
             
               <p class="site-author-name" itemprop="name">王瑞鹏</p>
-              <p class="site-description motion-element" itemprop="description">一点一滴也可以改变世界</p>
+              <p class="site-description motion-element" itemprop="description">有人说我的代码像诗一样优雅</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -550,7 +550,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -572,7 +572,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -824,6 +824,28 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'xHUEmhrVmHWv8MupdDvR9FvM-gzGzoHsz',
+        appKey: 'Cr1qzcPhqKCVqEhTSX6TRoa4',
+        placeholder: 'Say something here...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 

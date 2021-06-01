@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,并发,线程,练习," />
+  <meta name="keywords" content="Java,线程,并发,练习," />
 
 
 
@@ -93,8 +93,8 @@
 <meta property="article:modified_time" content="2021-05-07T13:18:19.750Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Java">
-<meta property="article:tag" content="并发">
 <meta property="article:tag" content="线程">
+<meta property="article:tag" content="并发">
 <meta property="article:tag" content="练习">
 <meta name="twitter:card" content="summary">
 
@@ -368,6 +368,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/45104/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/posts/45104/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -452,12 +462,6 @@
         <hr>
         <div>大家加油：）</div>
         
-        <div style="color: #aaa; font-size:16px;">
-            <a href="https://github.com/wangruipeng-wrp/blog" target="_blank" rel="noopener" style="color: #aaa">
-                Star
-            </a>
-        </div>
-        
     
 </div>
       </div>
@@ -480,7 +484,6 @@
     本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
   </li>
 </ul>
-
       </div>
     
 
@@ -490,9 +493,9 @@
           
             <a href="/tags/Java/" rel="tag"> <i class="fa fa-tag"></i> Java</a>
           
-            <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"> <i class="fa fa-tag"></i> 并发</a>
-          
             <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"> <i class="fa fa-tag"></i> 线程</a>
+          
+            <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"> <i class="fa fa-tag"></i> 并发</a>
           
             <a href="/tags/%E7%BB%83%E4%B9%A0/" rel="tag"> <i class="fa fa-tag"></i> 练习</a>
           
@@ -550,6 +553,9 @@
           
 
   
+    <div class="comments" id="comments">
+    </div>
+  
 
 
 
@@ -591,7 +597,7 @@
                 alt="王瑞鹏" /></a>
             
               <p class="site-author-name" itemprop="name">王瑞鹏</p>
-              <p class="site-description motion-element" itemprop="description">一点一滴也可以改变世界</p>
+              <p class="site-description motion-element" itemprop="description">有人说我的代码像诗一样优雅</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -601,7 +607,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -623,7 +629,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -895,6 +901,28 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'xHUEmhrVmHWv8MupdDvR9FvM-gzGzoHsz',
+        appKey: 'Cr1qzcPhqKCVqEhTSX6TRoa4',
+        placeholder: 'Say something here...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 
