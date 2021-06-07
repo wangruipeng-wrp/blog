@@ -6,7 +6,7 @@
   <link href="https://www.wrp.cool/atom.xml" rel="self"/>
   
   <link href="https://www.wrp.cool/"/>
-  <updated>2021-06-07T12:14:31.408Z</updated>
+  <updated>2021-06-01T14:38:49.065Z</updated>
   <id>https://www.wrp.cool/</id>
   
   <author>
@@ -15,19 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>test</title>
-    <link href="https://www.wrp.cool/posts/63534/"/>
-    <id>https://www.wrp.cool/posts/63534/</id>
-    <published>2021-06-07T12:14:20.000Z</published>
-    <updated>2021-06-07T12:14:31.408Z</updated>
-    
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>递归</title>
@@ -536,6 +523,38 @@
     
     <category term="碎笔" scheme="https://www.wrp.cool/categories/%E7%A2%8E%E7%AC%94/"/>
     
+    
+  </entry>
+  
+  <entry>
+    <title>【Java并发练习】两个线程交替打印0~100</title>
+    <link href="https://www.wrp.cool/posts/45104/"/>
+    <id>https://www.wrp.cool/posts/45104/</id>
+    <published>2020-07-16T11:19:21.000Z</published>
+    <updated>2021-05-07T13:18:19.750Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>题目：<br>实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。</p></blockquote><blockquote><p><strong>分析题目：</strong><br>题目关键字：<strong>两个线程</strong>、<strong>交替</strong>、<strong>0~100</strong>、<strong>专门打印奇数</strong>、<strong>专门打印偶数</strong></p></blockquote><a id="more"></a><h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol><li>首先创建两个线程</li><li>交替打印证明线程之间需要协同配合、考虑 synchronized、wait-notify</li></ol><h1 id="使用-sychronized"><a href="#使用-sychronized" class="headerlink" title="使用 sychronized"></a>使用 sychronized</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 打印奇数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"奇数"</span>).start();</span><br><span class="line">    <span class="comment">// 打印偶数的线程</span></span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span>(count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">"偶数"</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>使用 synchronized 的方法虽然也是能够完成题目的要求，但是效率上略差一些。<br>main 方法中的逻辑是，先判断是否满足打印 0~100 的要求，如果满足则进入同步代码块中，此时两个线程将会竞争同一把锁 <code>lock</code><br>竞争到锁的线程将判断是否满足打印条件，如果满足则打印，否则直接跳出，紧接着同步代码块执行完毕释放锁，两个线程重新进入竞争锁的步骤<br>如果在这个时候其中一个线程接连多次竞争到锁，但是却因为不满足打印条件而再次直接释放锁，这就是无意义的性能浪费</p></blockquote><h1 id="使用-wait-notify"><a href="#使用-wait-notify" class="headerlink" title="使用 wait-notify"></a>使用 wait-notify</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="comment">// 获取锁证明是符合打印条件，直接打印</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count++);</span><br><span class="line">                <span class="comment">// 唤醒另外的线程</span></span><br><span class="line">                lock.notify();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 判断是否打印到最后的数字了，如果还没有则中断，把锁让给另外的线程去打印</span></span><br><span class="line">                    <span class="comment">// 做这层判断是为了预防在打印到最后一个数字时，中断后另外的线程已经执行完毕，而无法唤醒</span></span><br><span class="line">                    <span class="keyword">if</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test test = <span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">new</span> Thread(test, <span class="string">"偶数"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(test,<span class="string">"奇数"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>使用 wait-notify 不需要去判断是否符合奇偶数的打印条件，而是当拿到锁则证明肯定是符合打印条件的，直接打印<br>打印完唤醒另外的线程准备执行下一次的打印，再中断本线程让渡锁</p></blockquote>]]></content>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;题目：&lt;br&gt;实现两个线程交替打印0~100，其中一个线程专门打印奇数，另一个线程专门打印偶数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;分析题目：&lt;/strong&gt;&lt;br&gt;题目关键字：&lt;strong&gt;两个线程&lt;/strong&gt;、&lt;strong&gt;交替&lt;/strong&gt;、&lt;strong&gt;0~100&lt;/strong&gt;、&lt;strong&gt;专门打印奇数&lt;/strong&gt;、&lt;strong&gt;专门打印偶数&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="题解" scheme="https://www.wrp.cool/categories/%E9%A2%98%E8%A7%A3/"/>
+    
+    
+    <category term="Java" scheme="https://www.wrp.cool/tags/Java/"/>
+    
+    <category term="并发" scheme="https://www.wrp.cool/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="线程" scheme="https://www.wrp.cool/tags/%E7%BA%BF%E7%A8%8B/"/>
+    
+    <category term="练习" scheme="https://www.wrp.cool/tags/%E7%BB%83%E4%B9%A0/"/>
     
   </entry>
   
