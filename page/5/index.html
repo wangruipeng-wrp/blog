@@ -113,7 +113,7 @@
       apiKey: '',
       indexName: '',
       hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+      labels: {"input_placeholder":"Search for Posts123","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
   };
 </script>
@@ -162,7 +162,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">“知道要更新，知道要进步”</p>
+        <h1 class="site-subtitle" itemprop="description">“知道要更新，知道要进步”</h1>
       
   </div>
 
@@ -325,12 +325,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/posts/15655/" itemprop="url">【JavaScript】创建对象</a></h1>
+                <a class="post-title-link" href="/posts/15655/" itemprop="url">【JavaScript】创建对象</a></h2>
         
 
         <div class="post-meta">
+          
           <span class="post-time">
             
               <span class="post-meta-item-icon">
@@ -505,12 +506,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/posts/31440/" itemprop="url">【JavaScript】垃圾回收机制</a></h1>
+                <a class="post-title-link" href="/posts/31440/" itemprop="url">【JavaScript】垃圾回收机制</a></h2>
         
 
         <div class="post-meta">
+          
           <span class="post-time">
             
               <span class="post-meta-item-icon">
@@ -685,12 +687,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/posts/54687/" itemprop="url">【JavaScript】执行上下文</a></h1>
+                <a class="post-title-link" href="/posts/54687/" itemprop="url">【JavaScript】执行上下文</a></h2>
         
 
         <div class="post-meta">
+          
           <span class="post-time">
             
               <span class="post-meta-item-icon">
@@ -865,12 +868,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/posts/1709/" itemprop="url">【JavaScript】作用域</a></h1>
+                <a class="post-title-link" href="/posts/1709/" itemprop="url">【JavaScript】作用域</a></h2>
         
 
         <div class="post-meta">
+          
           <span class="post-time">
             
               <span class="post-meta-item-icon">
@@ -1045,12 +1049,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/posts/24923/" itemprop="url">【JavaScript】数据类型</a></h1>
+                <a class="post-title-link" href="/posts/24923/" itemprop="url">【JavaScript】数据类型</a></h2>
         
 
         <div class="post-meta">
+          
           <span class="post-time">
             
               <span class="post-meta-item-icon">
@@ -1241,12 +1246,12 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <a href="https://www.wrp.cool/about/"><img class="site-author-image" itemprop="image"
+              <a href="https://www.wrp.cool/"><img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
                 alt="王瑞鹏" /></a>
             
               <p class="site-author-name" itemprop="name">王瑞鹏</p>
-              <p class="site-description motion-element" itemprop="description">有人说我的代码像诗一样优雅</p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -1278,7 +1283,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1764,7 +1769,7 @@
 
                   // select top N slices in content
 
-                  var upperBound = parseInt('1');
+                  var upperBound = parseInt('10');
                   if (upperBound >= 0) {
                     slicesOfContent = slicesOfContent.slice(0, upperBound);
                   }
