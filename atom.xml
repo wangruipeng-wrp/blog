@@ -6,7 +6,7 @@
   <link href="https://www.wrp.cool/atom.xml" rel="self"/>
   
   <link href="https://www.wrp.cool/"/>
-  <updated>2021-06-25T15:17:52.299Z</updated>
+  <updated>2021-06-26T11:01:29.538Z</updated>
   <id>https://www.wrp.cool/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="https://www.wrp.cool/posts/62949/"/>
     <id>https://www.wrp.cool/posts/62949/</id>
     <published>2021-06-25T15:00:10.000Z</published>
-    <updated>2021-06-25T15:17:52.299Z</updated>
+    <updated>2021-06-26T11:01:29.538Z</updated>
     
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>你好。</p></blockquote>]]></content>
+    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>你好，陌生人。<br>虽然我不认识你，但是在这里也希望你能够保持自己，继续加油：）<br>如果你想认识我，我叫王瑞鹏。</p></blockquote>]]></content>
     
     
       
       
-    <summary type="html">&lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;你好。&lt;/p&gt;
+    <summary type="html">&lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;你好，陌生人。&lt;br&gt;虽然我不认识你，但是在这里也希望你能够保持自己，继续加油：）&lt;br&gt;如果你想认识我，我叫王瑞鹏。&lt;/p&gt;
 &lt;/blockquote&gt;</summary>
       
     
@@ -494,9 +494,9 @@
     
     <category term="Java" scheme="https://www.wrp.cool/tags/Java/"/>
     
-    <category term="并发" scheme="https://www.wrp.cool/tags/%E5%B9%B6%E5%8F%91/"/>
-    
     <category term="线程" scheme="https://www.wrp.cool/tags/%E7%BA%BF%E7%A8%8B/"/>
+    
+    <category term="并发" scheme="https://www.wrp.cool/tags/%E5%B9%B6%E5%8F%91/"/>
     
     <category term="异常" scheme="https://www.wrp.cool/tags/%E5%BC%82%E5%B8%B8/"/>
     
