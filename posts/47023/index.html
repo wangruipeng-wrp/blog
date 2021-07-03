@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="闭包：「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。">
 <meta property="article:published_time" content="2020-06-09T11:06:46.000Z">
-<meta property="article:modified_time" content="2021-05-07T13:18:37.895Z">
+<meta property="article:modified_time" content="2021-06-29T13:10:46.321Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="封装">
@@ -437,7 +437,7 @@
 <a id="more"></a>
 
 <blockquote>
-<p>本文摘抄自 <a href="https://zhuanlan.zhihu.com/p/22486908" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22486908</a></p>
+<p>本文参考自 <a href="https://zhuanlan.zhihu.com/p/22486908" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22486908</a></p>
 </blockquote>
 <h1 id="什么是闭包"><a href="#什么是闭包" class="headerlink" title="什么是闭包"></a>什么是闭包</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> local = <span class="string">'变量'</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(local)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上面函数内部的三行代码中，有一个局部变量 <code>local</code>，有一个函数 <code>foo</code> ，<code>foo</code> 里面可以访问到 <code>local</code> 变量。这就是一个闭包，就是这么简单。</p>
@@ -641,7 +641,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -663,7 +663,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
