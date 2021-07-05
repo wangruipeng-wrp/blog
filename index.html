@@ -376,36 +376,11 @@
           
 
           
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  53
-                </span>
+            <div class="post-wordcount"> 
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
               
             </div>
           
@@ -426,13 +401,200 @@
 
       
         
-          <blockquote class="blockquote-center"><p>你好，陌生人。<br>虽然我不认识你，但也希望你能够保持自己，请继续加油：）<br>如果你想认识我，我叫王瑞鹏。</p>
+          <blockquote class="blockquote-center"><p>你好，陌生人。<br>保持你的激情，请继续加油：）</p>
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/posts/62949/#more" rel="contents">
               
                 去留言 &raquo;
+              
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+    
+        
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.wrp.cool/posts/54793/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王瑞鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="知更">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/posts/54793/" itemprop="url">AVL 树</a></h2>
+        
+
+        <div class="post-meta">
+          
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-04T10:50:29+08:00">
+                2021-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/54793/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/posts/54793/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount"> 
+              
+                
+                  <span class="post-meta-divider">|
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  550
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>上一篇文章所讲述的【<a href="https://www.wrp.cool/posts/46128/">二叉搜索树</a>】其实有一个非常严重的漏洞：如果插入的元素都是有序的怎么办？</p>
+<blockquote>
+<p>如果按照有序的方式或者近乎有序的方式将元素插入到二叉搜索树当中去，那么此时的二叉搜索树将退化成一个链表的数据结构。于是引入平衡这种机制来防止这种情况的发生，引入平衡的二叉树被成为平衡二叉树。</p>
+</blockquote>
+<p><strong>平衡：</strong><font color=blue>一棵树中对于任意节点都有左子树的高度减去右子树的高度的绝对值小于等于1，则称这棵二叉树是平衡的。</font></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/posts/54793/#more" rel="contents">
+              
+                阅读全文 &raquo;
               
             </a>
           </div>
@@ -572,10 +734,10 @@
           
 
           
-            <div class="post-wordcount">
+            <div class="post-wordcount"> 
               
                 
-                  <span class="post-meta-divider">|</span>
+                  <span class="post-meta-divider">|
                 
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
@@ -584,24 +746,12 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  933
+                  972
                 </span>
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4
-                </span>
               
             </div>
           
@@ -770,10 +920,10 @@
           
 
           
-            <div class="post-wordcount">
+            <div class="post-wordcount"> 
               
                 
-                  <span class="post-meta-divider">|</span>
+                  <span class="post-meta-divider">|
                 
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
@@ -787,19 +937,7 @@
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
               
             </div>
           
@@ -966,10 +1104,10 @@
           
 
           
-            <div class="post-wordcount">
+            <div class="post-wordcount"> 
               
                 
-                  <span class="post-meta-divider">|</span>
+                  <span class="post-meta-divider">|
                 
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
@@ -983,19 +1121,7 @@
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  11
-                </span>
               
             </div>
           
@@ -1170,10 +1296,10 @@
           
 
           
-            <div class="post-wordcount">
+            <div class="post-wordcount"> 
               
                 
-                  <span class="post-meta-divider">|</span>
+                  <span class="post-meta-divider">|
                 
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
@@ -1187,19 +1313,7 @@
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
               
             </div>
           
@@ -1377,10 +1491,10 @@
           
 
           
-            <div class="post-wordcount">
+            <div class="post-wordcount"> 
               
                 
-                  <span class="post-meta-divider">|</span>
+                  <span class="post-meta-divider">|
                 
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
@@ -1394,19 +1508,7 @@
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
               
             </div>
           
@@ -1583,10 +1685,10 @@
           
 
           
-            <div class="post-wordcount">
+            <div class="post-wordcount"> 
               
                 
-                  <span class="post-meta-divider">|</span>
+                  <span class="post-meta-divider">|
                 
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
@@ -1600,19 +1702,7 @@
               
 
               
-                <span class="post-meta-divider">|</span>
-              
 
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
               
             </div>
           
@@ -1637,213 +1727,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/posts/54363/#more" rel="contents">
-              
-                阅读全文 &raquo;
-              
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-    
-        
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.wrp.cool/posts/29125/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="王瑞鹏">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="知更">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/posts/29125/" itemprop="url">单例模式</a></h2>
-        
-
-        <div class="post-meta">
-          
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-04-23T21:51:13+08:00">
-                2021-04-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">创建型设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/29125/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/posts/29125/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.8k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>单例模式从名称上就很好理解：一个对象保证在内存中只有一个实例。<br>当然，如果是多线程的话也要保证多个线程在运行的过程当中这个实例只会被创建一次。</p>
-<p>单例模式的实现也有两种，懒汉式和饿汉式。从名字上就很好区分，懒汉式就是延迟创建单例对象的一种方式，饿汉式就是即刻创建单例对象的方式。两种实现方式本文都说到。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/posts/29125/#more" rel="contents">
               
                 阅读全文 &raquo;
               
@@ -1947,7 +1830,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1969,7 +1852,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2076,13 +1959,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-      <span class="post-meta-item-text">Site words total count&#58;</span>
+      <span class="post-meta-item-text">站点总字数&#58;</span>
     
-    <span title="Site words total count">55.7k</span>
+    <span title="站点总字数">56.3k</span>
   
   &nbsp;
   
-    <span class="footer-custom"><a target="_blank" href="http://beian.miit.gov.cn/">粤ICP备19093360号</a></span>
+    <span class="footer-custom"><br><img src="/images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a target="_blank" href="http://beian.miit.gov.cn/">粤ICP备19093360号</a></span>
   
 
 </div>

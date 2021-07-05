@@ -3,7 +3,7 @@
   <entry>
     <title>写在前面</title>
     <url>/posts/62949/</url>
-    <content><![CDATA[<blockquote class="blockquote-center"><p>你好，陌生人。<br>虽然我不认识你，但也希望你能够保持自己，请继续加油：）<br>如果你想认识我，我叫王瑞鹏。</p>
+    <content><![CDATA[<blockquote class="blockquote-center"><p>你好，陌生人。<br>保持你的激情，请继续加油：）</p>
 </blockquote>
 
 <a id="more"></a>
@@ -11,6 +11,44 @@
 <br>
 
 <center><font size=5>这里的评论区就当作留言板吧~</font></center>]]></content>
+  </entry>
+  <entry>
+    <title>AVL 树</title>
+    <url>/posts/54793/</url>
+    <content><![CDATA[<p>上一篇文章所讲述的【<a href="https://www.wrp.cool/posts/46128/">二叉搜索树</a>】其实有一个非常严重的漏洞：如果插入的元素都是有序的怎么办？</p>
+<blockquote>
+<p>如果按照有序的方式或者近乎有序的方式将元素插入到二叉搜索树当中去，那么此时的二叉搜索树将退化成一个链表的数据结构。于是引入平衡这种机制来防止这种情况的发生，引入平衡的二叉树被成为平衡二叉树。</p>
+</blockquote>
+<p><strong>平衡：</strong><font color=blue>一棵树中对于任意节点都有左子树的高度减去右子树的高度的绝对值小于等于1，则称这棵二叉树是平衡的。</font></p>
+<a id="more"></a>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>首先还是先看看百度百科中对于AVL树的定义（<a href="https://baike.baidu.com/item/AVL%E6%A0%91" target="_blank" rel="noopener">AVL树-百度百科</a>）。</p>
+<p><strong>AVL树的特点：</strong></p>
+<ul>
+<li>本身首先是一棵二叉搜索树</li>
+<li>带有平衡性：每个节点的左右子树的高度之差的绝对值（<strong>平衡因子</strong>）最多为1。<br>也就是说，AVL树，本质上是带了平衡功能的二叉搜索树。</li>
+</ul>
+<p><strong>平衡因子：</strong>左子树的高度减去右子树的高度。（注意：平衡因子的值可能为负，不过这是正常的，平衡因子的正负性能够帮助我们区分二叉树是向左倾斜的还是向右倾斜的）</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><blockquote>
+<p>本质上AVL树还是一种二叉搜索树，但是引入了“平衡因子”的概念来维护树的平衡，所以在树的节点类中要新增加一个<code>height</code>变量来维护树的高度。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 节点类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> e, height;</span><br><span class="line">    <span class="keyword">public</span> Node left, right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> e, Node left, Node right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.height = <span class="number">1</span>; <span class="comment">// 新节点默认高度为 1</span></span><br><span class="line">        <span class="keyword">this</span>.e = e;</span><br><span class="line">        <span class="keyword">this</span>.left = left;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设计两个辅助函数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取节点高度</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getHeight</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="number">0</span> : node.height;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取平衡因子</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getBalanceFactor</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="number">0</span> : getHeight(node.left) - getHeight(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="树的两种不平衡状态（LL和RR）"><a href="#树的两种不平衡状态（LL和RR）" class="headerlink" title="树的两种不平衡状态（LL和RR）"></a>树的两种不平衡状态（LL和RR）</h1><h1 id="左旋转与右旋转"><a href="#左旋转与右旋转" class="headerlink" title="左旋转与右旋转"></a>左旋转与右旋转</h1><h1 id="另外两种不平衡状态（LR和RL）"><a href="#另外两种不平衡状态（LR和RL）" class="headerlink" title="另外两种不平衡状态（LR和RL）"></a>另外两种不平衡状态（LR和RL）</h1><hr>
+<p>未完待续：）</p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>二叉树</tag>
+        <tag>平衡二叉树</tag>
+        <tag>递归</tag>
+      </tags>
   </entry>
   <entry>
     <title>二叉搜索树</title>
@@ -21,13 +59,13 @@
 </blockquote>
 <a id="more"></a>
 
-<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BST</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 节点类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> e;</span><br><span class="line">        <span class="keyword">public</span> Node left, right;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> e, Node left, Node right)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.left = left;</span><br><span class="line">            <span class="keyword">this</span>.right = right;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> String.valueOf(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BST</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.root = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BST</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 节点类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> e;</span><br><span class="line">        <span class="keyword">public</span> Node left, right;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> e, Node left, Node right)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.left = left;</span><br><span class="line">            <span class="keyword">this</span>.right = right;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> String.valueOf(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BST</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.root = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    add(root, e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">add</span><span class="params">(Node root, <span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        size ++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node(e, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (e &lt; root.e) &#123;</span><br><span class="line">        root.left = add(root.left, e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (e &gt; root.e) &#123;</span><br><span class="line">        root.right = add(root.right, e);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="查找元素"><a href="#查找元素" class="headerlink" title="查找元素"></a>查找元素</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> find(root, e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">find</span><span class="params">(Node root, <span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (e &lt; root.e) </span><br><span class="line">        <span class="keyword">return</span> find(root.left, e);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (e &gt; root.e)</span><br><span class="line">        <span class="keyword">return</span> find(root.right, e);</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除最大元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">delMax</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> root;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">        root.right = delMax(root.right);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">if</span> (root.left == <span class="keyword">null</span>) &#123;</span><br><span class="line">            root = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> root.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除任意元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delNode</span><span class="params">(<span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> delNode(root, e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">delNode</span><span class="params">(Node root, <span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (e &gt; root.e) &#123;</span><br><span class="line">        root.right = delNode(root.right, e);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (e &lt; root.e) &#123;</span><br><span class="line">        root.left = delNode(root.left, e);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root.left == <span class="keyword">null</span>) &#123;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">return</span> root.right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">return</span> root.left;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    size --;</span><br><span class="line">    <span class="keyword">return</span> delMax(root.left);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除最大元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">delMax</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> root;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">        root.right = delMax(root.right);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">if</span> (root.left == <span class="keyword">null</span>) &#123;</span><br><span class="line">            root = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> root.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除任意元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delNode</span><span class="params">(<span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> delNode(root, e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">delNode</span><span class="params">(Node root, <span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (e &gt; root.e) &#123;</span><br><span class="line">        root.right = delNode(root.right, e);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (e &lt; root.e) &#123;</span><br><span class="line">        root.left = delNode(root.left, e);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    size --;</span><br><span class="line">    <span class="keyword">if</span> (root.left == <span class="keyword">null</span>) <span class="keyword">return</span> root.right;</span><br><span class="line">    <span class="keyword">if</span> (root.right == <span class="keyword">null</span>) <span class="keyword">return</span> root.left;</span><br><span class="line">    <span class="keyword">return</span> delMax(root.left);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前序遍历（递归版本）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    System.out.println(root);</span><br><span class="line">    preOrder(root.left);</span><br><span class="line">    preOrder(root.right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前序遍历（循环版本）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用栈来模拟递归</span></span><br><span class="line">    IStack&lt;Node&gt; stack = <span class="keyword">new</span> ArrayStack&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    stack.push(root);</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        Node node = stack.pop();</span><br><span class="line">        System.out.print(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (node.right != <span class="keyword">null</span>)</span><br><span class="line">            stack.push(node.right);</span><br><span class="line">        <span class="keyword">if</span> (node.left != <span class="keyword">null</span>)</span><br><span class="line">            stack.push(node.left);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -38,7 +76,7 @@
 <h1 id="层序遍历二叉树"><a href="#层序遍历二叉树" class="headerlink" title="层序遍历二叉树"></a>层序遍历二叉树</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">levelOrder</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    IQueue&lt;Node&gt; queue = <span class="keyword">new</span> Queue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    queue.enque(root);</span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">        Node node = queue.deque();</span><br><span class="line">        System.out.println(node);</span><br><span class="line"></span><br><span class="line">        queue.enque(node.left);</span><br><span class="line">        queue.enque(node.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>以上就是一些二叉树的基本实现，有错误或者疑问都欢迎在评论区指出。</p>
+<p>由于二叉搜索树是一种比较简单的数据结构，所以本文更多的是一些代码的记录，并不对其中的逻辑做深入的阐述。<br>如果你发现了什么错误或者是有什么疑问都欢迎在评论区指出。</p>
 </blockquote>
 ]]></content>
       <categories>
@@ -969,8 +1007,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>数据结构</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>数据结构</tag>
+        <tag>Java</tag>
         <tag>链表</tag>
       </tags>
   </entry>
@@ -1014,8 +1052,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>数据结构</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>数据结构</tag>
+        <tag>Java</tag>
         <tag>动态数组</tag>
         <tag>数组</tag>
       </tags>
@@ -1057,9 +1095,9 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
         <tag>并发</tag>
+        <tag>线程</tag>
         <tag>异常</tag>
       </tags>
   </entry>
@@ -1146,9 +1184,9 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>题解</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
         <tag>并发</tag>
+        <tag>线程</tag>
         <tag>练习</tag>
       </tags>
   </entry>
@@ -1382,8 +1420,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
         <tag>生命周期</tag>
       </tags>
   </entry>
@@ -1444,8 +1482,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
   <entry>
@@ -1474,8 +1512,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
   <entry>
@@ -1604,8 +1642,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
   <entry>

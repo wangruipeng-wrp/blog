@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="数据结构,二叉树,平衡二叉树,递归," />
 
 
 
@@ -83,13 +83,19 @@
 
 
 
-<meta name="description" content="有人说我的代码像诗一样优雅">
-<meta property="og:type" content="website">
-<meta property="og:title" content="知更">
-<meta property="og:url" content="https://www.wrp.cool/tags/%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/index.html">
+<meta name="description" content="上一篇文章所讲述的【二叉搜索树】其实有一个非常严重的漏洞：如果插入的元素都是有序的怎么办？  如果按照有序的方式或者近乎有序的方式将元素插入到二叉搜索树当中去，那么此时的二叉搜索树将退化成一个链表的数据结构。于是引入平衡这种机制来防止这种情况的发生，引入平衡的二叉树被成为平衡二叉树。  平衡：一棵树中对于任意节点都有左子树的高度减去右子树的高度的绝对值小于等于1，则称这棵二叉树是平衡的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AVL 树">
+<meta property="og:url" content="https://www.wrp.cool/posts/54793/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="有人说我的代码像诗一样优雅">
+<meta property="og:description" content="上一篇文章所讲述的【二叉搜索树】其实有一个非常严重的漏洞：如果插入的元素都是有序的怎么办？  如果按照有序的方式或者近乎有序的方式将元素插入到二叉搜索树当中去，那么此时的二叉搜索树将退化成一个链表的数据结构。于是引入平衡这种机制来防止这种情况的发生，引入平衡的二叉树被成为平衡二叉树。  平衡：一棵树中对于任意节点都有左子树的高度减去右子树的高度的绝对值小于等于1，则称这棵二叉树是平衡的。">
+<meta property="article:published_time" content="2021-07-04T02:50:29.000Z">
+<meta property="article:modified_time" content="2021-07-05T14:56:24.543Z">
 <meta property="article:author" content="王瑞鹏">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="二叉树">
+<meta property="article:tag" content="平衡二叉树">
+<meta property="article:tag" content="递归">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://www.wrp.cool/tags/控制反转/"/>
+  <link rel="canonical" href="https://www.wrp.cool/posts/54793/"/>
 
 
 
 
 
-  <title>标签: 控制反转 | 知更</title>
+  <title>AVL 树 | 知更</title>
   
 
 
@@ -145,7 +151,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -293,57 +299,261 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2>控制反转<small>标签</small>
-        </h2>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.wrp.cool/posts/54793/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王瑞鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="知更">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/posts/5741/" itemprop="url">
-              
-                <span itemprop="name">【Spring】IOC理论推导</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">AVL 树</h2>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-08-23T04:18:18+08:00"
-              content="2020-08-23" >
-          08-23
-        </time>
-      </div>
+        <div class="post-meta">
+          
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-04T10:50:29+08:00">
+                2021-07-04
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/54793/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/posts/54793/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount"> 
+              
+                
+                  <span class="post-meta-divider">|
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  550
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇文章所讲述的【<a href="https://www.wrp.cool/posts/46128/">二叉搜索树</a>】其实有一个非常严重的漏洞：如果插入的元素都是有序的怎么办？</p>
+<blockquote>
+<p>如果按照有序的方式或者近乎有序的方式将元素插入到二叉搜索树当中去，那么此时的二叉搜索树将退化成一个链表的数据结构。于是引入平衡这种机制来防止这种情况的发生，引入平衡的二叉树被成为平衡二叉树。</p>
+</blockquote>
+<p><strong>平衡：</strong><font color=blue>一棵树中对于任意节点都有左子树的高度减去右子树的高度的绝对值小于等于1，则称这棵二叉树是平衡的。</font></p>
+<a id="more"></a>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>首先还是先看看百度百科中对于AVL树的定义（<a href="https://baike.baidu.com/item/AVL%E6%A0%91" target="_blank" rel="noopener">AVL树-百度百科</a>）。</p>
+<p><strong>AVL树的特点：</strong></p>
+<ul>
+<li>本身首先是一棵二叉搜索树</li>
+<li>带有平衡性：每个节点的左右子树的高度之差的绝对值（<strong>平衡因子</strong>）最多为1。<br>也就是说，AVL树，本质上是带了平衡功能的二叉搜索树。</li>
+</ul>
+<p><strong>平衡因子：</strong>左子树的高度减去右子树的高度。（注意：平衡因子的值可能为负，不过这是正常的，平衡因子的正负性能够帮助我们区分二叉树是向左倾斜的还是向右倾斜的）</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><blockquote>
+<p>本质上AVL树还是一种二叉搜索树，但是引入了“平衡因子”的概念来维护树的平衡，所以在树的节点类中要新增加一个<code>height</code>变量来维护树的高度。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 节点类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> e, height;</span><br><span class="line">    <span class="keyword">public</span> Node left, right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> e, Node left, Node right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.height = <span class="number">1</span>; <span class="comment">// 新节点默认高度为 1</span></span><br><span class="line">        <span class="keyword">this</span>.e = e;</span><br><span class="line">        <span class="keyword">this</span>.left = left;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.valueOf(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设计两个辅助函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取节点高度</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getHeight</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="number">0</span> : node.height;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取平衡因子</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getBalanceFactor</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="number">0</span> : getHeight(node.left) - getHeight(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="树的两种不平衡状态（LL和RR）"><a href="#树的两种不平衡状态（LL和RR）" class="headerlink" title="树的两种不平衡状态（LL和RR）"></a>树的两种不平衡状态（LL和RR）</h1><h1 id="左旋转与右旋转"><a href="#左旋转与右旋转" class="headerlink" title="左旋转与右旋转"></a>左旋转与右旋转</h1><h1 id="另外两种不平衡状态（LR和RL）"><a href="#另外两种不平衡状态（LR和RL）" class="headerlink" title="另外两种不平衡状态（LR和RL）"></a>另外两种不平衡状态（LR和RL）</h1><hr>
+<p>未完待续：）</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+    
+    
+      <div>
+        <div>
+    
+        
+    
+</div>
+      </div>
+        
+
+    
+      <div>
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      王瑞鹏（<a href="https://www.wrp.cool/about/" title="欢迎添加微信一起讨论！微信号：wangruipeng-wrp">欢迎打扰</a>）
+      <!--王瑞鹏-->
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://www.wrp.cool/posts/54793/" title="AVL 树">https://www.wrp.cool/posts/54793/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"> <i class="fa fa-tag"></i> 数据结构</a>
+          
+            <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"> <i class="fa fa-tag"></i> 二叉树</a>
+          
+            <a href="/tags/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"> <i class="fa fa-tag"></i> 平衡二叉树</a>
+          
+            <a href="/tags/%E9%80%92%E5%BD%92/" rel="tag"> <i class="fa fa-tag"></i> 递归</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/46128/" rel="next" title="二叉搜索树">
+                <i class="fa fa-chevron-left"></i> 二叉搜索树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+      <script src="https://kit.fontawesome.com/ba21d3fae0.js" crossorigin="anonymous"></script>
+    </footer>
   </div>
   
   
   
+  </article>
 
-  <!--
 
--->
 
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -351,6 +561,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -371,8 +588,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -487,6 +713,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备工作"><span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的两种不平衡状态（LL和RR）"><span class="nav-text">树的两种不平衡状态（LL和RR）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#左旋转与右旋转"><span class="nav-text">左旋转与右旋转</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#另外两种不平衡状态（LR和RL）"><span class="nav-text">另外两种不平衡状态（LR和RL）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -636,6 +878,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
