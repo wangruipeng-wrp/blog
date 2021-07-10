@@ -37,8 +37,15 @@
 <p>设计两个辅助函数</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取节点高度</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getHeight</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="number">0</span> : node.height;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取平衡因子</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getBalanceFactor</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="number">0</span> : getHeight(node.left) - getHeight(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="树的两种不平衡状态（LL和RR）"><a href="#树的两种不平衡状态（LL和RR）" class="headerlink" title="树的两种不平衡状态（LL和RR）"></a>树的两种不平衡状态（LL和RR）</h1><h1 id="左旋转与右旋转"><a href="#左旋转与右旋转" class="headerlink" title="左旋转与右旋转"></a>左旋转与右旋转</h1><h1 id="另外两种不平衡状态（LR和RL）"><a href="#另外两种不平衡状态（LR和RL）" class="headerlink" title="另外两种不平衡状态（LR和RL）"></a>另外两种不平衡状态（LR和RL）</h1><hr>
-<p>未完待续：）</p>
+<h1 id="树的平衡与失衡"><a href="#树的平衡与失衡" class="headerlink" title="树的平衡与失衡"></a>树的平衡与失衡</h1><p>一个节点的平衡因子是有这个节点左子树的高度减去右子树的高度得到的。如果平衡因子的绝对值小于等于一，则这个节点是平衡的，反之则称之为失衡。</p>
+<p><font color=blue>那么什么情况会导致树的失衡呢？</font><br>当左右子树的高度本来就相差1的情况下，其中较高的子树再次加1的情况下，此时就会产生失衡。</p>
+<p><font color=blue>那么失衡总共有多少种情况呢？</font><br>四种，分别是LL型、RR型、LR型、RL型，L和R分别是Left和Right的缩写。<br>其中第一个字母代表的是较高的子树是左子树还是右子树，第二个字母代表的是新增的节点是增加在较高子树的左子树还是右子树。<br>除了这四种失衡的情况，其余的情况就都是平衡的了。</p>
+<p>下面为这四种情况分别举个例子：<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210709215508.png" alt="20210709215508"></p>
+<blockquote>
+<p>以上的四种情况失衡的节点都是根节点。</p>
+</blockquote>
+<h1 id="左旋转与右旋转"><a href="#左旋转与右旋转" class="headerlink" title="左旋转与右旋转"></a>左旋转与右旋转</h1><p>左旋转与右旋转其实就是对于不平衡的节点做了一个使其平衡的操作。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-AVL-2.jpg" alt="数据结构-AVL-2"></p>
 ]]></content>
       <categories>
         <category>数据结构</category>
@@ -187,7 +194,7 @@
 <li>因为递归进去的逻辑跟第一层的逻辑是完全一样的。</li>
 </ul>
 <p>如果要把 <code>prevOrder</code> 这个递归函数所做的事情理解成一个递归单元的话，我们只需要整理出这个函数所要实现的功能就可以理解这个递归函数的逻辑。</p>
-<p><font size=4 ><strong>Q&amp;A Time</strong></font></p>
+<p><font size=4><strong>Q&amp;A Time</strong></font></p>
 <ul>
 <li><strong>Q：prevOrder这个函数的功能是什么？</strong></li>
 <li>A：按照中、左、右的顺序输出一棵二叉树。</li>
@@ -201,7 +208,7 @@
 <blockquote>
 <p>看到这里如果还不能够明白这个递归逻辑的话，我建议在纸上画一棵高度为3，7个节点的满二叉树然后按照上面 Q&amp;A 再结合代码依次访问一下这棵二叉树上的各个节点，你也许能更加直观的感受什么是递归的宏观语义。</p>
 </blockquote>
-<p><font color=blue>我所理解的递归函数的宏观语义是：</font></p>
+<p>我所理解的递归函数的宏观语义是：</font></p>
 <ul>
 <li><p>将一个大的问题一点一点的拆分成许多个小的问题，或者说是抽象成多个小问题，<strong>每一个问题就是一个递归单元，每一个递归单元在逻辑上都是相同的，唯一不同的只是参数列表。</strong></p>
 </li>
