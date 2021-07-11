@@ -90,9 +90,9 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="上一篇文章所讲述的【二叉搜索树】其实有一个非常严重的漏洞：如果插入的元素都是有序的怎么办？  如果按照有序的方式或者近乎有序的方式将元素插入到二叉搜索树当中去，那么此时的二叉搜索树将退化成一个链表的数据结构。于是引入平衡这种机制来防止这种情况的发生，引入平衡的二叉树被成为平衡二叉树。  平衡：一棵树中对于任意节点都有左子树的高度减去右子树的高度的绝对值小于等于1，则称这棵二叉树是平衡的。">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210709215508.png">
-<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-AVL-2.jpg">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-AVL-3.jpg">
 <meta property="article:published_time" content="2021-07-04T02:50:29.000Z">
-<meta property="article:modified_time" content="2021-07-10T15:04:19.787Z">
+<meta property="article:modified_time" content="2021-07-11T04:14:16.041Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="数据结构">
 <meta property="article:tag" content="二叉树">
@@ -412,7 +412,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  824
+                  973
                 </span>
               
 
@@ -466,8 +466,23 @@
 <blockquote>
 <p>以上的四种情况失衡的节点都是根节点。</p>
 </blockquote>
-<h1 id="左旋转与右旋转"><a href="#左旋转与右旋转" class="headerlink" title="左旋转与右旋转"></a>左旋转与右旋转</h1><p>左旋转与右旋转其实就是对于不平衡的节点做了一个使其平衡的操作。</p>
-<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-AVL-2.jpg" alt="数据结构-AVL-2"></p>
+<h1 id="左旋转与右旋转"><a href="#左旋转与右旋转" class="headerlink" title="左旋转与右旋转"></a>左旋转与右旋转</h1><p>左旋转与右旋转就是对不平衡节点的平衡操作，就拿上面比较简单的LL和RR的例子来演示左旋转与右旋转。</p>
+<p><font size=5><strong>左旋转：</strong></font><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-AVL-3.jpg" alt="数据结构-AVL-3"></p>
+<blockquote>
+<p>首先将上面所举的<code>RR</code>的例子转换成普通情况下的向右倾斜的二叉树。这里的<code>D、E、F、G</code>分别是挂在在<code>A、B、C</code>节点下的二叉树，这里假设<code>D、E、F、G</code>高度相同。为了方便理解，你可以直接把<code>D、E、F、G</code>就当成是单个节点。</p>
+</blockquote>
+<p><strong>旋转过程：</strong></p>
+<ul>
+<li>B节点的left指向A节点</li>
+<li>A节点的right指向E</li>
+<li>将改变指针的节点重新整理一下之后就得到了结果</li>
+</ul>
+<p><font size=5><strong>编码实现：</strong></font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<!-- ![数据结构-AVL-2](https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/数据结构-AVL-2.jpg) -->
 
       
     </div>
@@ -625,7 +640,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives%7C%7C%20archive">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
@@ -774,7 +789,7 @@
     
       <span class="post-meta-item-text">站点总字数&#58;</span>
     
-    <span title="站点总字数">56.6k</span>
+    <span title="站点总字数">56.7k</span>
   
   &nbsp;
   
