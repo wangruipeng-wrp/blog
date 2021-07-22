@@ -6,7 +6,7 @@
   <link href="https://www.wrp.cool/atom.xml" rel="self"/>
   
   <link href="https://www.wrp.cool/"/>
-  <updated>2021-07-21T12:50:46.664Z</updated>
+  <updated>2021-07-22T15:51:56.395Z</updated>
   <id>https://www.wrp.cool/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://www.wrp.cool/posts/18972/"/>
     <id>https://www.wrp.cool/posts/18972/</id>
     <published>2021-07-18T06:15:42.000Z</published>
-    <updated>2021-07-21T12:50:46.664Z</updated>
+    <updated>2021-07-22T15:51:56.395Z</updated>
     
-    <content type="html"><![CDATA[<p>好了，终于来到了这块最难啃的骨头了——<strong>红黑树</strong>。</p><p>首先，当然是直接摆出红黑树大名鼎鼎的五条基本性质了</p><ol><li><font color=blue>节点是红色或者黑色。</font></li><li><font color=blue>根节点是黑色。</font></li><li><font color=blue>所有叶子节点都是黑色。（叶子节点是NULLL节点）</font></li><li><font color=blue>每个红色的节点的两个子节点都是黑色。（根节点到任意节点上不可能有两个连续的红色节点）</font></li><li><font color=blue>任意节点至其所有叶子节点的所有路径包含相同数目的黑色节点。（黑平衡）</font></li></ol><p>只要满足以上五个性质的二叉搜索树就可以称之为红黑树。</p><a id="more"></a><blockquote><p>温馨提示：本文比较长，开始之前还请你耐下心来，一步一步仔细看完，我相信这篇文章会带给你一些收获。继续加油！：）</p></blockquote><p>红黑树其实也是一种二叉搜索树，只不过这是一种性能更好的二叉搜索树。二叉搜索树中所有节点都满足左子树小于它，右子树大于它。所以这是一种高效的数据结构，但它有一个致命的缺陷，就是有序插入元素的情况下，它会严重的向一边倾斜退化成一个链表。所以，我们希望我们的二叉搜索树在任何情况下都能保持左图的样子，或者说是尽量保持成左图的样子，而永远不要退化成右图的样子。</p><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210720231008.png" alt="20210720231008"></p><p>像左图这样的树我们称之为平衡的，而红黑树仅仅只是维持平衡的手段而已，<font color=blue>红黑树在本质上依然是一棵二叉搜索树。</font></p><p>像红黑树这样的数据结构，肯定也不是一朝一夕能够发明出来的，而是有一个演化的过程，从二叉搜索树到红黑树之间就有一个不可缺少的过渡——<strong>2-3树</strong>。</p><p>2-3树并不是二叉树，2-3树其实是二叉搜索树的一个变种，其中有<code>2节点</code>和<code>3节点</code>，<code>2节点</code>和二叉树中的节点是一样的，分别有左子树和右子树；<code>3节点</code>要特殊一些，除了左子树和右子树之外，还有中子树。借由<code>2节点</code>和<code>3节点</code>的配合，2-3树实现了一个非常非常重要的性质：<font color=blue>2-3树是一种绝对平衡的树结构。</font></p>]]></content>
+    <content type="html"><![CDATA[<p>好了，终于来到了这块最难啃的骨头了——<strong>红黑树</strong>。</p><p>首先，当然是直接摆出红黑树大名鼎鼎的五条基本性质了</p><ol><li><font color=blue>节点是红色或者黑色。</font></li><li><font color=blue>根节点是黑色。</font></li><li><font color=blue>所有叶子节点都是黑色。（叶子节点是NULLL节点）</font></li><li><font color=blue>每个红色的节点的两个子节点都是黑色。（根节点到任意节点上不可能有两个连续的红色节点）</font></li><li><font color=blue>任意节点至其所有叶子节点的所有路径包含相同数目的黑色节点。（黑平衡）</font></li></ol><p>只要满足以上五个性质的二叉搜索树就可以称之为红黑树。</p><a id="more"></a><blockquote><p>温馨提示：本文比较长，开始之前还请你耐下心来，一步一步仔细看完，我相信这篇文章会带给你一些收获。继续加油！：）</p></blockquote><p>红黑树其实也是一种二叉搜索树，只不过这是一种性能更好的二叉搜索树。二叉搜索树中所有节点都满足左子树小于它，右子树大于它。所以这是一种高效的数据结构，但它有一个致命的缺陷，就是有序插入元素的情况下，它会严重的向一边倾斜退化成一个链表。所以，我们希望我们的二叉搜索树在任何情况下都能保持左图的样子，或者说是尽量保持成左图的样子，而永远不要退化成右图的样子。</p><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210720231008.png" alt="20210720231008"></p><p>像左图这样的树我们称之为平衡的，而红黑树仅仅只是维持平衡的手段而已，<font color=blue>红黑树在本质上依然是一棵二叉搜索树。</font></p><p>像红黑树这样的数据结构，肯定也不是一朝一夕能够发明出来的，而是有一个演化的过程，从二叉搜索树到红黑树之间就有一个不可缺少的过渡——<strong>2-3树</strong>。</p><p>2-3树并不是二叉树，2-3树其实是二叉搜索树的一个变种，其中有<code>2节点</code>和<code>3节点</code>，<code>2节点</code>和二叉树中的节点是一样的，分别有左子树和右子树；<code>3节点</code>要特殊一些，除了左子树和右子树之外，还有中子树。借由<code>2节点</code>和<code>3节点</code>的配合，2-3树实现了一个非常非常重要的性质：<font color=blue>2-3树是一种绝对平衡的树结构。</font></p><hr><p>未完待续：）</p>]]></content>
     
     
     <summary type="html">&lt;p&gt;好了，终于来到了这块最难啃的骨头了——&lt;strong&gt;红黑树&lt;/strong&gt;。&lt;/p&gt;
