@@ -92,8 +92,12 @@
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210720231008.png">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627184547.PNG">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/IMG_0045.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627305570.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627307311.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627307543.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627310222.PNG">
 <meta property="article:published_time" content="2021-07-18T06:15:42.000Z">
-<meta property="article:modified_time" content="2021-07-25T15:48:52.008Z">
+<meta property="article:modified_time" content="2021-07-26T15:41:03.442Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="平衡二叉树">
 <meta property="article:tag" content="2-3树">
@@ -412,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.4k
+                  2.2k
                 </span>
               
 
@@ -452,7 +456,7 @@
 <blockquote>
 <p>温馨提示：本文比较长，开始之前还请你耐下心来，一步一步仔细看完，我相信这篇文章会带给你一些收获。继续加油！：）</p>
 </blockquote>
-<p>红黑树其实也是一种二叉搜索树，只不过这是一种性能更好的二叉搜索树。二叉搜索树中所有节点都满足左子树小于它，右子树大于它。所以这是一种高效的数据结构，但它有一个致命的缺陷，就是有序插入元素的情况下，它会严重的向一边倾斜退化成一个链表。所以，我们希望我们的二叉搜索树在任何情况下都能保持左图的样子，或者说是尽量保持成左图的样子，而永远不要退化成右图的样子。</p>
+<p>红黑树其实也是一种二叉搜索树，只不过这是一种性能更好的二叉搜索树。二叉搜索树的有序性决定了增删改查这些操作对于二叉搜索树而言都是对数级别的时间复杂度，所以这是一种高效的数据结构，但它有一个致命的缺陷，就是有序插入元素的情况下，它会严重的向一边倾斜退化成一个链表，也就是所谓的失衡。所以，我们希望我们的二叉搜索树在任何情况下都能保持左图的样子，或者说是尽量保持成左图的样子，而永远不要退化成右图的样子。于是我们为二叉搜索树加入了平衡机制，其中红黑树就是这么一种机制。<strong>对于二叉搜索树的有序性而言，红黑树在这基础上又添加了平衡性。</strong>以上红黑树的五条基本性质就是维持平衡的手段。</p>
 <p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210720231008.png" alt="20210720231008"></p>
 <p>像左图这样的树我们称之为平衡的，而红黑树仅仅只是维持平衡的手段而已，<font color=blue>红黑树在本质上依然是一棵二叉搜索树。</font></p>
 <p>像红黑树这样的数据结构，肯定也不是一朝一夕能够发明出来的，而是有一个演化的过程，从二叉搜索树到红黑树之间就有一个不可缺少的过渡——<strong>2-3查找树</strong>。</p>
@@ -481,7 +485,41 @@
 <p>于是，如果一棵二叉树的节点个数是偶数，那么这棵二叉树绝对不是完美平衡，想要得到一棵完美平衡的二叉树必备的一个条件就是树的节点个数为奇数。实际上一棵完美平衡的二叉树的节点数是等于<code>2 ^ h - 1</code>的。（其中h为树的高度，根节点的高度为1）</p>
 <p>一棵二叉树在生成的过程当中，依次将元素插入其中，这不可能保证整棵树的节点个数在任何情况下都是奇数。事实上，在节点只能存放一个元素的情况下，不可能实现完美平衡的树结构。2-3树中的<code>3-节点</code>正是为了解决这一情况而存在的。我更愿意将<code>3-节点</code>理解为一个过渡的节点，至于为什么，在后面我们会说到。</p>
 <p>正常情况下，向二叉树中的一个左右子树都为空的节点插入元素无论插入在左子树还是右子树中肯定会造成这个节点的不完美平衡，但是现在引入了<code>3-节点</code>这样的一个过渡的节点，说白了，这其实是在暂存一下这种不平衡的情况，一旦在这个<code>3-节点</code>中再次插入一个元素之后立马会分裂成为一棵左右子树都不为空的二叉树。</p>
-<h2 id="向3-节点添加元素"><a href="#向3-节点添加元素" class="headerlink" title="向3-节点添加元素"></a>向3-节点添加元素</h2><hr>
+<h2 id="向3-节点添加元素"><a href="#向3-节点添加元素" class="headerlink" title="向3-节点添加元素"></a>向3-节点添加元素</h2><p>单纯的向一棵仅有一个三节点的2-3树添加元素是比较简单的，这里简单讲一下思路即可。</p>
+<ol>
+<li>将新节点插入<code>3-节点</code>中，组成一个临时的<code>4-节点</code>。此时这个<code>4-节点</code>中包含三个值和四条链接。</li>
+<li>将这个<code>4-节点</code>的三个值都抽取出来成为三个<code>2-节点</code>，中值抽取出来的<code>2-节点</code>作为根，根的左链接指向三个节点中的最小者，右链接指向三个节点中的最大者。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627305570.PNG" alt="album_temp_1627305570"></p>
+<h3 id="向一个父节点为2-节点的3-节点添加元素"><a href="#向一个父节点为2-节点的3-节点添加元素" class="headerlink" title="向一个父节点为2-节点的3-节点添加元素"></a>向一个父节点为2-节点的3-节点添加元素</h3><ol>
+<li>插入到<code>3-节点</code>中，组成一个临时的<code>4-节点</code>。</li>
+<li>将<code>4-节点</code>的中值所抽取出来的根节点插入至父节点，使父节点从原来的<code>2-节点</code>变成<code>3-节点</code><br> 此处插入过程与“向<code>2-节点</code>添加元素”相同。</li>
+<li>将<code>4-节点</code>分裂出来的两个<code>2-节点</code>移动至父节点中，成为<code>3-节点</code>的两个子树。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627307311.PNG" alt="album_temp_1627307311"></p>
+<h3 id="向一个父节点为3-节点的3-节点添加元素"><a href="#向一个父节点为3-节点的3-节点添加元素" class="headerlink" title="向一个父节点为3-节点的3-节点添加元素"></a>向一个父节点为3-节点的3-节点添加元素</h3><ol>
+<li>插入到<code>3-节点</code>中，组成一个临时的<code>4-节点</code>。</li>
+<li>将<code>4-节点</code>的中值抽取出来的根节点插入至父节点，使父节点从原来的<code>3-节点</code>变成一个临时的<code>4-节点</code>。</li>
+<li>将<code>4-节点</code>分裂出来的两个<code>2-节点</code>移动至父节点也就是新的临时的<code>4-节点</code>中，成为新的临时<code>4-节点</code>的两个子树。</li>
+<li>将新的临时的<code>4-节点</code>分裂出来的根继续往上插入<br> 此处插入的过程与“向一个父节点为<code>2-节点</code>的<code>3-节点</code>添加元素”相同。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627307543.PNG" alt="album_temp_1627307543"></p>
+<h3 id="向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素"><a href="#向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素" class="headerlink" title="向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素"></a>向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素</h3><ol>
+<li>一直按照“向一个父节点为<code>3-节点</code>的<code>3-节点</code>添加元素”的方式插入元素，那么直到最后根节点也会变成一个临时的<code>4-节点</code>。</li>
+<li>将根节点转换成的临时<code>4-节点</code>分裂开来，按照“向<code>3-节点</code>添加元素”的方式，中值成为整颗2-3树新的根，此时树高加一。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627310222.PNG" alt="album_temp_1627310222"></p>
+<hr>
+<p><strong>以上就是2-3树中插入元素的全部情况，做个小结：</strong></p>
+<ol>
+<li>向<code>2-节点</code>插入元素：直接插入至<code>2-节点中</code>生成一个三节点。</li>
+<li>向<code>3-节点</code>插入元素：<ol>
+<li>父节点为<code>2-节点</code>：组成临时<code>4-节点</code>，分裂后的根插入父节点组成<code>3-节点</code>。</li>
+<li>父节点为<code>3-节点</code>：组成临时<code>4-节点</code>，分裂后的根插入父节点，再次组成临时<code>4-节点</code>。<br> 不断重复此过程，直到找到一个<code>2-节点</code>为止。如果直到根节点还找不到，则将根节点分裂成三个<code>2-节点</code>，此时树高加一。</li>
+</ol>
+</li>
+</ol>
+<hr>
 <p>未完待续：）</p>
 
       
@@ -746,7 +784,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3查找树"><span class="nav-text">2-3查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#向2-节点添加元素"><span class="nav-text">向2-节点添加元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向3-节点添加元素"><span class="nav-text">向3-节点添加元素</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3查找树"><span class="nav-text">2-3查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#向2-节点添加元素"><span class="nav-text">向2-节点添加元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向3-节点添加元素"><span class="nav-text">向3-节点添加元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向一个父节点为2-节点的3-节点添加元素"><span class="nav-text">向一个父节点为2-节点的3-节点添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向一个父节点为3-节点的3-节点添加元素"><span class="nav-text">向一个父节点为3-节点的3-节点添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素"><span class="nav-text">向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -787,7 +825,7 @@
     
       <span class="post-meta-item-text">站点总字数&#58;</span>
     
-    <span title="站点总字数">58.6k</span>
+    <span title="站点总字数">59.4k</span>
   
   &nbsp;
   
