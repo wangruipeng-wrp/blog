@@ -83,12 +83,12 @@
 
 
 
-<meta name="description" content="好了，终于来到了这块最难啃的骨头了——红黑树。 首先，当然是直接摆出红黑树大名鼎鼎的五条基本性质了  节点是红色或者黑色。 根节点是黑色。 所有叶子节点都是黑色。（叶子节点是NULLL节点） 每个红色的节点的两个子节点都是黑色。（根节点到任意节点上不可能有两个连续的红色节点） 任意节点至其所有叶子节点的所有路径包含相同数目的黑色节点。（黑平衡）  只要满足以上五个性质的二叉搜索树就可以称之为红黑树">
+<meta name="description" content="好了，终于来到了这块最难啃的骨头了——红黑树。 首先，当然是直接摆出红黑树大名鼎鼎的五条基本性质了  节点是红色或者黑色。 根节点是黑色。 所有叶子节点都是黑色。（叶子节点是空节点） 不存在能够和两条红链接相连的节点。（每个红色的节点的两个子节点都是黑色） 从任意一个节点到叶子节点，经过的黑色节点数量是一样的。（黑平衡）  只要满足以上五个性质的二叉搜索树就可以称之为红黑树。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过2-3树来理解红黑树">
 <meta property="og:url" content="https://www.wrp.cool/posts/18972/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="好了，终于来到了这块最难啃的骨头了——红黑树。 首先，当然是直接摆出红黑树大名鼎鼎的五条基本性质了  节点是红色或者黑色。 根节点是黑色。 所有叶子节点都是黑色。（叶子节点是NULLL节点） 每个红色的节点的两个子节点都是黑色。（根节点到任意节点上不可能有两个连续的红色节点） 任意节点至其所有叶子节点的所有路径包含相同数目的黑色节点。（黑平衡）  只要满足以上五个性质的二叉搜索树就可以称之为红黑树">
+<meta property="og:description" content="好了，终于来到了这块最难啃的骨头了——红黑树。 首先，当然是直接摆出红黑树大名鼎鼎的五条基本性质了  节点是红色或者黑色。 根节点是黑色。 所有叶子节点都是黑色。（叶子节点是空节点） 不存在能够和两条红链接相连的节点。（每个红色的节点的两个子节点都是黑色） 从任意一个节点到叶子节点，经过的黑色节点数量是一样的。（黑平衡）  只要满足以上五个性质的二叉搜索树就可以称之为红黑树。">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210720231008.png">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627184547.PNG">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/IMG_0045.PNG">
@@ -96,8 +96,13 @@
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627307311.PNG">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627307543.PNG">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627310222.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627903082.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627905396.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210803095327.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1628078520.PNG">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1628079653.PNG">
 <meta property="article:published_time" content="2021-07-18T06:15:42.000Z">
-<meta property="article:modified_time" content="2021-07-26T15:41:03.442Z">
+<meta property="article:modified_time" content="2021-08-04T12:29:45.816Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="平衡二叉树">
 <meta property="article:tag" content="2-3树">
@@ -416,7 +421,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.2k
+                  3.9k
                 </span>
               
 
@@ -446,9 +451,9 @@
 <ol>
 <li><font color=blue>节点是红色或者黑色。</font></li>
 <li><font color=blue>根节点是黑色。</font></li>
-<li><font color=blue>所有叶子节点都是黑色。（叶子节点是NULLL节点）</font></li>
-<li><font color=blue>每个红色的节点的两个子节点都是黑色。（根节点到任意节点上不可能有两个连续的红色节点）</font></li>
-<li><font color=blue>任意节点至其所有叶子节点的所有路径包含相同数目的黑色节点。（黑平衡）</font></li>
+<li><font color=blue>所有叶子节点都是黑色。（叶子节点是空节点）</font></li>
+<li><font color=blue>不存在能够和两条红链接相连的节点。（每个红色的节点的两个子节点都是黑色）</font></li>
+<li><font color=blue>从任意一个节点到叶子节点，经过的黑色节点数量是一样的。（黑平衡）</font></li>
 </ol>
 <p>只要满足以上五个性质的二叉搜索树就可以称之为红黑树。</p>
 <a id="more"></a>
@@ -456,7 +461,7 @@
 <blockquote>
 <p>温馨提示：本文比较长，开始之前还请你耐下心来，一步一步仔细看完，我相信这篇文章会带给你一些收获。继续加油！：）</p>
 </blockquote>
-<p>红黑树其实也是一种二叉搜索树，只不过这是一种性能更好的二叉搜索树。二叉搜索树的有序性决定了增删改查这些操作对于二叉搜索树而言都是对数级别的时间复杂度，所以这是一种高效的数据结构，但它有一个致命的缺陷，就是有序插入元素的情况下，它会严重的向一边倾斜退化成一个链表，也就是所谓的失衡。所以，我们希望我们的二叉搜索树在任何情况下都能保持左图的样子，或者说是尽量保持成左图的样子，而永远不要退化成右图的样子。于是我们为二叉搜索树加入了平衡机制，其中红黑树就是这么一种机制。<strong>对于二叉搜索树的有序性而言，红黑树在这基础上又添加了平衡性。</strong>以上红黑树的五条基本性质就是维持平衡的手段。</p>
+<p>红黑树其实也是一种二叉搜索树，只不过这是一种性能更好的二叉搜索树。二叉搜索树的结构决定了增删改查这些操作对于二叉搜索树而言都是对数级别的时间复杂度，所以这是一种高效的数据结构，但它有一个致命的缺陷，就是有序插入元素的情况下，它会严重的向一边倾斜退化成一个链表，也就是所谓的失衡。所以，我们希望我们的二叉搜索树在任何情况下都能保持左图的样子，或者说是尽量保持成左图的样子，而永远不要退化成右图的样子。于是我们为二叉搜索树加入了平衡机制，其中红黑树就是这么一种机制。<strong>对于二叉搜索树的有序性而言，红黑树在这基础上又添加了平衡性。</strong>以上红黑树的五条基本性质就是维持平衡的手段。</p>
 <p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210720231008.png" alt="20210720231008"></p>
 <p>像左图这样的树我们称之为平衡的，而红黑树仅仅只是维持平衡的手段而已，<font color=blue>红黑树在本质上依然是一棵二叉搜索树。</font></p>
 <p>像红黑树这样的数据结构，肯定也不是一朝一夕能够发明出来的，而是有一个演化的过程，从二叉搜索树到红黑树之间就有一个不可缺少的过渡——<strong>2-3查找树</strong>。</p>
@@ -478,12 +483,15 @@
 <li><code>3-节点</code>要么没有三条链接都指向空，要么三条链接都不为空。</li>
 </ul>
 <p><strong>如图：</strong><br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627184547.PNG" alt="album_temp_1627184547"></p>
+<blockquote>
+<p><strong>接下来将分析2-3树中的各种插入情况</strong></p>
+</blockquote>
 <h2 id="向2-节点添加元素"><a href="#向2-节点添加元素" class="headerlink" title="向2-节点添加元素"></a>向2-节点添加元素</h2><p>首先，需要在2-3树中搜索到一个可以添加节点的位置，如果搜索结束于一个<code>2-节点</code>，那么很好办，只需要将这个<code>2-节点</code>替换成一个<code>3-节点</code>。像这样：<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/IMG_0045.PNG" alt="IMG_0045"></p>
 <hr>
 <p>其实向一个<code>2-节点</code>插入元素是非常简单的，只需要将一<code>2-节点</code>变换成一个<code>3-节点</code>即可。但是这很简单的一步却是保持2-3树完美平衡<strong>最关键的一步</strong>。</p>
 <p>试想一个问题：一棵完美的平衡二叉树，也就是满二叉树，它的节点个数是奇数还是偶数？答案非常简单，是奇数，根节点的左子树和右子树的节点数是相同的，于是整棵树的节点数就是<code>2 * 左子树的节点数 + 1</code>。采用递归的思想，整棵树无论对于哪个节点求节点个数得出的答案都是奇数。</p>
 <p>于是，如果一棵二叉树的节点个数是偶数，那么这棵二叉树绝对不是完美平衡，想要得到一棵完美平衡的二叉树必备的一个条件就是树的节点个数为奇数。实际上一棵完美平衡的二叉树的节点数是等于<code>2 ^ h - 1</code>的。（其中h为树的高度，根节点的高度为1）</p>
-<p>一棵二叉树在生成的过程当中，依次将元素插入其中，这不可能保证整棵树的节点个数在任何情况下都是奇数。事实上，在节点只能存放一个元素的情况下，不可能实现完美平衡的树结构。2-3树中的<code>3-节点</code>正是为了解决这一情况而存在的。我更愿意将<code>3-节点</code>理解为一个过渡的节点，至于为什么，在后面我们会说到。</p>
+<p>一棵二叉树在生成的过程当中，依次将元素插入其中，这不可能保证整棵树的节点个数在任何情况下都是奇数。事实上，在节点只能存放一个元素的情况下，不可能实现完美平衡的树结构。2-3树中的<code>3-节点</code>正是为了解决这一情况而存在的。</p>
 <p>正常情况下，向二叉树中的一个左右子树都为空的节点插入元素无论插入在左子树还是右子树中肯定会造成这个节点的不完美平衡，但是现在引入了<code>3-节点</code>这样的一个过渡的节点，说白了，这其实是在暂存一下这种不平衡的情况，一旦在这个<code>3-节点</code>中再次插入一个元素之后立马会分裂成为一棵左右子树都不为空的二叉树。</p>
 <h2 id="向3-节点添加元素"><a href="#向3-节点添加元素" class="headerlink" title="向3-节点添加元素"></a>向3-节点添加元素</h2><p>单纯的向一棵仅有一个三节点的2-3树添加元素是比较简单的，这里简单讲一下思路即可。</p>
 <ol>
@@ -491,6 +499,9 @@
 <li>将这个<code>4-节点</code>的三个值都抽取出来成为三个<code>2-节点</code>，中值抽取出来的<code>2-节点</code>作为根，根的左链接指向三个节点中的最小者，右链接指向三个节点中的最大者。</li>
 </ol>
 <p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627305570.PNG" alt="album_temp_1627305570"></p>
+<blockquote>
+<p>也许有些同学也注意到了，这一步操作使得树的高度增加了，在将<code>4-节点</code>分裂为三个<code>2-节点</code>的过程当中，树高由1变成了2。这也是2-3树的生长方式，当根节点已经是一个<code>3-节点</code>的时候插入一个新的节点，此时根节点分裂为三个<code>2-节点</code>，树高度加1。与普通的二叉查找树不同的是2-3树的生长方向是由下至上生长的，而二叉查找树的生长方向是由上至下生长的。</p>
+</blockquote>
 <h3 id="向一个父节点为2-节点的3-节点添加元素"><a href="#向一个父节点为2-节点的3-节点添加元素" class="headerlink" title="向一个父节点为2-节点的3-节点添加元素"></a>向一个父节点为2-节点的3-节点添加元素</h3><ol>
 <li>插入到<code>3-节点</code>中，组成一个临时的<code>4-节点</code>。</li>
 <li>将<code>4-节点</code>的中值所抽取出来的根节点插入至父节点，使父节点从原来的<code>2-节点</code>变成<code>3-节点</code><br> 此处插入过程与“向<code>2-节点</code>添加元素”相同。</li>
@@ -519,9 +530,54 @@
 </ol>
 </li>
 </ol>
-<hr>
-<p>未完待续：）</p>
+<h1 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h1><p>其实我更愿意这么来理解红黑树：<font color=blue>使用二叉树来表现2-3树</font>。换句话说，其实2-3树和红黑树是等价的。</p>
+<blockquote>
+<p>其实一般的红黑树是等价于2-3-4树的，也就是我们前面说的2-3树中再加了一个<code>4-节点</code>。但是本文讲述的红黑树是左倾红黑树，具体的左倾红黑树与一般红黑树的区别，在这就留个坑吧。在这里只需要记住一点：<strong>左倾红黑树中红链接全部都是左连接</strong>。</p>
+</blockquote>
+<p>一棵2-3树中的<code>2-节点</code>跟二叉查找树中的节点是完全相同的，也就是说普通的节点就可以表示2-3树中的<code>2-节点</code>。于是我们只要能够使用二叉树的形式来表现一个<code>3-节点</code>我们就可以成功的将一棵2-3树转化成为红黑树。</p>
+<p>将<code>3-节点</code>中的两个值分别当作是两个<code>2-节点</code>分裂开，中间使用一条连接将这两个<code>2-节点</code>相连接起来，表示了这两个<code>2-节点</code>代表了一个<code>3-节点</code>。这样的链接被称为红链接。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627903082.PNG" alt="album_temp_1627903082"></p>
+<p>为了方便表示红链接我们注意到每个红色链接都会指向唯一的一个节点，所以我们将节点标记为红色来表示指向此节点的链接是红链接，相反的没有被红链接指向的节点全部就被标记为黑色。</p>
+<p>本文一开始就提出的红黑树的五条基本性质中的第1点、第2点、第3点也就是这么来的，性质4和性质5稍微有一些抽象：</p>
+<ol>
+<li><font color=blue>节点是红色或者黑色</font>：每个节点都会被标记为红色或者黑色。</li>
+<li><font color=blue>根节点是黑色</font>：二叉树中没有链接指向根节点，所以根节点被标记为黑色。</li>
+<li><font color=blue>所有叶子节点都是黑色</font>：叶子节点都是空节点，没有被红链接所指向，所以标记为黑色。</li>
+<li><font color=blue>不存在能够和两条红链接相连的节点</font>：如果将红黑树中由红链接相连的节点合并起来，得到的就是一棵2-3树。相反，如果将一棵2-3树中的<code>3-节点</code>画作由红色左连接相连的两个<code>2-节点</code>，那么肯定不会存在能够和两条红链接相连的节点。</li>
+<li><font color=blue>从任意一个节点到叶子节点，经过的黑色节点数量是一样的。</font>：如果将红链接画平，那么第5点将很容易理解。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1627905396.PNG" alt="album_temp_1627905396"></p>
+<blockquote>
+<p>上图中粗链接表示为红链接</p>
+</blockquote>
+<h2 id="着色和旋转"><a href="#着色和旋转" class="headerlink" title="着色和旋转"></a>着色和旋转</h2><p>保持红黑树五大性质的两大法宝就是着色和旋转，其中旋转又分为左旋转和右旋转。</p>
+<h3 id="着色"><a href="#着色" class="headerlink" title="着色"></a>着色</h3><p>着色操作比较简单，只需要改变对节点颜色的标记即可。</p>
+<h3 id="左旋转和右旋转"><a href="#左旋转和右旋转" class="headerlink" title="左旋转和右旋转"></a>左旋转和右旋转</h3><p>下图中粗链接表示为红链接<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210803095327.png" alt="20210803095327"></p>
+<p>具体的旋转过程在<a href="https://www.wrp.cool/posts/54793/">AVL 树</a>这篇文章中已经有具体的说明。这里不再过多的赘述。</p>
+<blockquote>
+<p>需要注意的是：旋转过后应该保持根节点颜色相同，以及这里的旋转过程是在插入节点时调用的，在2-3树中插入操作总是和树中的节点相互融合的，所以要将旋转后的节点标记为红色。</p>
+</blockquote>
+<!-- TODO 聊清楚左右旋转的着色原理 -->
 
+<hr>
+<p>在正式开始插入操作之前，有一点需要先注意：新插入的节点默认是红色的节点，因为在插入的时候除非是插入在根节点的位置之外，所有的插入首先都是与原有的节点做融合操作，而融合进其他节点的节点在红黑树中被标记为红色。</p>
+<h2 id="向红黑树中的“2-节点”插入元素"><a href="#向红黑树中的“2-节点”插入元素" class="headerlink" title="向红黑树中的“2-节点”插入元素"></a>向红黑树中的“2-节点”插入元素</h2><p>向一个<code>2-节点</code>中插入元素之后，会与原来的<code>2-节点</code>一起形成一个<code>3-节点</code>。这就引申出了两种情况：</p>
+<ol>
+<li>插入节点小于<code>2-节点</code>，插入在<code>2-节点</code>的左边，成为<code>2-节点</code>的左孩子。<br> 符合左倾红黑树的定义，即红链接在左边，此时无需修改。</li>
+<li>插入节点大于<code>2-节点</code>，插入在<code>2-节点</code>的右边，成为<code>2-节点</code>的右孩子。<br> 不符合左倾红黑树的定义，即红链接在右边，此时需要对被插入节点做一次左旋转的操作，以将右红链接纠正为左红链接。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1628078520.PNG" alt="album_temp_1628078520"></p>
+<h2 id="向红黑树中的“3-节点”插入元素"><a href="#向红黑树中的“3-节点”插入元素" class="headerlink" title="向红黑树中的“3-节点”插入元素"></a>向红黑树中的“3-节点”插入元素</h2><p>向一个<code>3-节点</code>中插入元素之后，与原来的<code>3-节点</code>之间会产生三种情况：</p>
+<ol>
+<li>插入的元素小于<code>3-节点</code>的两个元素。</li>
+<li>插入的元素位于<code>3-节点</code>的两个元素之间。</li>
+<li>插入的元素大于<code>3-节点</code>的两个元素。</li>
+</ol>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/album_temp_1628079653.PNG" alt="album_temp_1628079653"></p>
+<blockquote>
+<p>注意：以上的三种情况中最后的一个步骤都是需要将根节点也就是b节点转换成黑色的，这样才能保持红黑树的第五条性质，黑平衡。</p>
+</blockquote>
+<h2 id="插入代码实现"><a href="#插入代码实现" class="headerlink" title="插入代码实现"></a>插入代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RBTree</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> RED = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> BLACK = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> e;</span><br><span class="line">        Node left, right;</span><br><span class="line">        <span class="keyword">boolean</span> color;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.e = e;</span><br><span class="line">            <span class="keyword">this</span>.left = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">this</span>.right = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">this</span>.color = RED;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 左旋转</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">leftRotate</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 暂存</span></span><br><span class="line">        Node x = node.right;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 旋转</span></span><br><span class="line">        node.right = x.left;</span><br><span class="line">        x.left = node;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 着色</span></span><br><span class="line">        x.color = node.color;</span><br><span class="line">        node.color = RED;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 右旋转</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">rightRotate</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 暂存</span></span><br><span class="line">        Node x = node.left;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 旋转</span></span><br><span class="line">        node.left = x.right;</span><br><span class="line">        x.right = node;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 着色</span></span><br><span class="line">        x.color = node.color;</span><br><span class="line">        node.color = RED;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isRed</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> node == <span class="keyword">null</span> ? BLACK : node.color;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flipColors</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">        node.color = RED;</span><br><span class="line">        node.left.color = BLACK;</span><br><span class="line">        node.right.color = BLACK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">        add(root, e);</span><br><span class="line">        root.color = BLACK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">add</span><span class="params">(Node node, <span class="keyword">int</span> e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">            size++;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Node(e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (node.e &gt; e) &#123;</span><br><span class="line">            node.left = add(node.left, e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node.e &lt; e) &#123;</span><br><span class="line">            node.right = add(node.right, e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isRed(node.right) &amp;&amp; !isRed(node.left))</span><br><span class="line">            node = leftRotate(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isRed(node.left) &amp;&amp; isRed(node.left.left))</span><br><span class="line">            node = rightRotate(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isRed(node.left) &amp;&amp; isRed(node.right))</span><br><span class="line">            flipColors(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -536,6 +592,9 @@
       <div>
         <div>
     
+        
+        <hr>
+        <div>大家加油：）</div>
         
     
 </div>
@@ -784,7 +843,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3查找树"><span class="nav-text">2-3查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#向2-节点添加元素"><span class="nav-text">向2-节点添加元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向3-节点添加元素"><span class="nav-text">向3-节点添加元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向一个父节点为2-节点的3-节点添加元素"><span class="nav-text">向一个父节点为2-节点的3-节点添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向一个父节点为3-节点的3-节点添加元素"><span class="nav-text">向一个父节点为3-节点的3-节点添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素"><span class="nav-text">向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-3查找树"><span class="nav-text">2-3查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#向2-节点添加元素"><span class="nav-text">向2-节点添加元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向3-节点添加元素"><span class="nav-text">向3-节点添加元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向一个父节点为2-节点的3-节点添加元素"><span class="nav-text">向一个父节点为2-节点的3-节点添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向一个父节点为3-节点的3-节点添加元素"><span class="nav-text">向一个父节点为3-节点的3-节点添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素"><span class="nav-text">向“从插入节点出发直到根节点全部都是3-节点”的节点添加元素</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树"><span class="nav-text">红黑树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#着色和旋转"><span class="nav-text">着色和旋转</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#着色"><span class="nav-text">着色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#左旋转和右旋转"><span class="nav-text">左旋转和右旋转</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向红黑树中的“2-节点”插入元素"><span class="nav-text">向红黑树中的“2-节点”插入元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向红黑树中的“3-节点”插入元素"><span class="nav-text">向红黑树中的“3-节点”插入元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入代码实现"><span class="nav-text">插入代码实现</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -825,7 +884,7 @@
     
       <span class="post-meta-item-text">站点总字数&#58;</span>
     
-    <span title="站点总字数">59.4k</span>
+    <span title="站点总字数">61.1k</span>
   
   &nbsp;
   
