@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="闭包：「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。">
 <meta property="article:published_time" content="2020-06-09T11:06:46.000Z">
-<meta property="article:modified_time" content="2021-06-29T13:10:46.321Z">
+<meta property="article:modified_time" content="2021-08-11T12:22:54.867Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="封装">
@@ -236,12 +236,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-collection">
-          <a href="/collection/" rel="section">
+        <li class="menu-item menu-item-note">
+          <a href="/note/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-folder"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
             
-            收藏
+            笔记
           </a>
         </li>
       
@@ -436,9 +436,6 @@
         <p>闭包：<strong>「函数」和「函数内部能访问到的变量」（也叫环境）的总和，就是一个闭包。</strong><br>闭包在js面向对象中是一个非常重要的知识点，许多的面向对象的特性都可以通过闭包来体现。</p>
 <a id="more"></a>
 
-<blockquote>
-<p>本文参考自 <a href="https://zhuanlan.zhihu.com/p/22486908" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22486908</a></p>
-</blockquote>
 <h1 id="什么是闭包"><a href="#什么是闭包" class="headerlink" title="什么是闭包"></a>什么是闭包</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> local = <span class="string">'变量'</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(local)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上面函数内部的三行代码中，有一个局部变量 <code>local</code>，有一个函数 <code>foo</code> ，<code>foo</code> 里面可以访问到 <code>local</code> 变量。这就是一个闭包，就是这么简单。</p>
 <p>其实大家比较熟知的闭包是下面的这种嵌套函数的形式：</p>
@@ -476,6 +473,9 @@
 <p>在我看来，刚刚的闭包的例子与上面的这段 Java 代码实现的是同一个功能。也就是说闭包其实是为了封装变量，只是在这里我们将其称为了隐藏变量，仅此而已。</p>
 <blockquote>
 <p>分享一个小经验：<br>编程崇尚的是以简洁优雅为美，很多时候<br><strong>如果你觉得一个概念很复杂，那么很可能是你理解错了</strong></p>
+</blockquote>
+<blockquote>
+<p>参考文章：<br><a href="https://zhuanlan.zhihu.com/p/22486908" target="_blank" rel="noopener">「每日一题」JS 中的闭包是什么？</a></p>
 </blockquote>
 
       
@@ -641,7 +641,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -652,7 +652,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -663,7 +663,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -717,11 +717,11 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="https://www.unlinus.cn/" title="时雨小栈" target="_blank">时雨小栈</a>
+                    <a href="https://blog.tokiame-asu.top/" title="时雨小栈" target="_blank">时雨小栈</a>
                   </li>
                 
                   <li class="links-of-blogroll-item">
-                    <a href="https://jasonkayzk.github.io/" title="张小凯的博客" target="_blank">张小凯的博客</a>
+                    <a href="https://jasonkay.gitee.io/" title="张小凯的博客" target="_blank">张小凯的博客</a>
                   </li>
                 
                   <li class="links-of-blogroll-item">
@@ -788,7 +788,7 @@
     
       <span class="post-meta-item-text">站点总字数&#58;</span>
     
-    <span title="站点总字数">61.1k</span>
+    <span title="站点总字数">62.4k</span>
   
   &nbsp;
   
