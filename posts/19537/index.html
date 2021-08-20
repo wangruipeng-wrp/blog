@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Spring,Spring Boot," />
+  <meta name="keywords" content="Spring Boot,Spring," />
 
 
 
@@ -90,10 +90,10 @@
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="记录一下最近在开发中遇到的一个问题有以及一个不错的解决方案。 通常情况下一个请求从前端发起到后端的 Controller 接收这个请求，再去调用对应的 Service 方法去处理对应的逻辑，再由 Controller 将处理的结果封装成一个 JSON 对象返回给前端。这是我们的一个正常的请求处理的过程，但是这其中也有一些例外的地方，如果在 Service 处理的时候出现了一些业务上的逻辑问题流程已">
 <meta property="article:published_time" content="2021-08-11T08:13:13.000Z">
-<meta property="article:modified_time" content="2021-08-12T03:47:36.210Z">
+<meta property="article:modified_time" content="2021-08-17T09:35:03.549Z">
 <meta property="article:author" content="王瑞鹏">
-<meta property="article:tag" content="Spring">
 <meta property="article:tag" content="Spring Boot">
+<meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
 
 
@@ -418,7 +418,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  572
+                  574
                 </span>
               
 
@@ -452,9 +452,9 @@
 <li>一旦项目中的返回类型多了起来就会造成 Controller 层代码的冗余。</li>
 <li>Service 一旦返回事务就会提交，这样子就没办法灵活的来控制我们的事务了。当然这也可以通过 Service 层代码编写的逻辑来解决，但这么处理就不是那么的优雅了。</li>
 </ol>
-<p>一个优雅的处理方式应该是定义好一个业务异常类 BizException，这个类需要集成 RuntimeException 类，一旦在 Service 中需要返回的时候就抛出 BizException 异常，这样事务就可以回滚，然后再由 Spring Boot 的全局异常处理器来捕获这个异常直接将我们自定义的异常信息返回给前端。</p>
+<p>一个优雅的处理方式应该是定义好一个业务异常类 BizException，这个类需要继承 RuntimeException 类，一旦在 Service 中需要返回的时候就抛出 BizException 异常，这样事务就可以回滚，然后再由 Spring Boot 的全局异常处理器来捕获这个异常直接将我们自定义的异常信息返回给前端。</p>
 <p><strong>代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义业务异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BizException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此处的异常信息仅仅为了演示而定义的只有一个 errMsg 字段</span></span><br><span class="line">    <span class="comment">// 在真实的开发中可以将这个异常信息定义的丰富一些，比如使用一个 Enum 来维护这些异常信息</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String errMsg;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BizException</span><span class="params">(String errMsg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">this</span>.errMsg = errMsg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义业务异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BizException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此处的异常信息仅仅为了演示而定义的只有一个 errMsg 字段</span></span><br><span class="line">    <span class="comment">// 实际使用中可以根据需要将这个异常信息定义的丰富一些，比如使用一个 Enum 来维护这些异常信息</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String errMsg;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BizException</span><span class="params">(String errMsg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">this</span>.errMsg = errMsg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ControllerAdvice;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ExceptionHandler;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 全局异常处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalExceptionHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ApiResponse 类为接口全局响应类</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@ExceptionHandler</span>(BizException<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">    <span class="title">public</span> <span class="title">ApiResponse</span>&lt;<span class="title">String</span>&gt; <span class="title">businessExceptionHandler</span>(<span class="title">BizException</span> <span class="title">e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ApiResponse.fail(e.getErrMsg());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
@@ -506,9 +506,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Spring/" rel="tag"> <i class="fa fa-tag"></i> Spring</a>
-          
             <a href="/tags/Spring-Boot/" rel="tag"> <i class="fa fa-tag"></i> Spring Boot</a>
+          
+            <a href="/tags/Spring/" rel="tag"> <i class="fa fa-tag"></i> Spring</a>
           
         </div>
       
@@ -521,8 +521,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/46673/" rel="next" title="【Spring】事务传播行为">
-                <i class="fa fa-chevron-left"></i> 【Spring】事务传播行为
+              <a href="/posts/18972/" rel="next" title="通过2-3树来理解红黑树">
+                <i class="fa fa-chevron-left"></i> 通过2-3树来理解红黑树
               </a>
             
           </div>
@@ -530,6 +530,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/48812/" rel="prev" title="Nginx 配置">
+                Nginx 配置 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -595,7 +599,7 @@
                 alt="王瑞鹏" /></a>
             
               <p class="site-author-name" itemprop="name">王瑞鹏</p>
-              <p class="site-description motion-element" itemprop="description">还得知道要生活</p>
+              <p class="site-description motion-element" itemprop="description">有人说我的代码像诗一样优雅</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -605,7 +609,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -627,7 +631,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -736,7 +740,7 @@
     
       <span class="post-meta-item-text">站点总字数&#58;</span>
     
-    <span title="站点总字数">62.5k</span>
+    <span title="站点总字数">64k</span>
   
   &nbsp;
   
@@ -1261,7 +1265,9 @@
   
 
 
-  
+  <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
 
 </body>
 </html>
