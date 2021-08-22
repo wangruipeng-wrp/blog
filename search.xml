@@ -3,8 +3,12 @@
   <entry>
     <title>写在前面</title>
     <url>/posts/62949/</url>
-    <content><![CDATA[<blockquote class="blockquote-center"><p>人一旦有了梦想，就没了退路。<br>保持你的激情，请继续加油：）</p>
-</blockquote>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>人一旦有了梦想，就没了退路。<br>保持你的激情，请继续加油：）</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
 
 <a id="more"></a>
 
@@ -138,8 +142,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>MySQL</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -147,7 +151,7 @@
     <url>/posts/48812/</url>
     <content><![CDATA[<p>Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 <code>nginx.conf</code> 配置文件，本文也主要记录该配置文件中的配置</p>
 <p>为了使配置文件能够更方便管理，把一些站点配置写到外面来，不要直接写入 <code>nginx.conf</code> 文件</p>
-<p>在 conf 文件夹下创建一个 hosts 文件夹，之后将每个站点的配置都以 <code>域名.conf</code> 的命名格式保存在 hosts 文件夹中</p>
+<p>在 conf 文件夹下创建一个 hosts 文件夹，之后将每个虚拟主机的配置都以 <code>域名.conf</code> 的命名格式保存在 hosts 文件夹中</p>
 <p>之后在 nginx.conf 文件的 http 的大括号内引入自己写的配置文件 <code>include hosts/*.conf;</code></p>
 <a id="more"></a>
 
