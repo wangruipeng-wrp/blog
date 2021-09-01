@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"www.wrp.cool","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 nginx.conf 配置文件，本文也主要记录该配置文件中的配置 为了使配置文件能够更方便管理，把一些站点配置写到外面来，不要直接写入 nginx.conf 文件 在 conf 文件夹下创建一个 hosts 文件夹，之后将每个虚拟主机的配置都以 域名.conf 的命名格式保存在 hosts 文件夹中 之后在 nginx.conf 文">
+  <meta name="description" content="本文记录一些 nginx 中的配置，以便后续查看。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx 配置">
 <meta property="og:url" content="https://www.wrp.cool/posts/48812/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 nginx.conf 配置文件，本文也主要记录该配置文件中的配置 为了使配置文件能够更方便管理，把一些站点配置写到外面来，不要直接写入 nginx.conf 文件 在 conf 文件夹下创建一个 hosts 文件夹，之后将每个虚拟主机的配置都以 域名.conf 的命名格式保存在 hosts 文件夹中 之后在 nginx.conf 文">
+<meta property="og:description" content="本文记录一些 nginx 中的配置，以便后续查看。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-17T09:19:13.000Z">
-<meta property="article:modified_time" content="2021-08-20T12:07:46.246Z">
+<meta property="article:modified_time" content="2021-08-28T13:12:23.207Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Nginx">
@@ -238,7 +238,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                  <a href="/categories/Nginx/" itemprop="url" rel="index"><span itemprop="name">Nginx</span></a>
                 </span>
             </span>
 
@@ -263,7 +263,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>809</span>
+              <span>1.6k</span>
             </span>
 
         </div>
@@ -275,12 +275,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 <code>nginx.conf</code> 配置文件，本文也主要记录该配置文件中的配置</p>
+        <blockquote>
+<p>本文记录一些 nginx 中的配置，以便后续查看。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 <code>nginx.conf</code> 配置文件，本文也主要记录该配置文件中的配置</p>
 <p>为了使配置文件能够更方便管理，把一些站点配置写到外面来，不要直接写入 <code>nginx.conf</code> 文件</p>
 <p>在 conf 文件夹下创建一个 hosts 文件夹，之后将每个虚拟主机的配置都以 <code>域名.conf</code> 的命名格式保存在 hosts 文件夹中</p>
 <p>之后在 nginx.conf 文件的 http 的大括号内引入自己写的配置文件 <code>include hosts/*.conf;</code></p>
-<a id="more"></a>
-
 <h4 id="运行配置"><a href="#运行配置" class="headerlink" title="运行配置"></a>运行配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 指定运行 worker 进程的用户</span></span><br><span class="line">user root;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> worker 进程的数量</span></span><br><span class="line">worker_processes  3;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 日志文件输出配置 可根据日志级别输出到不同的日志文件中</span></span><br><span class="line"><span class="meta">#</span><span class="bash">error_log  logs/error.log;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定 pid</span></span><br><span class="line"><span class="meta">#</span><span class="bash">pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 工作模式</span></span><br><span class="line">events &#123;</span><br><span class="line">    # 默认使用 epoll，采用异步非阻塞的处理方式</span><br><span class="line">    use epoll;</span><br><span class="line">    # 每个 worker 进程的客户端最大连接数</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="传输配置"><a href="#传输配置" class="headerlink" title="传输配置"></a>传输配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    # 导入请求类型</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    # 日志格式，main 为格式的名称，可以通过 main 来指定输出此日志格式。</span><br><span class="line">    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span><br><span class="line">                        '$status $body_bytes_sent "$http_referer" '</span><br><span class="line">                        '"$http_user_agent" "$http_x_forwarded_for"';</span><br><span class="line"></span><br><span class="line">    # 定义日志输出格式</span><br><span class="line">    access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    # sendfile 高效传输文件，开启可提升传输性能，开启后才可以使用 tcp_nopush，当数据累积到一定大小后才发送，提高了效率</span><br><span class="line">    sendfile        on;</span><br><span class="line">    tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    # 设置客户端与服务端请求的超时时间，保证客户端多次请求的时候不会重复建立新的连接，节约资源资源损耗</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    # 启用 gzip 压缩，静态资源文件压缩后传输会更快一些</span><br><span class="line">    gzip  on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -330,7 +333,7 @@
 <td>通过代理服务器来记录客户端的IP</td>
 </tr>
 </tbody></table>
-<h4 id="虚拟主机配置"><a href="#虚拟主机配置" class="headerlink" title="虚拟主机配置"></a>虚拟主机配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    # 虚拟主机配置块</span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;         # 监听端口</span><br><span class="line">        server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">        # 设置请求头，一般用于解决跨域问题</span><br><span class="line">        add_header 'Access-Control_Allow_Origin' *;             # 允许跨域请求的域</span><br><span class="line">        add_header 'Access-Control_Allow_Credentials' 'true';   # 允许带上 cookie 请求</span><br><span class="line">        add_header 'Access-Control_Allow_Methods' *;            # 允许请求的方法（GET/POST/PUT/DELETE）</span><br><span class="line">        add_header 'Access-Control_Allow_Headers' *;            # 允许请求的 header</span><br><span class="line"></span><br><span class="line">        # 对源站点进行验证（防盗链）</span><br><span class="line">        valid_referers *.wrp.cool;</span><br><span class="line">        if ($valid_referers) &#123;</span><br><span class="line">            return 403;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 请求路由映射，匹配拦截</span><br><span class="line">        location / &#123;</span><br><span class="line">            root    html;           # 转发路径</span><br><span class="line">            index   index.html;     # 默认首页</span><br><span class="line">            # alias 可以为请求路径配置一个别名</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # ssl 证书配置</span><br><span class="line">        ssl_certificate "ssl证书 fullchain.crt 文件的位置";</span><br><span class="line">        ssl_certificate_key "ssl证书 private.pem 文件的位置";</span><br><span class="line">        ssl_protocols TLSv1.1 TLSv1.2;</span><br><span class="line">        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">        ssl_prefer_server_ciphers on;</span><br><span class="line">        ssl_session_cache shared:SSL:10m;</span><br><span class="line">        ssl_session_timeout 10m;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="虚拟主机配置"><a href="#虚拟主机配置" class="headerlink" title="虚拟主机配置"></a>虚拟主机配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"></span><br><span class="line">    # 虚拟主机配置块</span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;         # 监听端口</span><br><span class="line">        server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">        # 设置请求头，一般用于解决跨域问题</span><br><span class="line">        add_header 'Access-Control_Allow_Origin' *;             # 允许跨域请求的域</span><br><span class="line">        add_header 'Access-Control_Allow_Credentials' 'true';   # 允许带上 cookie 请求</span><br><span class="line">        add_header 'Access-Control_Allow_Methods' *;            # 允许请求的方法（GET/POST/PUT/DELETE）</span><br><span class="line">        add_header 'Access-Control_Allow_Headers' *;            # 允许请求的 header</span><br><span class="line"></span><br><span class="line">        # 对源站点进行验证（防盗链）</span><br><span class="line">        valid_referers *.wrp.cool;</span><br><span class="line">        if ($valid_referers) &#123;</span><br><span class="line">            return 403;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 请求路由映射，匹配拦截</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;           # 网站根路径（配置负载均衡之后不需要配置根路径）</span><br><span class="line">            index       index.html;     # 默认首页</span><br><span class="line">            expires     10s;            # 设置缓存</span><br><span class="line">            # alias 可以为请求路径配置一个别名</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # ssl 证书配置</span><br><span class="line">        ssl on                              # 开启ssl</span><br><span class="line">        ssl_certificate "ssl证书路径";       # 配置 ssl 证书</span><br><span class="line">        ssl_certificate_key "ssl证书路径";   # 配置 ssl 证书密钥</span><br><span class="line">        ssl_session_cache shared:SSL:10m;   # ssl 会话 cache</span><br><span class="line">        ssl_session_timeout 10m;            # ssl 会话超时时间</span><br><span class="line">        # 配置加密套件</span><br><span class="line">        ssl_protocols TLSv1.1 TLSv1.2;</span><br><span class="line">        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">        ssl_prefer_server_ciphers on;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>location 的匹配规则：</strong></p>
 <ul>
@@ -339,6 +342,41 @@
 <li><code>~*</code>：匹配正则表达式，不区分大小写</li>
 <li><code>~</code>：匹配正则表达式，区分大小写</li>
 <li><code>^~</code>：以某个字符路径开头</li>
+</ul>
+<p><strong>expires 指令</strong></p>
+<ul>
+<li><code>expires 10s</code>：10s之后过期</li>
+<li><code>expires @22h30m</code>：22h30m这个时间点之后过期</li>
+<li><code>expires -1h</code>：一个小时之前就过期了</li>
+<li><code>expires epoch</code>：关闭缓存</li>
+<li><code>expires off</code>：使用浏览器默认缓存</li>
+</ul>
+<h4 id="负载均衡配置"><a href="#负载均衡配置" class="headerlink" title="负载均衡配置"></a>负载均衡配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"></span><br><span class="line">    # 负载均衡配置快</span><br><span class="line">    upstream load_balance &#123;</span><br><span class="line">        </span><br><span class="line">        # 使用 ip hash 作为负载均衡算法，使用 ip hash 算法之后不能把服务器直接移除，只能标记为 down</span><br><span class="line">        ip_hash;</span><br><span class="line"></span><br><span class="line">        # 使用 url hash 作为负载均衡算法</span><br><span class="line">        hash $request_uri;</span><br><span class="line"></span><br><span class="line">        # 使用 least_conn 作为负载均衡算法，哪台服务器连接数少就去请求哪台服务器</span><br><span class="line">        least_conn;</span><br><span class="line"></span><br><span class="line">        # 配置上游服务器</span><br><span class="line">        server localhost:81;</span><br><span class="line">        server localhost:82;</span><br><span class="line">        server localhost:83;</span><br><span class="line"></span><br><span class="line">        # 常链接数量，用于提高网络吞吐量，相当于连接池</span><br><span class="line">        keepalive   32;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 将一些负载均衡节点中的静态资源文件缓存在nginx服务器当中</span><br><span class="line">    # prody_cache_path 指令设置缓存保存的目录</span><br><span class="line">    # keys_zone 指令设置共享缓存空间的名称和索引信息大小</span><br><span class="line">    # max_size 指令指定缓存大小</span><br><span class="line">    # inactive 指令指定超过这个时间则清理此缓存</span><br><span class="line">    # use_temp_path 指令指定临时目录，使用后会影响 nginx 性能</span><br><span class="line">    proxy_cache_path /usr/local/cache keys_zone=mycache:5m max_size=1g inactive=1h use_temp_path=off;</span><br><span class="line"></span><br><span class="line">    # 虚拟主机配置块</span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;         # 监听端口</span><br><span class="line">        server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">        # 开启并且使用缓存</span><br><span class="line">        proxy_cache mycache;</span><br><span class="line"></span><br><span class="line">        # 指定命中缓存返回码</span><br><span class="line">        proxy_cache_valid 200 304 8h;</span><br><span class="line"></span><br><span class="line">        # 请求路由映射，匹配拦截</span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://load_balance;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>upstream 模块参数：</strong></p>
+<ul>
+<li><p><code>weight</code>：配置每台服务器的权重</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 weight=1;</span><br><span class="line">    server localhost:82 weight=2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>max_conns</code>：配置服务器最大链接数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 max_conns=200;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <strong>注意：</strong>在多 <code>worker</code> 线程的环境下，可能会超过指定的最大连接数。</p>
+</li>
+<li><p><code>slow_start</code>：设置服务器权重从零开始至设置值的时间。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 slow_start=60s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <strong>注意：</strong><br>  ① 该参数不能在 <code>hash</code> 和 <code>random load balancing</code> 中使用。<br>  ② 如果在 <code>upstream</code> 中只有一台 server，则该参数无效。<br>  ③ 该参数为商业版 nginx 才有的，使用需要付费。 </p>
+</li>
+<li><p><code>down</code>：标识该服务器已经宕机。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 down;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>backup</code>：标识该服务器为备用机。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 backup;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <strong>注意：</strong>当所有服务器都无法访问才会访问备用机。</p>
+</li>
+<li><p><code>max_fails</code>：最大失败次数，超过这个次数时，默认该服务器已经宕机。与<code>fail_timeout</code>搭配使用。</p>
+</li>
+<li><p><code>fail_timeout</code>：当超过最大失败次数时，经过多少时间去重新访问这台服务器，默认值为10s。与<code>max_fails</code>搭配使用。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 max_fails=50 file_timeout=10s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 
     </div>
@@ -460,7 +498,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#运行配置"><span class="nav-number">1.</span> <span class="nav-text">运行配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#传输配置"><span class="nav-number">2.</span> <span class="nav-text">传输配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟主机配置"><span class="nav-number">3.</span> <span class="nav-text">虚拟主机配置</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#运行配置"><span class="nav-number">1.</span> <span class="nav-text">运行配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#传输配置"><span class="nav-number">2.</span> <span class="nav-text">传输配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟主机配置"><span class="nav-number">3.</span> <span class="nav-text">虚拟主机配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡配置"><span class="nav-number">4.</span> <span class="nav-text">负载均衡配置</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -478,7 +516,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -491,7 +529,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -546,7 +584,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">64k</span>
+    <span title="站点总字数">65.6k</span>
 </div>
   <div class="beian">
       <img src="/images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360号 </a>
