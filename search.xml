@@ -22,16 +22,6 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>Redis 数据类型介绍</title>
-    <url>/posts/9004/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Linux 安装 Redis</title>
-    <url>/posts/52455/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>Keepalived 实现 Nginx 的主备和互备</title>
     <url>/posts/42807/</url>
     <content><![CDATA[<blockquote>
@@ -234,8 +224,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>MySQL</tag>
         <tag>Linux</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -1632,8 +1622,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>线程</tag>
         <tag>并发</tag>
+        <tag>线程</tag>
         <tag>异常</tag>
       </tags>
   </entry>
@@ -1721,8 +1711,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>线程</tag>
         <tag>并发</tag>
+        <tag>线程</tag>
         <tag>练习</tag>
       </tags>
   </entry>
