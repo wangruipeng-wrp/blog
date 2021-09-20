@@ -267,8 +267,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>MySQL</tag>
         <tag>Linux</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -1664,9 +1664,9 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
         <tag>并发</tag>
+        <tag>线程</tag>
         <tag>异常</tag>
       </tags>
   </entry>
@@ -1753,9 +1753,9 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>题解</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
         <tag>并发</tag>
+        <tag>线程</tag>
         <tag>练习</tag>
       </tags>
   </entry>
@@ -2075,8 +2075,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
         <tag>生命周期</tag>
       </tags>
   </entry>
@@ -2137,8 +2137,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
   <entry>
@@ -2167,8 +2167,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
   <entry>
@@ -2297,8 +2297,8 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
-        <tag>线程</tag>
         <tag>Java</tag>
+        <tag>线程</tag>
       </tags>
   </entry>
   <entry>
