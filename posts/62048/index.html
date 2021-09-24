@@ -28,7 +28,7 @@
 <meta property="og:description" content="介绍一下 Nginx 的下载、安装以及配置，顺便也做一个记录，以便后续查看。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-06T13:28:40.000Z">
-<meta property="article:modified_time" content="2021-08-28T13:12:52.851Z">
+<meta property="article:modified_time" content="2021-09-24T15:36:58.453Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Nginx">
@@ -263,7 +263,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>783</span>
+              <span>826</span>
             </span>
 
         </div>
@@ -356,8 +356,12 @@
 
 <h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>在安装目录的 <code>sbin</code> 目录下执行 <code>./ngnix</code> 就可以将 Nginx 的服务成功启动起来。</p>
 <blockquote>
-<p><strong>注意：</strong>如果在配置时是直接运行的 <code>./configure</code> 可能会报 <code>error.log</code> 和 <code>access.log</code> 这两个日志文件找不到，直接按照提示创建这两个文件即可启动 nginx。</p>
+<p><strong>注意：</strong></p>
 </blockquote>
+<ol>
+<li>如果在配置时是直接运行的 <code>./configure</code> 可能会报 <code>error.log</code> 和 <code>access.log</code> 这两个日志文件找不到，直接按照提示创建这两个文件即可启动 nginx。</li>
+<li>如果启动403错误的话，可以查看nginx的启动线程是哪个用户然后在配置文件中修改user的值为改成哪个用户。</li>
+</ol>
 <h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>编辑 <code>/etc/profile</code> 文件，在最后添加以下代码即可</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH&#x3D;$PATH:&quot;nginx 的安装目录&quot;&#x2F;sbin</span><br></pre></td></tr></table></figure>
 <p>保存退出后再执行一下 <code>source /etc/profile</code> 使配置生效。</p>
