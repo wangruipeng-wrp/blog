@@ -20,20 +20,23 @@
     var CONFIG = {"hostname":"www.wrp.cool","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="js中仅有两种作用域，全局作用域和局部作用域，局部作用域又被称为函数作用域。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。">
+  <meta name="description" content="初始 RabbitMQ RabbitMQ 是一个开源的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ 是使用 Erlang 语言来编写的，并且 RabbitMQ 是基于 AMQP 协议的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【JavaScript】作用域">
-<meta property="og:url" content="https://www.wrp.cool/posts/1709/index.html">
+<meta property="og:title" content="RabbitMQ 远征篇">
+<meta property="og:url" content="https://www.wrp.cool/posts/28560/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="js中仅有两种作用域，全局作用域和局部作用域，局部作用域又被称为函数作用域。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。">
+<meta property="og:description" content="初始 RabbitMQ RabbitMQ 是一个开源的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ 是使用 Erlang 语言来编写的，并且 RabbitMQ 是基于 AMQP 协议的。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-05-26T11:05:04.000Z">
-<meta property="article:modified_time" content="2021-05-07T13:19:03.702Z">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210928135718.png">
+<meta property="article:published_time" content="2021-09-28T05:29:17.000Z">
+<meta property="article:modified_time" content="2021-09-28T06:12:37.476Z">
 <meta property="article:author" content="王瑞鹏">
-<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210928135718.png">
 
-<link rel="canonical" href="https://www.wrp.cool/posts/1709/">
+<link rel="canonical" href="https://www.wrp.cool/posts/28560/">
 
 
 <script id="page-configurations">
@@ -46,7 +49,7 @@
   };
 </script>
 
-  <title>【JavaScript】作用域 | 知更</title>
+  <title>RabbitMQ 远征篇 | 知更</title>
   
 
 
@@ -203,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.wrp.cool/posts/1709/">
+    <link itemprop="mainEntityOfPage" href="https://www.wrp.cool/posts/28560/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -216,7 +219,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          【JavaScript】作用域
+          RabbitMQ 远征篇
         </h1>
 
         <div class="post-meta">
@@ -228,16 +231,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-05-26 19:05:04" itemprop="dateCreated datePublished" datetime="2020-05-26T19:05:04+08:00">2020-05-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">JavaScript基础</span></a>
-                </span>
+              <time title="创建时间：2021-09-28 13:29:17" itemprop="dateCreated datePublished" datetime="2021-09-28T13:29:17+08:00">2021-09-28</time>
             </span>
 
           
@@ -249,8 +243,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/posts/1709/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/1709/" itemprop="commentCount"></span>
+    <a title="valine" href="/posts/28560/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/28560/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -261,7 +255,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>545</span>
+              <span>444</span>
             </span>
 
         </div>
@@ -273,16 +267,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>js中仅有两种作用域，<strong>全局作用域</strong>和<strong>局部作用域</strong>，<strong>局部作用域</strong>又被称为<strong>函数作用域</strong>。js中没有块级作用域这个概念，块级作用域只在一些其他的语言中才有，比如：Java、C++。作用域的这个概念是由于变量起作用的区域不用才被引出来的，所以作用域又被称为变量作用域。</p>
+        <p><font size=5><strong>初始 RabbitMQ</strong></font></p>
+<p>RabbitMQ 是一个开源的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ 是使用 Erlang 语言来编写的，并且 RabbitMQ 是基于 AMQP 协议的。</p>
 <a id="more"></a>
 
-<h1 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h1><p>先简单了解一下全局变量和局部变量。js可以简单的将在函数外部定义的变量称为全局变量，在函数内定义的变量称为局部变量。变量作用域的概念也因此而生，变量作用域实际就是变量产生作用的区域。全局变量在整个js程序中的任何地方都可以去调用，所以全局变量生存在一个全局作用域中。而局部变量只能够在函数内部去调用，出了函数之后就无法再访问到了，因此局部变量只生存在函数的作用域中。</p>
-<blockquote>
-<p><strong>注意：在函数内部声明变量时一定要使用显式声明，即使用<code>var</code>关键字声明。如果在函数内部隐式声明一个变量的话，实际声明的是一个全局变量</strong></p>
-</blockquote>
-<p><strong>来看一个例子：</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'zhangsan'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name1 = <span class="string">'lisi'</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(name);  <span class="comment">// 输出zhangsan</span></span><br><span class="line">    <span class="built_in">console</span>.log(name1); <span class="comment">// 输出lisi</span></span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 输出zhangsan</span></span><br><span class="line"><span class="built_in">console</span>.log(name1); <span class="comment">// 报错 name1 is not defined</span></span><br></pre></td></tr></table></figure>
-<p>这个例子中变量<code>name</code>是一个全局变量能够在程序的任何地方访问到。而变量<code>name1</code>声明在<code>fn</code>函数内部，是一个局部变量，所以仅仅只能在<code>fn</code>内部访问到。在这个例子中有两个作用域，一个是变量<code>name</code>位于的全局作用域，一个是变量<code>name1</code>位于的局部作用域。但是我们并不能够简单的将局部作用域理解为函数的花括号之内，因为js是没有块级作用域这个概念的，我们应该将其理解为函数的作用域。</p>
+<p><font size=5><strong>Q&amp;A Time</strong></font></p>
+<p>RabbitMQ 高性能的原因？</p>
+<ol>
+<li>Erlang语言最初在于交换机领域的架构模式，这样使得 RabbitMQ 在 Broker 之间进行数据交互的性能是非常优秀的</li>
+<li>Erlang语言的优点：有着和原生 Socket 一样的延迟</li>
+</ol>
+<p>什么是 AMQP？<br>AMQP全称：Advanced Messgae Queuing Protocol（高级消息队列协议）<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210928135718.png" alt="20210928135718"></p>
+<p>AMQP 核心概念：</p>
+<ol>
+<li><strong>Server：</strong>又称 Broker，接受客户端的连接，实现 AMQP 实体服务</li>
+<li><strong>Connection：</strong>连接，应用程序与 Broker 的网络连接</li>
+<li><strong>Channel：</strong>网络信道，几乎所有的操作都在 Channel 中进行，Channel 是进行消息读写的通道。客户端可建立多个 Channel，每个 Channel 代表一个会话任务。</li>
+<li><strong>Message：</strong>消息，服务器和应用程序之间传送的数据，由 Properties 和 Body 组成。Properties 可以对消息进行修饰，比如消息的优先级、延迟等高级特性；Body 则就是消息体内容。</li>
+<li><strong>Virtual Host：</strong>虚拟地址，用于进行逻辑隔离，最上层的消息路由。一个 Virtual Host里面可以有若干个 Exchange 和 Queue，同一个 Virtual Host 里面不能用相同名称的 Exchange 或 Queue。</li>
+<li><strong>Exchange：</strong>交换机，接收消息，根据路由键转发消息到绑定的队列。</li>
+<li><strong>Binding：</strong>Exchange 和 Queue 之间的虚拟连接，binding 中可以包含 Routing Key。</li>
+<li><strong>Routing Key：</strong>一个路由规则，虚拟机可用它来确定如何路由一个特定消息。</li>
+<li><strong>Queue：</strong>也成为 Message Queue，消息队列，保存消息并将他们转发给消费者。</li>
+</ol>
 
     </div>
 
@@ -311,7 +318,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://www.wrp.cool/posts/1709/" title="【JavaScript】作用域">https://www.wrp.cool/posts/1709/</a>
+    <a href="https://www.wrp.cool/posts/28560/" title="RabbitMQ 远征篇">https://www.wrp.cool/posts/28560/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -323,7 +330,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag"><i class="fa fa-tag"></i> 中间件</a>
+              <a href="/tags/RabbitMQ/" rel="tag"><i class="fa fa-tag"></i> RabbitMQ</a>
           </div>
 
         
@@ -333,13 +341,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/24923/" rel="prev" title="【JavaScript】数据类型">
-      <i class="fa fa-chevron-left"></i> 【JavaScript】数据类型
+    <a href="/posts/38923/" rel="prev" title="RabbitMQ 启航篇">
+      <i class="fa fa-chevron-left"></i> RabbitMQ 启航篇
     </a></div>
-      <div class="post-nav-item">
-    <a href="/posts/54687/" rel="next" title="【JavaScript】执行上下文">
-      【JavaScript】执行上下文 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       
 
@@ -401,7 +406,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量作用域"><span class="nav-number">1.</span> <span class="nav-text">变量作用域</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

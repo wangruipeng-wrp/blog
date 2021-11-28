@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20210920144340.png">
 <meta property="article:published_time" content="2021-09-20T05:41:52.000Z">
-<meta property="article:modified_time" content="2021-09-22T07:44:10.463Z">
+<meta property="article:modified_time" content="2021-09-28T05:49:20.703Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="RabbitMQ">
@@ -255,7 +255,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>852</span>
+              <span>634</span>
             </span>
 
         </div>
@@ -309,16 +309,6 @@
 <p><font size=5><strong>常用命令</strong></font></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 添加用户</span></span><br><span class="line">rabbitmqctl add_user 用户 密码</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置用户角色（根绝角色分配权限）</span></span><br><span class="line">rabbitmqctl set_user_tags 用户 角色</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改用户密码</span></span><br><span class="line">rabbitmqctl change_password 用户 新密码</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除用户</span></span><br><span class="line">rabbitmqctl delete_user 用户</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 为用户设置权限</span></span><br><span class="line">rabbitmqctl set_permissions -p / 用户 ".*" ".*" ".*"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 打开 RabbitMQ WEB 界面管理，访问地址：http://虚拟机IP:15672，需要创建一个用户进行访问</span></span><br><span class="line">rabbitmq-plugins enable rabbitmq_management</span><br></pre></td></tr></table></figure>
 
-<p><font size=5><strong>常见概念</strong></font></p>
-<ol>
-<li><p><strong>连接（Connection）和信道（Channel）</strong><br> 应用服务器和 RabbitMQ 服务器的TCP连接，是长连接。为了保证性能通常不会创建过多的连接，转而使用信道，信道是建立在 TCP 上的虚拟连接。RabbitMQ 在一条TCP上建立成百上千个信道来达到多个线程处理，这个TCP被多个线程共享，每个线程对应一个信道，信道在rabbit都有唯一的ID ,保证了信道私有性，对应上唯一的线程使用。</p>
-<blockquote>
-<p>类似概念：TCP是电缆，信道就是里面的光纤，每个光纤都是独立的，互不影响。</p>
-</blockquote>
-</li>
-<li><p><strong>交换机（Exchange）路由键（Routing Key）</strong><br> 交换机的作用就是类似路由器，Routing Key 就是路由键，服务器会根据路由键将消息从交换器路由到队列上去。</p>
-</li>
-</ol>
 <blockquote>
 <p>参考文章：<br><a href="https://juejin.cn/post/6844903926408413197#heading-0" target="_blank" rel="noopener">RabbitMQ的六种工作模式</a><br><a href="https://segmentfault.com/a/1190000023107822" target="_blank" rel="noopener">连RabbitMQ的5种核心消息模式都不懂，也敢说自己会用消息队列！</a></p>
 </blockquote>
@@ -380,7 +370,10 @@
     <a href="/posts/61883/" rel="prev" title="Redis 高可用集群搭建">
       <i class="fa fa-chevron-left"></i> Redis 高可用集群搭建
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/28560/" rel="next" title="RabbitMQ 远征篇">
+      RabbitMQ 远征篇 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       
 
@@ -460,7 +453,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -478,11 +471,6 @@
       </div>
   </nav>
 </div>
-  <div class="sidebar-button motion-element">
-    <a onclick="Chatra('openChat', true);"><i class="fa fa-comment"></i>
-    Chat
-  </a>
-  </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
         <a href="https://github.com/wangruipeng-wrp" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangruipeng-wrp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
@@ -528,7 +516,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">66.9k</span>
+    <span title="站点总字数">67.1k</span>
 </div>
   <div class="beian">
       <img src="/images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360号 </a>
@@ -576,20 +564,9 @@
 
 
 
-  <script>
-    (function(d, w, c) {
-      w.ChatraID = 'o9EaGHPhyzcTz9Q7s';
-      var s = d.createElement('script');
-      w[c] = w[c] || function() {
-        (w[c].q = w[c].q || []).push(arguments);
-      };
-      s.async = false;
-      s.src = 'https://call.chatra.io/chatra.js';
-      if (d.head) d.head.appendChild(s);
-    })(document, window, 'Chatra');
-  </script>
 
 
+  <script src="//code.tidio.co/.js"></script>
 
 
 
