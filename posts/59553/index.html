@@ -20,17 +20,23 @@
     var CONFIG = {"hostname":"www.wrp.cool","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="先占个坑，回头来把这篇博客补全。">
+  <meta name="description" content="RDB和AOF分别是Redis所提供的两种持久化方式，其中RDB是全量备份，也就是一个快照的方式，对应的AOF就是一个增量备份的方式，是一个日志备份的方式。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis 持久化机制（RDB 和 AOF）">
 <meta property="og:url" content="https://www.wrp.cool/posts/59553/index.html">
 <meta property="og:site_name" content="知更">
-<meta property="og:description" content="先占个坑，回头来把这篇博客补全。">
+<meta property="og:description" content="RDB和AOF分别是Redis所提供的两种持久化方式，其中RDB是全量备份，也就是一个快照的方式，对应的AOF就是一个增量备份的方式，是一个日志备份的方式。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221142546.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221144234.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221161556.png">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221162108.png">
 <meta property="article:published_time" content="2021-09-12T16:21:49.000Z">
-<meta property="article:modified_time" content="2021-09-19T03:08:15.591Z">
+<meta property="article:modified_time" content="2022-02-21T08:27:46.729Z">
 <meta property="article:author" content="王瑞鹏">
+<meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221142546.png">
 
 <link rel="canonical" href="https://www.wrp.cool/posts/59553/">
 
@@ -229,6 +235,15 @@
 
               <time title="创建时间：2021-09-13 00:21:49" itemprop="dateCreated datePublished" datetime="2021-09-13T00:21:49+08:00">2021-09-13</time>
             </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
 
           
   
@@ -251,7 +266,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>14</span>
+              <span>3k</span>
             </span>
 
         </div>
@@ -263,9 +278,97 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>先占个坑，回头来把这篇博客补全。</p>
+        <p>RDB和AOF分别是Redis所提供的两种持久化方式，其中RDB是全量备份，也就是一个快照的方式，对应的AOF就是一个增量备份的方式，是一个日志备份的方式。</p>
+<a id="more"></a>
+
+<blockquote>
+<p>本文非原著，出自：<a href="https://pdai.tech/md/db/nosql-redis/db-redis-x-rdb-aof.html" target="_blank" rel="noopener">Redis进阶 - 持久化：RDB和AOF机制详解</a></p>
 </blockquote>
+<hr>
+<h1 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h1><p>触发Redis进行RDB备份的方式有两种，手动备份和自动备份。自动备份需要在配置文件种设置一些配置项，手动备份只需要手动向Redis控制台输入<code>save</code>命令或者是<code>bgsave</code>命令。</p>
+<ul>
+<li><code>save</code>：阻塞当前Redis服务器，直到RDB过程完成为止，对于内存比较大的实例会造成长时间<strong>阻塞</strong>，线上环境不建议使用</li>
+<li><code>bgsave</code>：Redis进程执行fork操作创建子进程，RDB持久化过程由子进程负责，完成后自动结束。阻塞只发生在fork阶段，一般时间很短</li>
+</ul>
+<p>bgsave流程图如下所示<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221142546.png" alt="20220221142546"></p>
+<h2 id="会自动触发RDB备份的四种情况"><a href="#会自动触发RDB备份的四种情况" class="headerlink" title="会自动触发RDB备份的四种情况"></a>会自动触发RDB备份的四种情况</h2><ul>
+<li>redis.conf中配置<code>save m n</code>，即在<code>m</code>秒内有<code>n</code>次修改时，自动触发bgsave生成rdb文件</li>
+<li>主从复制时，从节点要从主节点进行全量复制时也会触发bgsave操作，生成当时的快照发送到从节点；执行debug</li>
+<li>reload命令重新加载redis时也会触发bgsave操作</li>
+<li>默认情况下执行shutdown命令时，如果没有开启aof持久化，那么也会触发bgsave操作</li>
+</ul>
+<h2 id="redis-conf-中配置RDB备份"><a href="#redis-conf-中配置RDB备份" class="headerlink" title="redis.conf 中配置RDB备份"></a>redis.conf 中配置RDB备份</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 周期性执行条件的设置格式为</span><br><span class="line">save &lt;seconds&gt; &lt;changes&gt;</span><br><span class="line"></span><br><span class="line"># 默认的设置为：</span><br><span class="line">save 900 1      # 如果900秒内有1条Key信息发生变化，则进行快照</span><br><span class="line">save 300 10     # 如果300秒内有10条Key信息发生变化，则进行快照</span><br><span class="line">save 60 10000   # 如果60秒内有10000条Key信息发生变化，则进行快照</span><br><span class="line"></span><br><span class="line"># 以下设置方式为关闭RDB快照功能</span><br><span class="line">save &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 文件名称</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 文件保存路径</span><br><span class="line">dir &#x2F;home&#x2F;work&#x2F;app&#x2F;redis&#x2F;data&#x2F;</span><br><span class="line"></span><br><span class="line"># 如果持久化出错，主进程是否停止写入</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 是否压缩 </span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 导入时是否检查</span><br><span class="line">rdbchecksum yes</span><br></pre></td></tr></table></figure>
+
+<p><code>rdbcompression</code>：该属性将在字符串类型的数据被快照到磁盘文件时，启用LZF压缩算法。Redis官方的建议是请保持该选项设置为yes，因为“it’s almost always a win”。<br><code>rdbchecksum</code>：从RDB快照功能的version 5 版本开始，一个64位的CRC冗余校验编码会被放置在RDB文件的末尾，以便对整个RDB文件的完整性进行验证。这个功能大概会多损失10%左右的性能，但获得了更高的数据可靠性。所以如果您的Redis服务需要追求极致的性能，就可以将这个选项设置为no。</p>
+<h2 id="拍摄快照的过程中如何保证数据一致性？"><a href="#拍摄快照的过程中如何保证数据一致性？" class="headerlink" title="拍摄快照的过程中如何保证数据一致性？"></a>拍摄快照的过程中如何保证数据一致性？</h2><p><em>由于生产环境中我们为Redis开辟的内存区域都比较大（例如6GB），那么将内存中的数据同步到硬盘的过程可能就会持续比较长的时间，而实际情况是这段时间Redis服务一般都会收到数据写操作请求。那么如何保证数据一致性呢？</em></p>
+<p>RDB中的核心思路是Copy-on-Write，来保证在进行快照操作的这段时间，需要压缩写入磁盘上的数据在内存中不会发生变化。在正常的快照操作中，一方面Redis主进程会fork一个新的快照进程专门来做这个事情，这样保证了Redis服务不会停止对客户端包括写请求在内的任何响应。另一方面这段时间发生的数据变化会以副本的方式存放在另一个新的内存区域，待快照操作结束后才会同步到原来的内存区域。 </p>
+<p>举个例子：如果主线程对这些数据也都是读操作（例如图中的键值对 A），那么，主线程和 bgsave 子进程相互不影响。但是，如果主线程要修改一块数据（例如图中的键值对 C），那么，这块数据就会被复制一份，生成该数据的副本。然后，bgsave 子进程会把这个副本数据写入 RDB 文件，而在这个过程中，主线程仍然可以直接修改原来的数据。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221144234.png" alt="20220221144234"></p>
+<h2 id="RDB优缺点"><a href="#RDB优缺点" class="headerlink" title="RDB优缺点"></a>RDB优缺点</h2><ul>
+<li><strong>优点</strong><ul>
+<li>RDB文件是某个时间节点的快照，默认使用LZF算法进行压缩，压缩后的文件体积远远小于内存大小，适用于备份、全量复制等场景；</li>
+<li>Redis加载RDB文件恢复数据要远远快于AOF方式；</li>
+</ul>
+</li>
+<li><strong>缺点</strong><ul>
+<li>RDB方式实时性不够，无法做到秒级的持久化；</li>
+<li>每次调用bgsave都需要fork子进程，fork子进程属于重量级操作，频繁执行成本较高；</li>
+<li>每次调用bgsave都需要fork子进程，fork子进程属于重量级操作，频繁执行成本较高；</li>
+<li>版本兼容RDB文件问题；</li>
+</ul>
+</li>
+</ul>
+<h1 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h1><p>Redis是“写后”日志，Redis先执行命令，把数据写入内存，然后才记录日志。日志里记录的是Redis收到的每一条命令，这些命令是以文本形式保存。即先写内存，后写日志。</p>
+<h2 id="为什么采用写后日志？"><a href="#为什么采用写后日志？" class="headerlink" title="为什么采用写后日志？"></a>为什么采用写后日志？</h2><p>Redis要求高性能，采用写后日志有两方面好处：</p>
+<ul>
+<li><strong>避免额外的检查开销</strong>：Redis 在向 AOF 里面记录日志的时候，并不会先去对这些命令进行语法检查。所以，如果先记日志再执行命令的话，日志中就有可能记录了错误的命令，Redis 在使用日志恢复数据时，就可能会出错。 </li>
+<li>不会阻塞当前的写操作。</li>
+</ul>
+<p>但这种方式存在潜在风险：</p>
+<ul>
+<li>如果命令执行完成，写日志之前宕机了，会丢失数据。</li>
+<li>主线程写磁盘压力大，导致写盘慢，阻塞后续操作。</li>
+</ul>
+<h2 id="三种写回策略："><a href="#三种写回策略：" class="headerlink" title="三种写回策略："></a>三种写回策略：</h2><ul>
+<li>always，同步写回：每个写命令执行完，立马同步地将日志写回磁盘</li>
+<li>everysec，每秒写回：每个写命令执行完，只是先把日志写到AOF文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘</li>
+<li>no，操作系统控制的写回：每个写命令执行完，只是先把日志写到AOF文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘</li>
+</ul>
+<p>为了提高文件写入效率，在现代操作系统中，当用户调用write函数，将一些数据写入文件时，操作系统通常会将数据暂存到一个内存缓冲区里，当缓冲区的空间被填满或超过了指定时限后，才真正将缓冲区的数据写入到磁盘里。</p>
+<p>这样的操作虽然提高了效率，但也为数据写入带来了安全问题：如果计算机停机，内存缓冲区中的数据会丢失。为此，系统提供了fsync、fdatasync同步函数，可以强制操作系统立刻将缓冲区中的数据写入到硬盘里，从而确保写入数据的安全性。</p>
+<h2 id="redis-conf中配置AOF"><a href="#redis-conf中配置AOF" class="headerlink" title="redis.conf中配置AOF"></a>redis.conf中配置AOF</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># appendonly参数开启AOF持久化</span><br><span class="line">appendonly no</span><br><span class="line"></span><br><span class="line"># AOF持久化的文件名，默认是appendonly.aof</span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的</span><br><span class="line">dir .&#x2F;</span><br><span class="line"></span><br><span class="line"># 同步策略</span><br><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br><span class="line"></span><br><span class="line"># aof重写期间是否同步</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line"></span><br><span class="line"># 重写触发配置</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br><span class="line"></span><br><span class="line"># 加载aof出错如何处理</span><br><span class="line">aof-load-truncated yes</span><br><span class="line"></span><br><span class="line"># 文件重写策略</span><br><span class="line">aof-rewrite-incremental-fsync yes</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>appendfsync</code>：这个参数项是AOF功能最重要的设置项之一，主要用于设置“真正执行”操作命令向AOF文件中同步的策略。与上节对应，appendfsync参数项可以设置三个值，分别是：always、everysec、no，默认的值为everysec。</li>
+<li><code>auto-aof-rewrite-percentage</code>：上文说到在生产环境下，技术人员不可能随时随地使用“BGREWRITEAOF”命令去重写AOF文件。所以更多时候我们需要依靠Redis中对AOF文件的自动重写策略。Redis中对触发自动重写AOF文件的操作提供了两个设置：auto-aof-rewrite-percentage表示如果当前AOF文件的大小超过了上次重写后AOF文件的百分之多少后，就再次开始重写AOF文件。例如该参数值的默认设置值为100，意思就是如果AOF文件的大小超过上次AOF文件重写后的1倍，就启动重写操作。 </li>
+<li><code>auto-aof-rewrite-min-size</code>：参考auto-aof-rewrite-percentage选项的介绍，auto-aof-rewrite-min-size设置项表示启动AOF文件重写操作的AOF文件最小大小。如果AOF文件大小低于这个值，则不会触发重写操作。注意，auto-aof-rewrite-percentage和auto-aof-rewrite-min-size只是用来控制Redis中自动对AOF文件进行重写的情况，如果是技术人员手动调用“BGREWRITEAOF”命令，则不受这两个限制条件左右。</li>
+</ul>
+<h2 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h2><p>AOF会记录每个写命令到AOF文件，随着时间越来越长，AOF文件会变得越来越大。如果不加以控制，会对Redis服务器，甚至对操作系统造成影响，而且AOF文件越大，数据恢复也越慢。为了解决AOF文件体积膨胀的问题，Redis提供AOF文件重写机制来对AOF文件进行“瘦身”。Redis通过创建一个新的AOF文件来替换现有的AOF，新旧两个AOF文件保存的数据相同，但新AOF文件没有了冗余命令。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221161556.png" alt="20220221161556"></p>
+<ul>
+<li><p><strong>AOF重写会阻塞吗？</strong><br>  AOF重写过程是由后台进程bgrewriteaof来完成的。主线程fork出后台的bgrewriteaof子进程，fork会把主线程的内存拷贝一份给bgrewriteaof子进程，这里面就包含了数据库的最新数据。然后，bgrewriteaof子进程就可以在不影响主线程的情况下，逐一把拷贝的数据写成操作，记入重写日志。 </p>
+<p>  所以aof在重写时，在fork进程时是会阻塞住主线程的。</p>
+</li>
+<li><p><strong>AOF日志何时会重写？</strong><br>  有两个配置项控制AOF重写的触发：</p>
+<ul>
+<li><code>auto-aof-rewrite-min-size</code>：表示运行AOF重写时文件的最小大小，默认为64MB。</li>
+<li><code>auto-aof-rewrite-percentage</code>：这个值的计算方式是，当前aof文件大小和上一次重写后aof文件大小的差值，再除以上一次重写后aof文件大小。也就是当前aof文件比上一次重写后aof文件的增量大小，和上一次重写后aof文件大小的比值。</li>
+</ul>
+</li>
+<li><p><strong>小结：</strong></p>
+<ul>
+<li>主线程fork出子进程重写aof日志</li>
+<li>子进程重写日志完成后，主线程追加aof日志缓冲</li>
+<li>替换日志文件</li>
+</ul>
+</li>
+</ul>
+<h1 id="RDB和AOF混合方式"><a href="#RDB和AOF混合方式" class="headerlink" title="RDB和AOF混合方式"></a>RDB和AOF混合方式</h1><blockquote>
+<p>Redis 4.0 中提出了一个混合使用 AOF 日志和内存快照的方法。简单来说，内存快照以一定的频率执行，在两次快照之间，使用 AOF 日志记录这期间的所有命令操作。</p>
+</blockquote>
+<p>这样一来，快照不用很频繁地执行，这就避免了频繁 fork 对主线程的影响。而且，AOF 日志也只用记录两次快照间的操作，也就是说，不需要记录所有操作了，因此，就不会出现文件过大的情况了，也可以避免重写开销。</p>
+<p>如下图所示，T1 和 T2 时刻的修改，用 AOF 日志记录，等到第二次做全量快照时，就可以清空 AOF 日志，因为此时的修改都已经记录到快照中了，恢复时就不再用日志了。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221162108.png" alt="20220221162108"></p>
 
     </div>
 
@@ -285,25 +388,12 @@
 </div>
         
       </div>
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>王瑞鹏
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://www.wrp.cool/posts/59553/" title="Redis 持久化机制（RDB 和 AOF）">https://www.wrp.cool/posts/59553/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"><i class="fa fa-tag"></i> Redis</a>
+          </div>
 
         
 
@@ -380,6 +470,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RDB"><span class="nav-number">1.</span> <span class="nav-text">RDB</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#会自动触发RDB备份的四种情况"><span class="nav-number">1.1.</span> <span class="nav-text">会自动触发RDB备份的四种情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-conf-中配置RDB备份"><span class="nav-number">1.2.</span> <span class="nav-text">redis.conf 中配置RDB备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拍摄快照的过程中如何保证数据一致性？"><span class="nav-number">1.3.</span> <span class="nav-text">拍摄快照的过程中如何保证数据一致性？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB优缺点"><span class="nav-number">1.4.</span> <span class="nav-text">RDB优缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AOF"><span class="nav-number">2.</span> <span class="nav-text">AOF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么采用写后日志？"><span class="nav-number">2.1.</span> <span class="nav-text">为什么采用写后日志？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种写回策略："><span class="nav-number">2.2.</span> <span class="nav-text">三种写回策略：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-conf中配置AOF"><span class="nav-number">2.3.</span> <span class="nav-text">redis.conf中配置AOF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF重写"><span class="nav-number">2.4.</span> <span class="nav-text">AOF重写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RDB和AOF混合方式"><span class="nav-number">3.</span> <span class="nav-text">RDB和AOF混合方式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -460,7 +551,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">67.1k</span>
+    <span title="站点总字数">70k</span>
 </div>
   <div class="beian">
       <img src="/images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360号 </a>
