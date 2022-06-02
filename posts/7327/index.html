@@ -22,14 +22,14 @@
 
   <meta name="description" content="《极客时间-MySQL实战45讲》01|基础架构：一条SQL查询语句是如何执行的？笔记记录">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【极客时间-MySQL实战45讲】笔记01">
+<meta property="og:title" content="【MySQL实战】基础架构：一条SQL查询语句是如何执行的？">
 <meta property="og:url" content="https://www.wrp.cool/posts/7327/index.html">
 <meta property="og:site_name" content="知更">
 <meta property="og:description" content="《极客时间-MySQL实战45讲》01|基础架构：一条SQL查询语句是如何执行的？笔记记录">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2022-06-01T03:06:13.000Z">
-<meta property="article:modified_time" content="2022-06-01T13:14:18.038Z">
+<meta property="article:modified_time" content="2022-06-02T07:01:05.390Z">
 <meta property="article:author" content="王瑞鹏">
 <meta property="article:tag" content="笔记">
 <meta name="twitter:card" content="summary">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>【极客时间-MySQL实战45讲】笔记01 | 知更</title>
+  <title>【MySQL实战】基础架构：一条SQL查询语句是如何执行的？ | 知更</title>
   
 
 
@@ -218,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          【极客时间-MySQL实战45讲】笔记01
+          【MySQL实战】基础架构：一条SQL查询语句是如何执行的？
         </h1>
 
         <div class="post-meta">
@@ -263,7 +263,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>1.6k</span>
             </span>
 
         </div>
@@ -300,6 +300,10 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select SQL_CACHE * from T where ID=10；</span><br></pre></td></tr></table></figure>
 
 <h1 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h1><p>对于SQL语句做词法分析、语法分析。</p>
+<ul>
+<li><strong>词法分析：</strong>分析SQL语句中的每个单词代表什么意思</li>
+<li><strong>语法分析：</strong>分析SQL语句是否满足MySQL的语法要求</li>
+</ul>
 <h1 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h1><ul>
 <li>决定使用索引的方式</li>
 <li>如果是多表连接查询还需要决定表连接的先后顺序</li>
@@ -317,6 +321,17 @@
 <p><strong>连接器的权限校验：</strong>应该是库的校验，因为连接是可以指定连接到哪个库中去的，不指定库的话连接成功之后也是要返回可以操作的库给用户的。</p>
 <p><strong>分析器的权限校验：</strong>在分析器应该是做的表权限验证，因为分析器已经分析出要执行的SQL了需要调用那一张表了，在此处进行表的权限验证就是最合适的。</p>
 <p><strong>执行器的权限校验：</strong>在执行器这一块我认为是做的一个存储过程、触发器、函数之类的验证，因为在这些模块中是可能会调用到其他的表的，而在分析器的时候并不知道这些模块都调用到什么表，因此MySQL需要判断当前用户是否有对这些模块所调用到的表的权限。</p>
+<hr>
+<blockquote>
+<p>在网上搜罗的这部分内容的几个问题，可以尝试回答一下。</p>
+</blockquote>
+<ol>
+<li>Server 有多少组件，各自都是什么作用？</li>
+<li>Server 层和存储引擎层各是什么作用？</li>
+<li><code>you have an error in your SQL syntax</code> 这个错误是在词法分析还是语法分析的报错？</li>
+<li>对于表的操作权限验证在哪里进行？</li>
+<li>执行器执行查询语句的流程是怎么样的？</li>
+</ol>
 
     </div>
 
@@ -345,7 +360,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://www.wrp.cool/posts/7327/" title="【极客时间-MySQL实战45讲】笔记01">https://www.wrp.cool/posts/7327/</a>
+    <a href="https://www.wrp.cool/posts/7327/" title="【MySQL实战】基础架构：一条SQL查询语句是如何执行的？">https://www.wrp.cool/posts/7327/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -370,7 +385,10 @@
     <a href="/posts/28560/" rel="prev" title="RabbitMQ 远征篇">
       <i class="fa fa-chevron-left"></i> RabbitMQ 远征篇
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/39005/" rel="next" title="【MySQL实战】日志系统：一条SQL更新语句是如何执行的？">
+      【MySQL实战】日志系统：一条SQL更新语句是如何执行的？ <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       
 
@@ -450,7 +468,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -513,7 +531,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">71.4k</span>
+    <span title="站点总字数">73.3k</span>
 </div>
   <div class="beian">
       <img src="/images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360号 </a>
