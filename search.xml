@@ -17,6 +17,94 @@
 <center><font size=5>这里的评论区就当作留言板吧：）</font></center>]]></content>
   </entry>
   <entry>
+    <title>【MySQL实战】事务隔离：为什么你改了我还看不见？</title>
+    <url>/posts/574/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://time.geekbang.org/column/article/68963" target="_blank" rel="noopener">《极客时间-MySQL实战45讲》03|事务隔离：为什么你改了我还看不见？</a>笔记记录</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="事务的基本特性（ACID）"><a href="#事务的基本特性（ACID）" class="headerlink" title="事务的基本特性（ACID）"></a>事务的基本特性（ACID）</h1><ul>
+<li><strong>原子性（Atomicity）：</strong>事务开始后所有操作，要么全部做完，要么全部不做，不可能停滞在中间环节。</li>
+<li><strong>一致性（Consistency）：</strong>事务开始前和结束后，数据库的完整性约束没有被破坏。</li>
+<li><strong>隔离性（Isolation）：</strong>同一时间，只允许一个事务请求同一数据，不同的事务之间彼此没有任何干扰。</li>
+<li><strong>持久性（Durability）：</strong>事务完成后，事务对数据库的所有更新将被保存到数据库，不能回滚。</li>
+</ul>
+<h1 id="不考虑隔离性可能产生的问题"><a href="#不考虑隔离性可能产生的问题" class="headerlink" title="不考虑隔离性可能产生的问题"></a>不考虑隔离性可能产生的问题</h1><ul>
+<li><strong>脏读：</strong>指在一个事务处理过程中读取了另一个未提交的事务中的数据。<ul>
+<li>比如事务A将x的值从0修改为1，但未回滚或提交，此时事务B读取了x的值为1，随后事务A回滚，将x的值重新设置为0。那么事务B读取的x的值为1的哪个过程就称为脏读。</li>
+</ul>
+</li>
+<li><strong>不可重复读：</strong>一个事务内多次查询<u>同一个数据</u>却返回了不同的数据值。<ul>
+<li>比如事务A查询x值为0，此时事务B将x的值修改为0并提交，事务A再次查询x的值为1。事务A并未对x的值做操作，但是两次查询x的值发生了变化，这个现象就被称为不可重复读。</li>
+</ul>
+</li>
+<li><strong>幻读：</strong>一个事务内多次查询<u>同一批数据</u>却返回了不同批的数据。<ul>
+<li>比如事务A查询用户表有100个用户，此时事务B新增或者删除了一些用户，之后事务A再次查询用户表返回的不是100个用户。这个现象就被称为幻读。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>幻读和不可重复读看起来好像很相似，都是读取了另外一个事务所提交的修改，但区别是<u>不可重复读针对的是数据项，而幻读针对的是数据量</u>。</p>
+</blockquote>
+<h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ul>
+<li><strong>读未提交（READ UNCOMMITTED）：</strong>一个事务还没提交时，它做的变更就能被别的事务看到。</li>
+<li><strong>读已提交（READ COMMITTED）：</strong>一个事务提交之后，它做的变更才会被其他事务看到。</li>
+<li><strong>可重复读（REPEATABLE READ）：</strong>一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一致的。</li>
+<li><strong>串行化（SERIALIZABLE ）：</strong>顾名思义是对于同一行记录，“写”会加“写锁”，“读”会加“读锁”。当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行。</li>
+</ul>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%BE%E4%BE%8B.jpg" alt="事务隔离级别举例"></p>
+<ul>
+<li><strong>读未提交：</strong> V1 的值是 2。这时候事务 B 虽然还没有提交，但是结果已经被 A 看到了。因此，V2、V3 也都是 2。</li>
+<li><strong>读已提交：</strong> V1 是 1，V2 的值是 2。事务 B 的更新在提交后才能被 A 看到。所以，V3 的值也是 2。</li>
+<li><strong>可重复读：</strong> V1、V2 是 1，V3 是 2。之所以 V2 还是 1，遵循的就是这个要求：事务在执行期间看到的数据前后必须是一致的。</li>
+<li><strong>串行化：</strong>在事务 B 执行“将 1 改成 2”的时候，会被锁住。直到事务 A 提交后，事务 B 才可以继续执行。所以从 A 的角度看， V1、V2 值是 1，V3 的值是 2。</li>
+</ul>
+<h1 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h1><p>事务隔离级别中的 READ UNCOMMITIED 总是读取最新的数据行，而不是符合当前事务版本的数据行。而 SERIALIZABLE 则会对所有读取的行都加锁。这两种隔离级别都能够独立实现，而 READ COMMITTED 和 REPEATABLE READ 这两种隔离级别则需要依赖于 MVVC 多版本并发控制来实现。</p>
+<h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC 多版本并发控制"></a>MVCC 多版本并发控制</h2><p><strong>什么是 MVCC？</strong></p>
+<blockquote>
+<p>MVCC，全称 Multi-Version Concurrency Control，即多版本并发控制。MVCC 是一种并发控制的方法，一般在数据库管理系统中，实现对数据库的并发访问，在编程语言中实现事务内存。</p>
+</blockquote>
+<p><strong>MVCC 能做什么？</strong></p>
+<blockquote>
+<p>借助 MVCC 实现了 READ COMMITTED，REPEATABLE READ 等隔离级别。</p>
+</blockquote>
+<h3 id="InnoDB-中的-MVCC"><a href="#InnoDB-中的-MVCC" class="headerlink" title="InnoDB 中的 MVCC"></a>InnoDB 中的 MVCC</h3><p>InnDB 中每个事务都有一个唯一的事务 ID，记为 transaction_id。它在事务开始时向 InnDB 申请，按照时间先后严格递增。</p>
+<p>而每行数据其实都有多个版本，这就依赖 undo log 来实现了。每次事务更新数据就会生成一个新的数据版本，并把  transaction_id 记为 row trx_id。同时旧的数据版本会保留在 undo log 中，而且新的版本会记录旧版本的回滚指针，通过它直接拿到上一个版本。</p>
+<p>为了保证每个事务中拿到的数据都是不被其他事务污染的，InnoDB 还需要一个 read-view 来保存每次事务查询的时候不被污染的那一份数据。</p>
+<p>所以，InnDB 中的 MVCC 其实是通过在每行记录后面保存两个隐藏的列来实现的。一列是事务 ID：trx_id；另一列是回滚指针：roll_pt。</p>
+<h3 id="undo-log（回滚日志）"><a href="#undo-log（回滚日志）" class="headerlink" title="undo log（回滚日志）"></a>undo log（回滚日志）</h3><p>回滚日志保存了事务发生之前的数据的一个版本，可以用于回滚，同时可以提供多版本并发控制下的读（MVCC），也即非锁定读。</p>
+<p>根据操作和删除日志时机的不同，undo log 分为两种： insert undo log 和 update undo log。</p>
+<h4 id="insert-undo-log"><a href="#insert-undo-log" class="headerlink" title="insert undo log"></a>insert undo log</h4><p>由于 INSERT 操作记录没有历史版本只对当前事务本身可见，对于其他事务此记录不可见，所以 insert undo log 可以在事务提交后直接删除而不需要进行 purge 操作。</p>
+<blockquote>
+<p>purge（清除）：的主要任务是将数据库中已经 mark del 的数据删除，另外也会批量回收 undo pages</p>
+</blockquote>
+<p>插入数据时，它的在 undo log 的初始状态是这样的：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(<span class="keyword">id</span>, <span class="keyword">name</span>, age, trx_id, roll_pt) <span class="keyword">values</span> (<span class="number">1</span>, <span class="string">"张三"</span>, <span class="number">18</span>, <span class="number">1</span>, <span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在事务提交时，这个事务所做的 INSERT 的操作所记录的 undo log 的日志会被直接删除。</p>
+<h4 id="update-undo-log"><a href="#update-undo-log" class="headerlink" title="update undo log"></a>update undo log</h4><p>由于 UPDATE 操作的历史版本可能其他的事务需要用到，所以 UPDATE 操作的 undo log 保存的时间会长一些，只有在系统中没有比这个回滚日志更早的版本时，purge 线程将进行最后的删除操作。</p>
+<p>假设一个值从 1 被按顺序改成了 2、3、4，在回滚日志里面就会有类似下面的记录。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/%E5%9B%9E%E6%BB%9A%E6%97%A5%E5%BF%97%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg" alt="回滚日志流程图"></p>
+<p>如果发生了回滚，4就会变成3再变成2再变成1，一步一步的恢复到初始状态。</p>
+<blockquote>
+<p>当不需要这些回滚日志的时候，这些日志就会被删除。<br>什么时候不需要这些回滚日志呢？<strong>当系统里没有比这个回滚日志更早的 read-view 的时候。</strong></p>
+</blockquote>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/1654328337012.png" alt="1654328337012"></p>
+<h3 id="read-view（一致性读视图）"><a href="#read-view（一致性读视图）" class="headerlink" title="read-view（一致性读视图）"></a>read-view（一致性读视图）</h3><p>read view 是 InnDB 在实现 MVCC 时用到的一致性读视图，用于支持 RC（读提交）以及 RR（可重复读）隔离级别的实现。</p>
+<p>read view 不是真实存在的，<strong>只是一个概念</strong>，undo log 才是它的体现。它<strong>主要是通过版本和 undolog 计算出来的</strong>。作用是决定事务能看到哪些数据。</p>
+<p><strong>每个事务或者语句有自己的一致性视图。普通查询语句是一致性读，一致性读会根据 row trx_id 和一致性视图确定数据版本的可见性。</strong></p>
+<hr>
+<p>未完待续。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【MySQL实战】日志系统：一条SQL更新语句是如何执行的？</title>
     <url>/posts/39005/</url>
     <content><![CDATA[<blockquote>
@@ -617,8 +705,36 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p'临时密码'</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>修改 root 用户密码</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 调整密码复杂度和长度</span></span><br><span class="line">set global validate_password.policy=0;</span><br><span class="line">set global validate_password.length=4;</span><br><span class="line"></span><br><span class="line">ALTER USER 'root'@'localhost' IDENTIFIED BY "新密码";</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 调整密码复杂度和长度</span></span><br><span class="line">set global validate_password.policy=0;</span><br><span class="line">set global validate_password.length=4;</span><br><span class="line"></span><br><span class="line">ALTER USER 'root'@'localhost' IDENTIFIED BY "新密码";</span><br></pre></td></tr></table></figure>
+
+</li>
 </ol>
+<h4 id="SQL的四种语言：DDL、DML、DCL、TCL"><a href="#SQL的四种语言：DDL、DML、DCL、TCL" class="headerlink" title="SQL的四种语言：DDL、DML、DCL、TCL"></a>SQL的四种语言：DDL、DML、DCL、TCL</h4><ul>
+<li><p><strong>DDL（Data Definition Language）</strong></p>
+<ul>
+<li>数据定义语言，定义表结构跟约束</li>
+<li>关键字：CREATE、ALTER、DROP、TRUNCATE（清空表）</li>
+</ul>
+</li>
+<li><p><strong>DML（Data Manipulation Language）</strong></p>
+<ul>
+<li>数据操纵语言，可操控具体数据</li>
+<li>关键字：SELECT、INSERT、UPDATE、DELETE</li>
+</ul>
+</li>
+<li><p><strong>DCL（Data Control Language）</strong></p>
+<ul>
+<li>数据库控制语言，授权，角色控制等</li>
+<li>关键字：GRANT、REVOKE</li>
+</ul>
+</li>
+<li><p><strong>TCL（Transaction Control Language）</strong></p>
+<ul>
+<li>事务控制语言</li>
+<li>关键字：BEGIN、COMMIT、ROLLBACK</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>数据库</category>
