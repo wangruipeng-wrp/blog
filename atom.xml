@@ -315,9 +315,9 @@
     <category term="数据库" scheme="https://www.wrp.cool/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
-    <category term="Linux" scheme="https://www.wrp.cool/tags/Linux/"/>
-    
     <category term="MySQL" scheme="https://www.wrp.cool/tags/MySQL/"/>
+    
+    <category term="Linux" scheme="https://www.wrp.cool/tags/Linux/"/>
     
   </entry>
   

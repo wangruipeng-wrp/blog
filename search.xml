@@ -289,9 +289,9 @@
       
         <tags>
             
-            <tag> Linux </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> Linux </tag>
             
         </tags>
       
@@ -1449,7 +1449,7 @@
     
     
     <entry>
-      <title>写在前面</title>
+      <title>《写在前面》</title>
       <link href="/posts/62949/"/>
       <url>/posts/62949/</url>
       
@@ -1462,6 +1462,28 @@
     
   
   
+    
+    
+    <entry>
+      <title>About me</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[<p><font size=5> <strong>说说自己</strong> </font></p><ul><li>一个简简单单的小年轻</li><li>一个有点小小梦想的小年轻</li><li>冲！冲！冲！！！</li></ul><p><font size=5> <strong>说说这个小站</strong> </font></p><ul><li>一个简简单单的博客小站</li><li>一个有点小小梦想的博客小站</li></ul><p><font size=5> <strong>联系方式</strong> </font></p><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/6ac9184fb440093a91541cc797ec88e.jpg" alt="6ac9184fb440093a91541cc797ec88e"></p><blockquote><p>座右铭：以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</p></blockquote><hr><p>大家加油：）</p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>categories</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
     
     
     <entry>
@@ -1509,11 +1531,11 @@
     
     
     <entry>
-      <title>categories</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
+      <title>友情链接</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<hr><blockquote><p><strong>友链申请滴注意事项：</strong></p><ol><li>内容持续更新且可以稳定访问</li><li>网页整洁无繁杂广告推广</li><li>本站会定期清理无法访问的友链，如果更换了链接信息请至评论区留言，谢谢合作</li><li>本站会定期查看双方是否互为友链，如果取消本站友链，本站也会将您的友链移除</li><li>将本站的友链添加到您的友链，相关信息如下</li><li>按照以下格式在以下评论区留言，待博主为您添上友链</li></ol></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
       
     </entry>
     
@@ -1525,28 +1547,6 @@
       <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>About me</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[<p><font size=5> <strong>说说自己</strong> </font></p><ul><li>一个简简单单的小年轻</li><li>一个有点小小梦想的小年轻</li><li>冲！冲！冲！！！</li></ul><p><font size=5> <strong>说说这个小站</strong> </font></p><ul><li>一个简简单单的博客小站</li><li>一个有点小小梦想的博客小站</li></ul><p><font size=5> <strong>联系方式</strong> </font></p><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/6ac9184fb440093a91541cc797ec88e.jpg" alt="6ac9184fb440093a91541cc797ec88e"></p><blockquote><p>座右铭：以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</p></blockquote><hr><p>大家加油：）</p>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>友情链接</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
-      
-        <content type="html"><![CDATA[<hr><p><font size=4><strong>友链申请注意事项</strong></font></p><ol><li>内容持续更新且可以稳定访问</li><li>网页整洁无繁杂广告推广</li><li>本站会定期清理无法访问的友链，如果更换了链接信息请至评论区留言，谢谢合作</li><li>本站会定期查看双方是否互为友链，如果取消本站友链，本站也会将您的友链移除</li></ol><p><font size=4><strong>申请方式</strong></font></p><ol><li>将本站的友链添加到您的友链，相关信息如下</li><li>按照以下格式在以下评论区留言，待博主为您添上友链</li></ol><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
       
     </entry>
     
