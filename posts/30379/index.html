@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Java并发：线程协同 | 知更</title><meta name="author" content="码小瑞"><meta name="copyright" content="码小瑞"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="讲述线程之间的协同运行，包括：CountDownLatch、Semaphore、CyclicBarrier、Condition">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发：线程协同">
+<meta property="og:url" content="https://www.wrp.cool/posts/30379/index.html">
+<meta property="og:site_name" content="知更">
+<meta property="og:description" content="讲述线程之间的协同运行，包括：CountDownLatch、Semaphore、CyclicBarrier、Condition">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg">
+<meta property="article:published_time" content="2022-08-04T14:02:10.000Z">
+<meta property="article:modified_time" content="2022-08-29T02:59:23.798Z">
+<meta property="article:author" content="码小瑞">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg"><link rel="shortcut icon" href="/images/avatar.png"><link rel="canonical" href="https://www.wrp.cool/posts/30379/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 码小瑞","link":"链接: ","source":"来源: 知更","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java并发：线程协同',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-29 10:59:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="知更" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">70</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-archive"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-map-marker-alt"></i><span> 这里</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user"></i><span> 我说我呀</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-book"></i><span> 喜欢看书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 喜欢电影</span></a></li><li><a class="site-page child" href="/love/"><i class="fa-fw fa fa-heart red"></i><span> 还喜欢你</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">知更</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-archive"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-map-marker-alt"></i><span> 这里</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user"></i><span> 我说我呀</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-book"></i><span> 喜欢看书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 喜欢电影</span></a></li><li><a class="site-page child" href="/love/"><i class="fa-fw fa fa-heart red"></i><span> 还喜欢你</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Java并发：线程协同</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-04T14:02:10.000Z" title="发表于 2022-08-04 22:02:10">2022-08-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-29T02:59:23.798Z" title="更新于 2022-08-29 10:59:23">2022-08-29</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span></div></div></div><article class="post-content" id="article-container"><p>本文讲述控制并发流程的工具类，包括：CountDownLatch、Semaphore、CyclicBarrier、Condition。这些工具类的作用就是帮助程序员更容易控制线程之间的合作，让线程互相配合，以满足业务逻辑，比如让线程A等待线程B执行完毕后再执行的排队策略、或者是让多个线程等待到某个时刻再同时从某个阶段开始执行的合作策略。</p>
+<h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><blockquote>
+<p>中文名：倒计时门栓，举个例子可以类比成一个门锁，一旦门打开了，门外面等待的人就会一拥而入。而 CountDownLatch 就是用一个倒计时做为门锁，一旦计数到0，就把门锁打开，等待执行的线程就会在此时刻一起开始执行。</p>
+</blockquote>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li><code>public CountDownLatch(int count)</code> 参数 count 为要倒数的值</li>
+</ul>
+<p><strong>重要方法：</strong></p>
+<ul>
+<li><code>public void await() throws InterruptedException</code><ul>
+<li>等待，线程调用此方法后被挂起，等待直到 count 值为0才开始执行</li>
+</ul>
+</li>
+<li><code>public boolean await(long timeout, TimeUnit unit)</code><ul>
+<li>超时等待，线程调用此方法后会被挂起，在设置的最长等待时间之前如果倒计时结束则返回 true 并在倒计时结束时刻开始执行后续代码，到达最长等待时间之后则返回 false 并开始执行后续代码</li>
+</ul>
+</li>
+<li><code>public void countDown()</code><ul>
+<li>将 count 值减1，直到为0时，等待的线程才会被唤醒。</li>
+</ul>
+</li>
+</ul>
+<p><strong>CountDownLatch 使用示例代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">CountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="type">Random</span> <span class="variable">r</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(Math.abs(r.nextInt() % <span class="number">1000</span>));</span><br><span class="line">                latch.await();</span><br><span class="line">                System.out.println(<span class="string">&quot;门锁打开了，开始执行，此刻时间是：&quot;</span> + System.currentTimeMillis());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">    latch.countDown();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 十个线程的开始执行时间都是相同的</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><blockquote>
+<p>可以理解为：运行许可证。拿到 Semaphore 资源的线程才可以往下运行，运行完毕之后必须归还 Semaphore 资源。可以用来保护一些比较稀缺的资源，保证了同一时刻最多只有有限个线程在使用这些稀缺资源。</p>
+</blockquote>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li><code>public Semaphore(int permits, boolean fair)</code><ul>
+<li>permits：运行许可证数量</li>
+<li>fair：是否使用公平锁策略</li>
+</ul>
+</li>
+</ul>
+<p><strong>重要方法：</strong></p>
+<ul>
+<li><code>public void acquire() throws InterruptedException</code><ul>
+<li>申请许可证，如果暂时没许可证则陷入阻塞。</li>
+</ul>
+</li>
+<li><code>public boolean tryAcquire()</code><ul>
+<li>尝试申请许可证，看看现在有没有空闲的许可证，如果有的话直接获取，没有则去做别的事情。</li>
+</ul>
+</li>
+<li><code>public void release()</code><ul>
+<li>释放许可证，将用完的许可证放回去。必须在 finally 代码块中调用</li>
+</ul>
+</li>
+</ul>
+<p>以上摘抄了几个比较重要的方法出来说明，Semaphore 类中还有一些其他的方法能更灵活使用，包括设置阻塞超时、一次性获取多个许可证、一次性释放多个许可证等。</p>
+<p><strong>Semaphore 使用示例代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">Semaphore</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Semaphore</span>(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                s.acquire();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 申请到了许可证，往下执行&quot;</span>);</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;释放许可证&quot;</span>);</span><br><span class="line">                s.release();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;Thread-&quot;</span> + i).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h1><blockquote>
+<p>可以类比为春游时候的大巴车，等待人满发车。就是约定好一个数字（<em>大巴车的载客数</em>），先到的线程等待后到的线程（<em>先上车的同学等待后上车的同学</em>），等到线程数满足约定数量之后（<em>全部同学到齐</em>）全部开始执行（<em>发车</em>）。</p>
+</blockquote>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li><code>public CyclicBarrier(int parties, Runnable barrierAction)</code><ul>
+<li>parties：提前约定好等待线程的数量</li>
+<li>barrierAction：等待所有线程到齐后执行的线程</li>
+</ul>
+</li>
+</ul>
+<p><strong>重要方法：</strong></p>
+<ul>
+<li><code>public int await() throws InterruptedException, BrokenBarrierException</code><ul>
+<li>先到的线程开始等待后面的线程来了之后一起执行</li>
+</ul>
+</li>
+<li><code>public int await(long timeout, TimeUnit unit) throws InterruptedException, BrokenBarrierException, TimeoutException</code><ul>
+<li>设置超时的等待，超时抛出 TimeoutException</li>
+</ul>
+</li>
+<li><code>public void reset()</code><ul>
+<li>放弃正在等待中的线程，开始新一轮等待</li>
+</ul>
+</li>
+</ul>
+<div class="note primary modern no-icon flat"><p><strong>抛出 BrokenBarrierException 的3种情况：</strong></p>
+</div>
+
+<ol>
+<li>其他等待的线程被中断</li>
+<li>其他等待的线程超时</li>
+<li>其他线程调用 CyclicBarrier.reset() 方法</li>
+</ol>
+<p><strong>CyclicBarrier 使用示例代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Random</span> <span class="variable">r</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">CyclicBarrier</span> <span class="variable">cb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CyclicBarrier</span>(<span class="number">5</span>, () -&gt; System.out.println(<span class="string">&quot;大巴发车&quot;</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>(i, cb), <span class="string">&quot;Thread-&quot;</span> + i).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Task</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CyclicBarrier cb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Task</span><span class="params">(<span class="type">int</span> id, CyclicBarrier cb)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">        <span class="built_in">this</span>.cb = cb;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Thread-&quot;</span> + id + <span class="string">&quot; 准备前往大巴车&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(Math.abs(r.nextInt() % <span class="number">10000</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;Thread-&quot;</span> + id + <span class="string">&quot; 已经上大巴车了，开始等待其他同学到达&quot;</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">            System.out.println(<span class="string">&quot;Thread-&quot;</span> + id + <span class="string">&quot;所乘坐的大巴车出发！&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException | BrokenBarrierException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p><strong>CountDownLatch 和 CyclicBarrier 的区别：</strong></p>
+<ol>
+<li><strong>可重用性不同：</strong>CountDownLatch 在倒数到0并出发门栓打开后，就不能再次使用了，只能创建新的实例；而 CyclicBarrier 可以重复使用。</li>
+<li><strong>作用不同：</strong>CyclicBarrier 要等到固定数量的线程都到达了栅栏位置才能继续执行，而 CountDownLatch 只需要等待计数器倒数至0。</li>
+<li>CyclicBarrier 是线程之间的交互行为，重点在协作的线程；<br>CountDownLatch 是倒数事件的行为，重点在倒数的事件。</li>
+</ol>
+</blockquote>
+<p><strong>CountDownLatch 的应用场景：</strong>有一个任务想要往下执行，但必须要等到其他的任务执行完毕后才可以继续往下执行。假如我们这个想要继续往下执行的任务调用一个CountDownLatch对象的await()方法，其他的任务执行完自己的任务后调用同一个CountDownLatch对象上的countDown()方法，这个调用await()方法的任务将一直阻塞等待，直到这个CountDownLatch对象的计数值减到0为止。</p>
+<p><strong>CyclicBarrier 的应用场景：</strong>CyclicBarrier 可以构造一个栅栏，当某一个线程执行到栅栏前，它就会开始等待，直到所有线程都到达栅栏前，那么该栅栏就会打开，所有线程再统一出发，继续执行剩下的任务。</p>
+<h1 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h1><blockquote>
+<p>条件对象。是 Object 中的 wait()、notify()、notifyAll() 这几个方法的升级版（避免了 synchronized 的使用），不同的是这里的锁使用的是 ReentrantLock，而不是 monitor 锁。<br>关于 Object 中的 wait()、notify()、notifyAll() 这几个方法具体可以查看<a href="https://www.wrp.cool/posts/29010/">这里</a></p>
+</blockquote>
+<p><strong>创建 Condition 对象：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">c</span> <span class="operator">=</span> lock.newCondition();</span><br></pre></td></tr></table></figure>
+
+<div class="note info modern no-icon flat"><p><strong>Condition 中与 Object 三个方法的对应：</strong></p>
+</div>
+
+<table>
+<thead>
+<tr>
+<th align="left">Object</th>
+<th align="left">Condition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">wait()</td>
+<td align="left">await()</td>
+</tr>
+<tr>
+<td align="left">notify()</td>
+<td align="left">signal()</td>
+</tr>
+<tr>
+<td align="left">notifyAll()</td>
+<td align="left">signalAll()</td>
+</tr>
+</tbody></table>
+<p><strong>Condition 使用的示例代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 两个线程交替打印 1-100</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">Runnable</span> <span class="variable">r</span> <span class="operator">=</span> () -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                c.signal();</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;输出：&quot;</span> + String.format(<span class="string">&quot;%03d&quot;</span>, count++));</span><br><span class="line">                <span class="keyword">if</span> (count &lt;= <span class="number">100</span>)</span><br><span class="line">                    c.awaitUninterruptibly();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(r, <span class="string">&quot;奇数线程&quot;</span>).start();</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(r, <span class="string">&quot;偶数线程&quot;</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的这个交替打印 1-100 的例子，还可以使用 synchronized 来实现，只是效率上较差了一些。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> count;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="comment">// 打印奇数的线程</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;:&quot;</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">&quot;奇数&quot;</span>).start();</span><br><span class="line">    <span class="comment">// 打印偶数的线程</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span> (count &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;:&quot;</span> + count++);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="string">&quot;偶数&quot;</span>).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个场景下使用 synchronized 的效率较差的原因是：竞争到锁的线程将判断是否满足打印条件，如果满足则打印，否则直接跳出，紧接着同步代码块执行完毕释放锁，两个线程重新进入竞争锁的步骤，如果在这个时候其中一个线程接连多次竞争到锁，但是却因为不满足打印条件而再次直接释放锁，这就是无意义的浪费</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.wrp.cool">码小瑞</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.wrp.cool/posts/30379/">https://www.wrp.cool/posts/30379/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.wrp.cool" target="_blank">知更</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/38839/"><img class="prev-cover" src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java并发：AQS</div></div></a></div><div class="next-post pull-right"><a href="/posts/3103/"><img class="next-cover" src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java并发：并发容器</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar123"/></div><div class="author-info__name">码小瑞</div><div class="author-info__description">一直在学习，永远在路上</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">70</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wangruipeng-wrp"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">广告位招租哇</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CountDownLatch"><span class="toc-number">1.</span> <span class="toc-text">CountDownLatch</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Semaphore"><span class="toc-number">2.</span> <span class="toc-text">Semaphore</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CyclicBarrier"><span class="toc-number">3.</span> <span class="toc-text">CyclicBarrier</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Condition"><span class="toc-number">4.</span> <span class="toc-text">Condition</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/63338/" title="Java并发：volatile">Java并发：volatile</a><time datetime="2022-08-25T07:26:42.000Z" title="发表于 2022-08-25 15:26:42">2022-08-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/41133/" title="Java并发：重排序规则">Java并发：重排序规则</a><time datetime="2022-08-25T02:17:57.000Z" title="发表于 2022-08-25 10:17:57">2022-08-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/62788/" title="Java并发：线程的执行结果和异常">Java并发：线程的执行结果和异常</a><time datetime="2022-08-06T17:54:46.000Z" title="发表于 2022-08-07 01:54:46">2022-08-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/38839/" title="Java并发：AQS">Java并发：AQS</a><time datetime="2022-08-06T13:54:00.000Z" title="发表于 2022-08-06 21:54:00">2022-08-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/30379/" title="Java并发：线程协同">Java并发：线程协同</a><time datetime="2022-08-04T14:02:10.000Z" title="发表于 2022-08-04 22:02:10">2022-08-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 码小瑞</div><div class="footer_custom_text"><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360 号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'xHUEmhrVmHWv8MupdDvR9FvM-gzGzoHsz',
+      appKey: 'Cr1qzcPhqKCVqEhTSX6TRoa4',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
