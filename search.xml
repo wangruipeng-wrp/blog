@@ -17,22 +17,7 @@
 ]]></content>
   </entry>
   <entry>
-    <title>编写一个简单的 Spring Security 鉴权 Demo</title>
-    <url>/posts/52595/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>编写一个简单的 Spring Security 认证 Demo</title>
-    <url>/posts/60569/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Spring Security 鉴权流程</title>
-    <url>/posts/57350/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Spring Security 认证流程</title>
+    <title>Spring Security</title>
     <url>/posts/28582/</url>
     <content><![CDATA[<p>关于 Spring Security 的文章网上有很多，B站也有很多教程，我都看过一些，但感觉对这部分的知识还不是很牢固。网上的大部分文章主要都是从后端的用户认证开始讲起的，一上来就是这些比较偏向实用部分的内容我觉得不是很好理解，还有很多巨长的类名方法名等等，这并不是在说网上的这些文章写的不好，毕竟本文也是一篇前人栽树，后人乘凉的文章。但是写这篇文章的初衷是想要从一个简单的小例子入手，解释清楚那些巨长的类名方法名都是干嘛的，应该怎么使用。</p>
 <p>Spring Security 的一些介绍就不多说了，直接一个小 demo 走起，这个 demo 力争简洁，代码如下：</p>
@@ -97,7 +82,10 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">additionalAuthenticationChecks</span><span class="params">(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)</span> <span class="keyword">throws</span> AuthenticationException &#123;</span><br><span class="line">    <span class="keyword">if</span> (authentication.getCredentials() == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 前台没传密码，直接报错</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">presentedPassword</span> <span class="operator">=</span> authentication.getCredentials().toString();</span><br><span class="line">        <span class="comment">// 比对密码，passwordEncoder 是需要注册的密码器。</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">this</span>.passwordEncoder.matches(presentedPassword, userDetails.getPassword())) &#123;</span><br><span class="line">            <span class="comment">// 密码不匹配，直接报错</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>PasswordEncoder：</strong>是一个接口，用来定义一些密码器的，Spring Security 提供了多种不同的密码策略，需要选择一种密码策略，在配置文件中注册。通常使用 BCryptPasswordEncoder。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<div class="note default flat"><p><strong>小结：</strong></p>
+</div>
+
+<ol>
 <li>顶层接口，一切的开始：AuthenticationManager，用于管理认证的每一个环节。</li>
 <li>Authentication：认证对象，所有的一切都是为它服务的，放在 SecurityContext 中传来传去的。每一个认证环节的开始和结束都是它。</li>
 <li>ProviderManager：AuthenticationManager 最重要的实现类，那也就是最重要的一个认证环节。</li>
@@ -108,6 +96,21 @@
 </ol>
 <p>写这篇文章的目的主要是学习 Spring Security 的过程中有很多的不理解的地方，很多类名都特别长，长的又差不多，感觉很难理解。所以想要写一篇文章来帮助自己巩固这部分的知识，这篇文章的一些内容也是在网上其他文章中出现过的。</p>
 <p>推荐一个 GitHub 上的一个仓库，有关于 Spring Security 的，写的真的不错：<a href="https://github.com/rookie-ricardo/spring-boot-learning-demo">向大佬学习</a></p>
+<hr>
+<p>本来鉴权部分应该是要单独的写一篇文章来总结的，但是看了看 Spring Security 的动态鉴权，看是看的明白个大概，就是道行太浅还用不上这么高级的东西。这里就先简单的介绍一下简单的鉴权方案吧。</p>
+<p>有需要动态鉴权的同学也可以先看看这两篇文章，顺带一提，大佬写的文章真的不错。</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/365515214">Spring Security 鉴权流程</a></li>
+<li><a href="https://juejin.cn/post/6847902222668431368">SpringSecurity动态鉴权流程解析</a></li>
+</ul>
+<p><strong>鉴权策略：</strong></p>
+<ol>
+<li>在 SecurityConfig 配置文件中手动开启 <code>@EnableGlobalMethodSecurity(prePostEnabled = true)</code></li>
+<li>在 UserDetailService.loadUserByUsername 方法中查询出用户所具有的全部权限</li>
+<li>将权限封装在 UserDetail.getAuthorities() 方法中供 Spring Security 获取</li>
+<li>在每个需要授权的 API 上加上 <code>@PreAuthorize(&quot;hasAuthority(&#39;权限值&#39;)&quot;)</code> 注解</li>
+<li>如果用户权限列表有该接口对应权限值就能访问对应接口</li>
+</ol>
 <hr>
 <blockquote>
 <p><strong>前人栽树：</strong></p>
@@ -173,8 +176,11 @@
 <li>AlgorithmMismatchException：算法不匹配异常</li>
 </ul>
 <hr>
+<p>说句题外话，有没有发现 JWT 的前面总是会加 <code>Bearer</code> 这个单词？？？</p>
+<p>那么加了能干嘛呢，不加行不行呢？？</p>
+<p>别问，问就是规范，至于什么规范？<a href="https://www.google.com/">谷歌</a>、<a href="https://www.bing.com/">必应</a>、<a href="https://www.baidu.com/">百度</a></p>
 <blockquote>
-<p><strong>巨人的肩膀：</strong></p>
+<p><strong>前人栽树：</strong></p>
 <ul>
 <li><a href="https://cnodejs.org/topic/5b0c4a7b8a4f51e140d942fc">一篇文章告诉你JWT的实现原理</a></li>
 <li><a href="https://www.cnblogs.com/johnvwan/p/15557287.html">JWT分布式场景应用解析 </a></li>
@@ -3110,10 +3116,10 @@
         <category>数据结构</category>
       </categories>
       <tags>
+        <tag>递归</tag>
         <tag>数据结构</tag>
         <tag>二叉树</tag>
         <tag>平衡二叉树</tag>
-        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -3149,9 +3155,9 @@
         <category>数据结构</category>
       </categories>
       <tags>
+        <tag>递归</tag>
         <tag>数据结构</tag>
         <tag>二叉树</tag>
-        <tag>递归</tag>
         <tag>遍历</tag>
       </tags>
   </entry>
@@ -3380,8 +3386,8 @@
         <category>算法</category>
       </categories>
       <tags>
-        <tag>递归</tag>
         <tag>算法</tag>
+        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -5214,44 +5220,6 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       </tags>
   </entry>
   <entry>
-    <title>这里</title>
-    <url>/here/index.html</url>
-    <content><![CDATA[<ul>
-<li>有记录一些我喜欢的句子</li>
-<li>有收藏一些常用的链接</li>
-<li>还有整理一些笔记</li>
-</ul>
-<hr>
-<center><b>一些我喜欢的句子</b></center>
-
-<ul>
-<li>人生最重要的是找到自己的热爱，并坚持。</li>
-<li>生命的意义在于不断发现美的过程，就像你发现了这朵花，而我发现了你。</li>
-<li>以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</li>
-<li>人们总是喜欢先入为主地评价别人，却不知背后的逻辑也可以很复杂，不知道自己所知道的真的很少。所以，学习是一辈子的事情。</li>
-<li>人这一生应该通过阅读、行走、学习、阅人，逐渐解锁更大的地图，看到更亮的世界。其实在二十多岁时，人最应该做的，就是拓展边界、探索未知、去伪存真、求知发问，打破不属于自己的人设。<br></li>
-</ul>
-<center><b>一些常用的链接</b></center>
-
-<ul>
-<li><a href="https://redis.io/">Redis官网</a>、<a href="https://redis.cn/">Redis中文网</a>、<a href="https://www.runoob.com/redis/redis-tutorial.html">Redis菜鸟教程</a>、<a href="http://download.redis.io/releases/">Redis下载地址（Linux）</a>、<a href="https://github.com/tporadowski/redis/releases">Redis下载地址（Window）</a></li>
-<li><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a>、<a href="https://developer.aliyun.com/mirror">阿里巴巴开源镜像站</a>、<a href="https://docs.spring.io/spring/docs/">Spring官方文档</a>、<a href="https://mvnrepository.com/">Maven仓库</a>、<a href="http://maven.apache.org/download.cgi">Maven 下载</a></li>
-<li><a href="https://fontawesome.com/icons">NexT 主题图标</a>、<a href="http://redisdoc.com/">Redis 命令文档</a></li>
-</ul>
-<br>
-
-<center><b>还有一些笔记</b></center>
-
-<ul>
-<li><a href="maven%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html">maven 数据源配置</a></li>
-<li><a href="SpringBoot%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86.html">Spring Boot 跨域处理</a></li>
-<li><a href="Spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA.html">Spring 事务传播行为</a></li>
-</ul>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-  </entry>
-  <entry>
     <title>标签</title>
     <url>/tags/index.html</url>
     <content><![CDATA[]]></content>
@@ -5307,5 +5275,43 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 </ol>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>这里</title>
+    <url>/here/index.html</url>
+    <content><![CDATA[<ul>
+<li>有记录一些我喜欢的句子</li>
+<li>有收藏一些常用的链接</li>
+<li>还有整理一些笔记</li>
+</ul>
+<hr>
+<center><b>一些我喜欢的句子</b></center>
+
+<ul>
+<li>人生最重要的是找到自己的热爱，并坚持。</li>
+<li>生命的意义在于不断发现美的过程，就像你发现了这朵花，而我发现了你。</li>
+<li>以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</li>
+<li>人们总是喜欢先入为主地评价别人，却不知背后的逻辑也可以很复杂，不知道自己所知道的真的很少。所以，学习是一辈子的事情。</li>
+<li>人这一生应该通过阅读、行走、学习、阅人，逐渐解锁更大的地图，看到更亮的世界。其实在二十多岁时，人最应该做的，就是拓展边界、探索未知、去伪存真、求知发问，打破不属于自己的人设。<br></li>
+</ul>
+<center><b>一些常用的链接</b></center>
+
+<ul>
+<li><a href="https://redis.io/">Redis官网</a>、<a href="https://redis.cn/">Redis中文网</a>、<a href="https://www.runoob.com/redis/redis-tutorial.html">Redis菜鸟教程</a>、<a href="http://download.redis.io/releases/">Redis下载地址（Linux）</a>、<a href="https://github.com/tporadowski/redis/releases">Redis下载地址（Window）</a></li>
+<li><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a>、<a href="https://developer.aliyun.com/mirror">阿里巴巴开源镜像站</a>、<a href="https://docs.spring.io/spring/docs/">Spring官方文档</a>、<a href="https://mvnrepository.com/">Maven仓库</a>、<a href="http://maven.apache.org/download.cgi">Maven 下载</a></li>
+<li><a href="https://fontawesome.com/icons">NexT 主题图标</a>、<a href="http://redisdoc.com/">Redis 命令文档</a></li>
+</ul>
+<br>
+
+<center><b>还有一些笔记</b></center>
+
+<ul>
+<li><a href="maven%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html">maven 数据源配置</a></li>
+<li><a href="SpringBoot%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86.html">Spring Boot 跨域处理</a></li>
+<li><a href="Spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA.html">Spring 事务传播行为</a></li>
+</ul>
+<hr>
+<p>大家加油：）</p>
+]]></content>
   </entry>
 </search>
