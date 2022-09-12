@@ -95,7 +95,7 @@
 <li>通常需要实现 UserDetailsService 和 UserDetails，DaoAuthenticationProvider 根据这两个对象来校验密码。</li>
 </ol>
 <p>写这篇文章的目的主要是学习 Spring Security 的过程中有很多的不理解的地方，很多类名都特别长，长的又差不多，感觉很难理解。所以想要写一篇文章来帮助自己巩固这部分的知识，这篇文章的一些内容也是在网上其他文章中出现过的。</p>
-<p>推荐一个 GitHub 上的一个仓库，有关于 Spring Security 的，写的真的不错：<a href="https://github.com/rookie-ricardo/spring-boot-learning-demo">向大佬学习</a></p>
+<p>推荐一个 GitHub 上的一个 Spring Security 的仓库，写的真的不错：<a href="https://github.com/rookie-ricardo/spring-boot-learning-demo">向大佬学习</a></p>
 <hr>
 <p>本来鉴权部分应该是要单独的写一篇文章来总结的，但是看了看 Spring Security 的动态鉴权，看是看的明白个大概，就是道行太浅还用不上这么高级的东西。这里就先简单的介绍一下简单的鉴权方案吧。</p>
 <p>有需要动态鉴权的同学也可以先看看这两篇文章，顺带一提，大佬写的文章真的不错。</p>
@@ -2778,122 +2778,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Nginx 配置</title>
-    <url>/posts/48812/</url>
-    <content><![CDATA[<blockquote>
-<p>本文记录一些 nginx 中的配置，以便后续查看。</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Nginx 的配置文件都放在 conf 目录下，其中最重要的就是 <code>nginx.conf</code> 配置文件，本文也主要记录该配置文件中的配置</p>
-<p>为了使配置文件能够更方便管理，把一些站点配置写到外面来，不要直接写入 <code>nginx.conf</code> 文件</p>
-<p>在 conf 文件夹下创建一个 hosts 文件夹，之后将每个虚拟主机的配置都以 <code>域名.conf</code> 的命名格式保存在 hosts 文件夹中</p>
-<p>之后在 nginx.conf 文件的 http 的大括号内引入自己写的配置文件 <code>include hosts/*.conf;</code></p>
-<h4 id="运行配置"><a href="#运行配置" class="headerlink" title="运行配置"></a>运行配置</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定运行 worker 进程的用户</span></span><br><span class="line">user root;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">worker 进程的数量</span></span><br><span class="line">worker_processes  3;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">日志文件输出配置 可根据日志级别输出到不同的日志文件中</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">error_log  logs/error.log;</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">error_log  logs/error.log  info;</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定 pid</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">pid        logs/nginx.pid;</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">工作模式</span></span><br><span class="line">events &#123;</span><br><span class="line">    # 默认使用 epoll，采用异步非阻塞的处理方式</span><br><span class="line">    use epoll;</span><br><span class="line">    # 每个 worker 进程的客户端最大连接数</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="传输配置"><a href="#传输配置" class="headerlink" title="传输配置"></a>传输配置</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    # 导入请求类型</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    # 日志格式，main 为格式的名称，可以通过 main 来指定输出此日志格式。</span><br><span class="line">    log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">                        &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">                        &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line"></span><br><span class="line">    # 定义日志输出格式</span><br><span class="line">    access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    # sendfile 高效传输文件，开启可提升传输性能，开启后才可以使用 tcp_nopush，当数据累积到一定大小后才发送，提高了效率</span><br><span class="line">    sendfile        on;</span><br><span class="line">    tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    # 设置客户端与服务端请求的超时时间，保证客户端多次请求的时候不会重复建立新的连接，节约资源资源损耗</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    # 启用 gzip 压缩，静态资源文件压缩后传输会更快一些</span><br><span class="line">    gzip  on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>日志格式：</strong></p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$remote_addr</td>
-<td>客户端IP</td>
-</tr>
-<tr>
-<td>$remote_user</td>
-<td>远程客户端用户名，一般为：’-‘</td>
-</tr>
-<tr>
-<td>$time_local</td>
-<td>时间和时区</td>
-</tr>
-<tr>
-<td>$request</td>
-<td>请求的 url 和 method</td>
-</tr>
-<tr>
-<td>$status</td>
-<td>响应状态码</td>
-</tr>
-<tr>
-<td>$body_bytes_send</td>
-<td>响应客户端内容字节数</td>
-</tr>
-<tr>
-<td>$http_referer</td>
-<td>记录用户从哪个链接跳转过来的</td>
-</tr>
-<tr>
-<td>$http_user_agent</td>
-<td>用户所使用的代理，一般情况下为浏览器</td>
-</tr>
-<tr>
-<td>$http_x_forwarded_for</td>
-<td>通过代理服务器来记录客户端的IP</td>
-</tr>
-</tbody></table>
-<h4 id="虚拟主机配置"><a href="#虚拟主机配置" class="headerlink" title="虚拟主机配置"></a>虚拟主机配置</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"></span><br><span class="line">    # 虚拟主机配置块</span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;         # 监听端口</span><br><span class="line">        server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">        # 设置请求头，一般用于解决跨域问题</span><br><span class="line">        add_header &#x27;Access-Control_Allow_Origin&#x27; *;             # 允许跨域请求的域</span><br><span class="line">        add_header &#x27;Access-Control_Allow_Credentials&#x27; &#x27;true&#x27;;   # 允许带上 cookie 请求</span><br><span class="line">        add_header &#x27;Access-Control_Allow_Methods&#x27; *;            # 允许请求的方法（GET/POST/PUT/DELETE）</span><br><span class="line">        add_header &#x27;Access-Control_Allow_Headers&#x27; *;            # 允许请求的 header</span><br><span class="line"></span><br><span class="line">        # 对源站点进行验证（防盗链）</span><br><span class="line">        valid_referers *.wrp.cool;</span><br><span class="line">        if ($valid_referers) &#123;</span><br><span class="line">            return 403;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 请求路由映射，匹配拦截</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;           # 网站根路径（配置负载均衡之后不需要配置根路径）</span><br><span class="line">            index       index.html;     # 默认首页</span><br><span class="line">            expires     10s;            # 设置缓存</span><br><span class="line">            # alias 可以为请求路径配置一个别名</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # ssl 证书配置</span><br><span class="line">        ssl on                              # 开启ssl</span><br><span class="line">        ssl_certificate &quot;ssl证书路径&quot;;       # 配置 ssl 证书</span><br><span class="line">        ssl_certificate_key &quot;ssl证书路径&quot;;   # 配置 ssl 证书密钥</span><br><span class="line">        ssl_session_cache shared:SSL:10m;   # ssl 会话 cache</span><br><span class="line">        ssl_session_timeout 10m;            # ssl 会话超时时间</span><br><span class="line">        # 配置加密套件</span><br><span class="line">        ssl_protocols TLSv1.1 TLSv1.2;</span><br><span class="line">        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">        ssl_prefer_server_ciphers on;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>location 的匹配规则：</strong></p>
-<ul>
-<li><code>空格</code>：普通匹配</li>
-<li><code>=</code>：精确匹配</li>
-<li><code>~*</code>：匹配正则表达式，不区分大小写</li>
-<li><code>~</code>：匹配正则表达式，区分大小写</li>
-<li><code>^~</code>：以某个字符路径开头</li>
-</ul>
-<p><strong>expires 指令</strong></p>
-<ul>
-<li><code>expires 10s</code>：10s之后过期</li>
-<li><code>expires @22h30m</code>：22h30m这个时间点之后过期</li>
-<li><code>expires -1h</code>：一个小时之前就过期了</li>
-<li><code>expires epoch</code>：关闭缓存</li>
-<li><code>expires off</code>：使用浏览器默认缓存</li>
-</ul>
-<h4 id="负载均衡配置"><a href="#负载均衡配置" class="headerlink" title="负载均衡配置"></a>负载均衡配置</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"></span><br><span class="line">    # 负载均衡配置快</span><br><span class="line">    upstream load_balance &#123;</span><br><span class="line">        </span><br><span class="line">        # 使用 ip hash 作为负载均衡算法，使用 ip hash 算法之后不能把服务器直接移除，只能标记为 down</span><br><span class="line">        ip_hash;</span><br><span class="line"></span><br><span class="line">        # 使用 url hash 作为负载均衡算法</span><br><span class="line">        hash $request_uri;</span><br><span class="line"></span><br><span class="line">        # 使用 least_conn 作为负载均衡算法，哪台服务器连接数少就去请求哪台服务器</span><br><span class="line">        least_conn;</span><br><span class="line"></span><br><span class="line">        # 配置上游服务器</span><br><span class="line">        server localhost:81;</span><br><span class="line">        server localhost:82;</span><br><span class="line">        server localhost:83;</span><br><span class="line"></span><br><span class="line">        # 常链接数量，用于提高网络吞吐量，相当于连接池</span><br><span class="line">        keepalive   32;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 将一些负载均衡节点中的静态资源文件缓存在nginx服务器当中</span><br><span class="line">    # prody_cache_path 指令设置缓存保存的目录</span><br><span class="line">    # keys_zone 指令设置共享缓存空间的名称和索引信息大小</span><br><span class="line">    # max_size 指令指定缓存大小</span><br><span class="line">    # inactive 指令指定超过这个时间则清理此缓存</span><br><span class="line">    # use_temp_path 指令指定临时目录，使用后会影响 nginx 性能</span><br><span class="line">    proxy_cache_path /usr/local/cache keys_zone=mycache:5m max_size=1g inactive=1h use_temp_path=off;</span><br><span class="line"></span><br><span class="line">    # 虚拟主机配置块</span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;         # 监听端口</span><br><span class="line">        server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">        # 开启并且使用缓存</span><br><span class="line">        proxy_cache mycache;</span><br><span class="line"></span><br><span class="line">        # 指定命中缓存返回码</span><br><span class="line">        proxy_cache_valid 200 304 8h;</span><br><span class="line"></span><br><span class="line">        # 请求路由映射，匹配拦截</span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://load_balance;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>upstream 模块参数：</strong></p>
-<ul>
-<li><p><code>weight</code>：配置每台服务器的权重</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 weight=1;</span><br><span class="line">    server localhost:82 weight=2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>max_conns</code>：配置服务器最大链接数</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 max_conns=200;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  <strong>注意：</strong>在多 <code>worker</code> 线程的环境下，可能会超过指定的最大连接数。</p>
-</li>
-<li><p><code>slow_start</code>：设置服务器权重从零开始至设置值的时间。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 slow_start=60s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  <strong>注意：</strong><br>  ① 该参数不能在 <code>hash</code> 和 <code>random load balancing</code> 中使用。<br>  ② 如果在 <code>upstream</code> 中只有一台 server，则该参数无效。<br>  ③ 该参数为商业版 nginx 才有的，使用需要付费。 </p>
-</li>
-<li><p><code>down</code>：标识该服务器已经宕机。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 down;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>backup</code>：标识该服务器为备用机。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 backup;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  <strong>注意：</strong>当所有服务器都无法访问才会访问备用机。</p>
-</li>
-<li><p><code>max_fails</code>：最大失败次数，超过这个次数时，默认该服务器已经宕机。与<code>fail_timeout</code>搭配使用。</p>
-</li>
-<li><p><code>fail_timeout</code>：当超过最大失败次数时，经过多少时间去重新访问这台服务器，默认值为10s。与<code>max_fails</code>搭配使用。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">负载均衡配置快</span></span><br><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 max_fails=50 file_timeout=10s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Nginx</tag>
-        <tag>配置</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【Spring Boot】全局异常处理器</title>
     <url>/posts/19537/</url>
     <content><![CDATA[<p>记录一下最近在开发中遇到的一个问题有以及一个不错的解决方案。</p>
@@ -3116,10 +3000,10 @@
         <category>数据结构</category>
       </categories>
       <tags>
-        <tag>递归</tag>
         <tag>数据结构</tag>
         <tag>二叉树</tag>
         <tag>平衡二叉树</tag>
+        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -3155,9 +3039,9 @@
         <category>数据结构</category>
       </categories>
       <tags>
-        <tag>递归</tag>
         <tag>数据结构</tag>
         <tag>二叉树</tag>
+        <tag>递归</tag>
         <tag>遍历</tag>
       </tags>
   </entry>
@@ -3386,8 +3270,8 @@
         <category>算法</category>
       </categories>
       <tags>
-        <tag>算法</tag>
         <tag>递归</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -4408,28 +4292,25 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       </tags>
   </entry>
   <entry>
-    <title>Nginx 安装</title>
+    <title>Nginx 真的很优秀</title>
     <url>/posts/62048/</url>
-    <content><![CDATA[<p>介绍一下 Nginx 的下载、安装以及配置，顺便也做一个记录，以便后续查看。</p>
-<span id="more"></span>
+    <content><![CDATA[<p>记录一些 Nginx 的安装步骤、配置项信息等，主要为了方便自己后续查看，如果能帮到其他人就更好了。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="二进制安装"><a href="#二进制安装" class="headerlink" title="二进制安装"></a>二进制安装</h2><h3 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install gcc-c++ pcre pcre-devel slib zlib-devel openssl openssl-devel</span><br></pre></td></tr></table></figure>
 
-<h1 id="二进制安装"><a href="#二进制安装" class="headerlink" title="二进制安装"></a>二进制安装</h1><p>首先需要安装 Nginx 的依赖包</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yum -y install gcc-c++ pcre pcre-devel slib zlib-devel openssl openssl-devel</span><br></pre></td></tr></table></figure>
-
-<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>Nginx 下载地址：<a href="http://nginx.org/en/download.html">http://nginx.org/en/download.html</a></p>
-<p>介绍一下 Nginx 官网中的版本：</p>
+<h3 id="下载解压"><a href="#下载解压" class="headerlink" title="下载解压"></a>下载解压</h3><p>从官网<a href="http://nginx.org/en/download.html">下载</a> Nginx，各个版本区别：</p>
 <ul>
-<li><strong>Mainline version：</strong>开发版本</li>
-<li><strong>Stable version：</strong>最新稳定版本</li>
-<li><strong>Legacy versions：</strong>历史版本</li>
-<li>在这里推荐大家下载最新稳定版本。</li>
+<li>Mainline version：开发版本</li>
+<li>Stable version：最新稳定版本</li>
+<li>Legacy versions：历史版本</li>
 </ul>
+<p>推荐大家下载最新稳定版本：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.20.1.tar.gz</span><br></pre></td></tr></table></figure>
 
-<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -zxvf nginx-1.9.9.tar.gz</span><br></pre></td></tr></table></figure>
+<p>下载完成后解压即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -zxvf nginx-1.20.1.tar.gz</span><br></pre></td></tr></table></figure>
 
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在安装目录下通过 <code>configure</code> 文件进行配置，如果全部使用默认的配置的话可以直接运行 <code>./configure</code>。</p>
-<p><strong>配置参数：</strong></p>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>首先需要配置安装参数，在安装目录下通过 <code>configure</code> 文件进行配置，如果全部使用默认的配置的话可以直接运行 <code>./configure</code>。</p>
+<p><strong>参数说明</strong></p>
 <table>
 <thead>
 <tr>
@@ -4437,79 +4318,225 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <th>说明</th>
 </tr>
 </thead>
-</table>
-<ul>
-<li>-prefix | 指定 nginx 安装目录</li>
-<li>-pid-path | 指向 nginx 的pid</li>
-<li>-lock-path | 锁定安装文件，防止而已篡改或者误操作</li>
-<li>-error-log | 错误日志</li>
-<li>-http-log-path | http 日志</li>
-<li>-with-http_gzip_static_module | 启用 gzip 模块，在线实时压缩输出数据流</li>
-<li>-http-client-body-temp-path | 设定客户端请求的临时目录</li>
-<li>-http-proxy-temp-path | 设定 http 代理临时目录</li>
-<li>-http-fastcgi-temp-path | 设定 fastcgi 临时目录</li>
-<li>-http-uwsgi-temp-path | 设定 uwsgi 临时目录</li>
-<li>-http-scgi-temp-path | 设定 scgil 临时目录</li>
-</ul>
+<tbody><tr>
+<td>- - prefix</td>
+<td>指定 nginx 安装目录</td>
+</tr>
+<tr>
+<td>- - pid-path</td>
+<td>指定 nginx 的pid</td>
+</tr>
+<tr>
+<td>- - lock-path</td>
+<td>锁定安装文件，防止而已篡改或者误操作</td>
+</tr>
+<tr>
+<td>- - error-log</td>
+<td>错误日志</td>
+</tr>
+<tr>
+<td>- - http-log-path</td>
+<td>http 日志</td>
+</tr>
+<tr>
+<td>- - with-http_gzip_static_module</td>
+<td>启用 gzip 模块，在线实时压缩输出数据流</td>
+</tr>
+<tr>
+<td>- - http-client-body-temp-path</td>
+<td>设定客户端请求的临时目录</td>
+</tr>
+<tr>
+<td>- - http-proxy-temp-path</td>
+<td>设定 http 代理临时目录</td>
+</tr>
+<tr>
+<td>- - http-fastcgi-temp-path</td>
+<td>设定 fastcgi 临时目录</td>
+</tr>
+<tr>
+<td>- - http-uwsgi-temp-path</td>
+<td>设定 uwsgi 临时目录</td>
+</tr>
+<tr>
+<td>- - http-scgi-temp-path</td>
+<td>设定 scgil 临时目录</td>
+</tr>
+</tbody></table>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure \</span><br><span class="line">--pid-path=/var/run/nginx.pid \</span><br><span class="line">--error-log-path=/var/log/nginx/error.log \</span><br><span class="line">--http-log-path=/var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
 
-<p><strong>注意：</strong>配置 https 访问则需要在编译时添加 <code>http_v2_module</code> 和 <code>http_ssl_module</code> 这两个模块</p>
+<p>如果配置 https 访问的话，需要在编译时添加 <code>http_v2_module</code> 和 <code>http_ssl_module</code> 这两个模块</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure \</span><br><span class="line">--pid-path=/var/run/nginx.pid \</span><br><span class="line">--error-log-path=/var/log/nginx/error.log \</span><br><span class="line">--http-log-path=/var/log/nginx/access.log \</span><br><span class="line">--with-http_v2_module \</span><br><span class="line">--with-http_ssl_module</span><br></pre></td></tr></table></figure>
 
-<h2 id="编译-amp-amp-安装"><a href="#编译-amp-amp-安装" class="headerlink" title="编译 &amp;&amp; 安装"></a>编译 &amp;&amp; 安装</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install </span><br></pre></td></tr></table></figure>
+<p><strong>编译安装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install </span><br></pre></td></tr></table></figure>
 
-<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>在安装目录的 <code>sbin</code> 目录下执行 <code>./ngnix</code> 就可以将 Nginx 的服务成功启动起来。</p>
-<blockquote>
-<p><strong>注意：</strong></p>
-</blockquote>
+<h3 id="启动测试"><a href="#启动测试" class="headerlink" title="启动测试"></a>启动测试</h3><p>在安装目录的 <code>sbin</code> 目录下执行 <code>./ngnix</code> 就可以将 Nginx 的服务成功启动起来。</p>
+<p><strong>踩坑提醒：</strong></p>
 <ol>
-<li>如果在配置时是直接运行的 <code>./configure</code> 可能会报 <code>error.log</code> 和 <code>access.log</code> 这两个日志文件找不到，直接按照提示创建这两个文件即可启动 nginx。</li>
-<li>如果启动403错误的话，可以查看nginx的启动线程是哪个用户然后在配置文件中修改user的值为改成哪个用户。</li>
+<li><p>如果在配置时是直接运行的 <code>./configure</code> 可能会报 <code>error.log</code> 和 <code>access.log</code> 这两个日志文件找不到，直接按照提示创建这两个文件即可启动 nginx。</p>
+</li>
+<li><p>如果启动403错误的话，可以查看 nginx 的启动线程是哪个用户然后在配置文件中修改 user 的值为改成哪个用户。</p>
+</li>
 </ol>
-<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>编辑 <code>/etc/profile</code> 文件，在最后添加以下代码即可</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:&quot;nginx 的安装目录&quot;/sbin</span><br></pre></td></tr></table></figure>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><p>编辑 <code>/etc/profile</code> 文件，在最后添加以下代码即可</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:&quot;nginx 安装目录&quot;/sbin</span><br></pre></td></tr></table></figure>
+
 <p>保存退出后再执行一下 <code>source /etc/profile</code> 使配置生效。</p>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
-<li>启动：<code>nginx</code></li>
-<li>暴力停止：<code>nginx -s stop</code></li>
-<li>平滑停止：<code>nginx -s quit</code></li>
-<li>重新加载配置文件：<code>nginx -s reload</code></li>
-<li>验证配置文件：<code>nginx -t</code></li>
-</ul>
-<hr>
-<h1 id="yum-源安装"><a href="#yum-源安装" class="headerlink" title="yum 源安装"></a>yum 源安装</h1><ol>
-<li><p>添加 nginx 到 yum 源</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用 yum 来安装 nginx</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install -y nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>常用命令<br>启动：<code>systemctl start nginx</code><br>停止：<code>systemctl stop nginx</code><br>重启：<code>systemctl restart nginx</code></p>
-</li>
-<li><p>开机启动</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl enable nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看 nginx 状态</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl status nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>指定配置文件启动</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -c nginx.conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>此种方式配置文件目录介绍</p>
-</li>
-</ol>
-<ul>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><table>
+<thead>
+<tr>
+<th>说明</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>启动</td>
+<td><code>nginx</code></td>
+</tr>
+<tr>
+<td>暴力停止</td>
+<td><code>nginx -s stop</code></td>
+</tr>
+<tr>
+<td>平滑停止</td>
+<td><code>nginx -s quit</code></td>
+</tr>
+<tr>
+<td>重新加载配置文件</td>
+<td><code>nginx -s reload</code></td>
+</tr>
+<tr>
+<td>验证配置文件</td>
+<td><code>nginx -t</code></td>
+</tr>
+</tbody></table>
+<h2 id="yum-源安装"><a href="#yum-源安装" class="headerlink" title="yum 源安装"></a>yum 源安装</h2><h3 id="添加-nginx-到-yum-源"><a href="#添加-nginx-到-yum-源" class="headerlink" title="添加 nginx 到 yum 源"></a>添加 nginx 到 yum 源</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-yum-安装-nginx"><a href="#使用-yum-安装-nginx" class="headerlink" title="使用 yum 安装 nginx"></a>使用 yum 安装 nginx</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install -y nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><table>
+<thead>
+<tr>
+<th>说明</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>启动</td>
+<td><code>systemctl start nginx</code></td>
+</tr>
+<tr>
+<td>停止</td>
+<td><code>systemctl stop nginx</code></td>
+</tr>
+<tr>
+<td>重启</td>
+<td><code>systemctl restart nginx</code></td>
+</tr>
+<tr>
+<td>开机启动</td>
+<td><code>systemctl enable nginx</code></td>
+</tr>
+<tr>
+<td>查看 nginx 状态</td>
+<td><code>systemctl status nginx</code></td>
+</tr>
+<tr>
+<td>指定配置文件启动</td>
+<td><code>nginx -c nginx.conf</code></td>
+</tr>
+</tbody></table>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><ul>
 <li>网站文件存放默认目录：<code>/usr/share/nginx/html</code></li>
 <li>网站默认站点配置：<code>/etc/nginx/conf.d/default.conf</code></li>
-<li>自定义Nginx站点配置文件存放目录：<code>/etc/nginx/conf.d/</code></li>
+<li>自定义 nginx 站点配置文件存放目录：<code>/etc/nginx/conf.d/</code></li>
 <li>nginx 全局配置：<code>/etc/nginx/nginx.conf</code></li>
 </ul>
-<hr>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><blockquote>
+<p>小操作：<br>为了方便管理，配置可以不直接写入 <code>nginx.conf</code> 文件。在外面写 <code>.conf</code> 配置文件，之后在 <code>nginx.conf</code> 文件中引入 <code>include myconf/*.conf;</code></p>
+</blockquote>
+<h2 id="运行配置"><a href="#运行配置" class="headerlink" title="运行配置"></a>运行配置</h2><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">user root;                # 指定运行 worker 进程的用户</span><br><span class="line">worker_processes  3;      # worker 进程的数量</span><br><span class="line"></span><br><span class="line"># 日志文件输出配置 可根据日志级别输出到不同的日志文件中</span><br><span class="line"># error_log  logs/error.log;</span><br><span class="line"># error_log  logs/error.log  notice;</span><br><span class="line"># error_log  logs/error.log  info;</span><br><span class="line"></span><br><span class="line">pid  logs/nginx.pid;  # 指定 pid</span><br><span class="line"></span><br><span class="line"># 工作模式</span><br><span class="line">events &#123;</span><br><span class="line">    use epoll;                 # 默认使用 epoll，采用异步非阻塞的处理方式</span><br><span class="line">    worker_connections  1024;  # 每个 worker 进程的客户端最大连接数</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="传输配置"><a href="#传输配置" class="headerlink" title="传输配置"></a>传输配置</h2><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    # 导入请求类型</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    # 日志格式，main 为格式的名称，可以通过 main 来指定输出此日志格式。</span><br><span class="line">    log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">                      &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">                      &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line"></span><br><span class="line">    # 定义日志输出格式</span><br><span class="line">    access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    # sendfile 高效传输文件，开启可提升传输性能，</span><br><span class="line">    # 开启后才可以使用 tcp_nopush，当数据累积到一定大小后才发送，提高了效率</span><br><span class="line">    sendfile      on;</span><br><span class="line">    tcp_nopush    on;</span><br><span class="line"></span><br><span class="line">    # 设置客户端与服务端请求的超时时间，保证客户端多次请求的时候不会重复建立新的连接，节约资源资源损耗</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    gzip  on; # 启用 gzip 压缩，静态资源文件压缩后传输会更快一些</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>日志格式：</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$remote_addr</td>
+<td>客户端IP</td>
+</tr>
+<tr>
+<td>$remote_user</td>
+<td>远程客户端用户名，一般为：’-‘</td>
+</tr>
+<tr>
+<td>$time_local</td>
+<td>时间和时区</td>
+</tr>
+<tr>
+<td>$request</td>
+<td>请求的 url 和 method</td>
+</tr>
+<tr>
+<td>$status</td>
+<td>响应状态码</td>
+</tr>
+<tr>
+<td>$body_bytes_send</td>
+<td>响应客户端内容字节数</td>
+</tr>
+<tr>
+<td>$http_referer</td>
+<td>记录用户从哪个链接跳转过来的</td>
+</tr>
+<tr>
+<td>$http_user_agent</td>
+<td>用户所使用的代理，一般情况下为浏览器</td>
+</tr>
+<tr>
+<td>$http_x_forwarded_for</td>
+<td>通过代理服务器来记录客户端的IP</td>
+</tr>
+</tbody></table>
+<h2 id="虚拟主机配置"><a href="#虚拟主机配置" class="headerlink" title="虚拟主机配置"></a>虚拟主机配置</h2><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line"># 虚拟主机配置块，位于 http 块中</span><br><span class="line">server &#123;</span><br><span class="line">    listen      80;         # 监听端口</span><br><span class="line">    server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">    # 设置请求头，一般用于解决跨域问题</span><br><span class="line">    add_header &#x27;Access-Control_Allow_Origin&#x27; *;             # 允许跨域请求的域</span><br><span class="line">    add_header &#x27;Access-Control_Allow_Credentials&#x27; &#x27;true&#x27;;   # 允许带上 cookie 请求</span><br><span class="line">    add_header &#x27;Access-Control_Allow_Methods&#x27; *;            # 允许请求的方法（GET/POST/PUT/DELETE）</span><br><span class="line">    add_header &#x27;Access-Control_Allow_Headers&#x27; *;            # 允许请求的 header</span><br><span class="line"></span><br><span class="line">    # 对源站点进行验证（防盗链）</span><br><span class="line">    valid_referers *.wrp.cool;</span><br><span class="line">    if ($valid_referers) &#123;</span><br><span class="line">        return 403;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 请求路由映射，匹配拦截</span><br><span class="line">    location / &#123;</span><br><span class="line">        root        html;           # 网站根路径（配置负载均衡之后不需要配置根路径）</span><br><span class="line">        index       index.html;     # 默认首页</span><br><span class="line">        expires     10s;            # 设置缓存</span><br><span class="line">        # alias 可以为请求路径配置一个别名</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # ssl 证书配置</span><br><span class="line">    ssl on                              # 开启ssl</span><br><span class="line">    ssl_certificate &quot;ssl证书路径&quot;;       # 配置 ssl 证书</span><br><span class="line">    ssl_certificate_key &quot;ssl证书路径&quot;;   # 配置 ssl 证书密钥</span><br><span class="line">    ssl_session_cache shared:SSL:10m;   # ssl 会话 cache</span><br><span class="line">    ssl_session_timeout 10m;            # ssl 会话超时时间</span><br><span class="line">    </span><br><span class="line">    # 配置加密套件</span><br><span class="line">    ssl_protocols TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>location 的匹配规则：</strong></p>
 <ul>
-<li><strong>参考文章：</strong></li>
-<li><a href="https://www.huaweicloud.com/articles/090289e5414715ed7e2c5c74f60d63ff.html">CentOS7安装Nginx，全网最快安装教程</a></li>
+<li><code>空格</code>：普通匹配</li>
+<li><code>=</code>：精确匹配</li>
+<li><code>~*</code>：匹配正则表达式，不区分大小写</li>
+<li><code>~</code>：匹配正则表达式，区分大小写</li>
+<li><code>^~</code>：以某个字符路径开头</li>
 </ul>
-]]></content>
+<p><strong>expires 指令</strong></p>
+<ul>
+<li><code>expires 10s</code>：10s之后过期</li>
+<li><code>expires @22h30m</code>：22h30m这个时间点之后过期</li>
+<li><code>expires -1h</code>：一个小时之前就过期了</li>
+<li><code>expires epoch</code>：关闭缓存</li>
+<li><code>expires off</code>：使用浏览器默认缓存</li>
+</ul>
+<h2 id="负载均衡配置"><a href="#负载均衡配置" class="headerlink" title="负载均衡配置"></a>负载均衡配置</h2><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"></span><br><span class="line">    # 负载均衡配置快</span><br><span class="line">    upstream load_balance &#123;</span><br><span class="line">        </span><br><span class="line">        # 使用 ip hash 作为负载均衡算法，使用 ip hash 算法之后不能把服务器直接移除，只能标记为 down</span><br><span class="line">        ip_hash;</span><br><span class="line"></span><br><span class="line">        # 使用 url hash 作为负载均衡算法</span><br><span class="line">        hash $request_uri;</span><br><span class="line"></span><br><span class="line">        # 使用 least_conn 作为负载均衡算法，哪台服务器连接数少就去请求哪台服务器</span><br><span class="line">        least_conn;</span><br><span class="line"></span><br><span class="line">        # 配置上游服务器</span><br><span class="line">        server localhost:81;</span><br><span class="line">        server localhost:82;</span><br><span class="line">        server localhost:83;</span><br><span class="line"></span><br><span class="line">        # 常链接数量，用于提高网络吞吐量，相当于连接池</span><br><span class="line">        keepalive   32;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 将一些负载均衡节点中的静态资源文件缓存在nginx服务器当中</span><br><span class="line">    proxy_cache_path /usr/local/cache # 指令设置缓存保存的目录</span><br><span class="line">    keys_zone=mycache:5m              # 指令设置共享缓存空间的名称和索引信息大小</span><br><span class="line">    max_size=1g                       # 指令指定缓存大小</span><br><span class="line">    inactive=1h                       # 指令指定超过这个时间则清理此缓存</span><br><span class="line">    use_temp_path=off;                # 指令指定临时目录，使用后会影响 nginx 性能</span><br><span class="line"></span><br><span class="line">    # 拦截请求使用负载均衡</span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;         # 监听端口</span><br><span class="line">        server_name localhost;  # 请求域名</span><br><span class="line"></span><br><span class="line">        proxy_cache mycache;           # 开启并且使用缓存</span><br><span class="line">        proxy_cache_valid 200 304 8h;  # 指定命中缓存返回码</span><br><span class="line"></span><br><span class="line">        # 请求路由映射，匹配拦截</span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://load_balance;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>upstream 模块参数：</strong></p>
+<ul>
+<li><code>weight</code>：配置每台服务器的权重</li>
+<li><code>max_conns</code>：配置服务器最大连接数，多个 <code>worker</code> 线程可能会超过指定值</li>
+<li><code>slow_start</code>：设置服务器权重从零开始至设置值的时间（付费）</li>
+<li><code>down</code>：表示该服务器已经宕机</li>
+<li><code>backup</code>：表示该服务器为备用机，所有服务器都无法访问才会访问备用机</li>
+<li><code>max_fails</code>：最大失败次数，超过这个次数时，默认该服务器已经宕机。</li>
+<li><code>fail_timeout</code>：当超过最大失败次数时，经过多少时间去重新访问这台服务器，默认值为10s。</li>
+</ul>
+<p><strong>以上参数使用示例：</strong></p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">upstream load_balance &#123;</span><br><span class="line">    server localhost:81 weight=1 max_conns=200 slow_start=60s;</span><br><span class="line">    server localhost:82 weight=2 max_fails=50 file_timeout=10s;</span><br><span class="line">    server localhost:83 down;</span><br><span class="line">    server localhost:84 backup;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Nginx</category>
       </categories>
@@ -5220,11 +5247,6 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       </tags>
   </entry>
   <entry>
-    <title>标签</title>
-    <url>/tags/index.html</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title></title>
     <url>/about/index.html</url>
     <content><![CDATA[<div class="note success flat"><p><strong>没错，是我了</strong></p>
@@ -5253,11 +5275,6 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <hr>
 <p>大家加油：）</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>categories</title>
-    <url>/categories/index.html</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title></title>
@@ -5313,5 +5330,15 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <hr>
 <p>大家加油：）</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>categories</title>
+    <url>/categories/index.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>标签</title>
+    <url>/tags/index.html</url>
+    <content><![CDATA[]]></content>
   </entry>
 </search>
