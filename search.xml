@@ -17,6 +17,238 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Docker 真的很优秀</title>
+    <url>/posts/24100/</url>
+    <content><![CDATA[<p>本文主要记录一些 Docker 中的基本概念，以及一些常用命令，主要是为了理清楚 <code>镜像</code>、<code>容器</code>、<code>网络</code>、<code>数据卷</code> 这几个概念、作用、操作。当然能够帮到大家就更好了。</p>
+<h1 id="Docker-介绍"><a href="#Docker-介绍" class="headerlink" title="Docker 介绍"></a>Docker 介绍</h1><p><strong>Docker 的四大组成对象：</strong></p>
+<ul>
+<li>Docker 镜像：相当于软件的安装包</li>
+<li>Docker 容器：相当于安装完正在运行的软件</li>
+<li>Docker 网络：负责软件之间的相互通信</li>
+<li>Docker 数据卷：将软件内外的数据相互映射，提供容器内外数据交互功能</li>
+</ul>
+<p>Docker 是以 服务端&#x2F;客户端 的形式对外提供服务的，服务端是 docker daemon，客户端是 docker CLI。所有的镜像模块、容器模块、网络模块、数据卷模块都是实现在 docker daemon 之中的。</p>
+<p>docker daemon 暴露了一套 RESTFul API 接口以对外提供服务，我们可以在控制台通过编写 http 请求来控制 docker daemon，但是这样太繁琐了。所以，Docker 提供了 docker CLI 可以在控制台更方便的控制 docker daemon。</p>
+<h1 id="搭建-Docker-运行环境"><a href="#搭建-Docker-运行环境" class="headerlink" title="搭建 Docker 运行环境"></a>搭建 Docker 运行环境</h1><p>Docker 主要是运行在 Linux 系统中的，也有提供运行在 Windows、Mac 系统上的桌面软件，运行在 Windows、Mac 系统上的 Docker 也是搭了一层 Linux 的隔离。Windows 和 Mac 操作系统的 Docker 环境下载连接如下：</p>
+<ul>
+<li><a href="https://docs.docker.com/desktop/install/windows-install/">Windows 安装环境下载</a></li>
+<li><a href="https://docs.docker.com/desktop/install/mac-install/">Mac 安装环境下载</a></li>
+</ul>
+<p><strong>CentOS 安装如下：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo yum install yum-utils device-mapper-persistent-data lvm2</span><br><span class="line"></span><br><span class="line">sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">sudo yum install docker-ce</span><br><span class="line"></span><br><span class="line">sudo systemctl enable docker  # 开机自启动</span><br><span class="line">sudo systemctl start docker   # 启动 Docker 服务</span><br></pre></td></tr></table></figure>
+
+<p>安装完成，启动成功之后可以运行两条命令查看 Docker 的一些基本信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker version  # Docker 版本信息（包含客户端和服务端的版本信息）</span><br><span class="line">docker info     # Docker 详细信息（包含镜像、容器状态等）</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置国内镜像源：</strong></p>
+<p>修改 <code>/etc/docker/daemon.json</code> 文件（如果不存在，直接创建即可）添加以下内容：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;https://registry.docker-cn.com&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改完成，重启 Docker 以生效：<code>systemctl restart docker</code></p>
+<p>运行 <code>docker info</code> 看看是否已经生效，大概在倒数两三行的位置可以看到 Registry Mirrors 信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Registry Mirrors:</span><br><span class="line"> https://registry.docker-cn.com/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Docker-镜像"><a href="#Docker-镜像" class="headerlink" title="Docker 镜像"></a>Docker 镜像</h1><p>在 <a href="https://hub.docker.com/">dockerhub</a> 中搜索想要下载的镜像直接下载即可，有标注 <code>DOCKER OFFICIAL IMAGE</code> 字样的镜像为官方维护的镜像。也可以在控制台查看 dockerhub 的镜像信息：<code>docker search image-name</code></p>
+<p>下载命令：<code>docker pull image-name</code></p>
+<p><strong>镜像命名规则：</strong> <code>username</code>&#x2F;<code>repository</code>:<code>tag</code></p>
+<ul>
+<li><strong>username：</strong> 上传该镜像的用户，由官方维护的镜像无此信息</li>
+<li><strong>repository：</strong> 镜像名称，通常是软件名</li>
+<li><strong>tag：</strong> 镜像标签，通常是版本信息，也可以是环境需求、构建方式等信息</li>
+</ul>
+<p>当我们在下载镜像时如果没有明确给出 <code>tag</code> 时，Docker 会默认使用 <code>latest</code> 作为 <code>tag</code>，也就是默认下载最新版本的镜像。</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看本地镜像信息</td>
+<td align="left"><code>docker images</code></td>
+</tr>
+<tr>
+<td align="left">查看本地镜像的详细信息</td>
+<td align="left"><code>docker inspect image-name</code></td>
+</tr>
+<tr>
+<td align="left">删除镜像</td>
+<td align="left"><code>docker rmi image-name</code></td>
+</tr>
+</tbody></table>
+<p><strong>创建镜像：</strong></p>
+<p>提交容器修改保存成镜像：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo docker commit -m &quot;message&quot; container-name your-image-name</span><br></pre></td></tr></table></figure>
+
+<p>创建镜像之后可以使用 <code>docker images</code> 命令查看镜像信息。创建时如果忘了指定镜像名称可以通过 <code>docker tag</code> 重新命名镜像。</p>
+<p><strong>镜像导入导出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 将镜像保存导出</span><br><span class="line">docker save -o save-path/save-name1.tar your-image-name1 your-image-name2</span><br><span class="line"># 将导出的镜像导入</span><br><span class="line">docker load -i image-path/image-name.tar</span><br></pre></td></tr></table></figure>
+
+<p><strong>容器导入导出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 导出容器（一次只能导出一个）</span><br><span class="line">docker export -o save-name.tar your-container-name</span><br><span class="line"># 导入容器（导入之后是镜像）</span><br><span class="line">docker import save-name.tar your-image-name</span><br></pre></td></tr></table></figure>
+
+<h1 id="Docker-容器"><a href="#Docker-容器" class="headerlink" title="Docker 容器"></a>Docker 容器</h1><p>Docker 镜像运行起来就是 Docker 容器了，也就是一个个运行起来的软件。</p>
+<p><strong>Docker 容器的生命周期：</strong></p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E5%AE%B9%E5%99%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="docker容器生命周期"></p>
+<p>Docker 容器的生命周期分为五种状态，分别为：</p>
+<ul>
+<li><strong>Created：</strong>容器已经被创建，容器所需的相关资源已经准备就绪，但容器中的程序还未处于运行状态。</li>
+<li><strong>Running：</strong>容器正在运行，也就是容器中的应用正在运行。</li>
+<li><strong>Paused：</strong>容器已暂停，表示容器中的所有程序都处于暂停 ( 不是停止 ) 状态。</li>
+<li><strong>Stopped：</strong>容器处于停止状态，占用的资源和沙盒环境都依然存在，只是容器中的应用程序均已停止。</li>
+<li><strong>Deleted：</strong>容器已删除，相关占用的资源及存储在 Docker 中的管理信息也都已释放和移除。</li>
+</ul>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+<th align="left">常用参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">创建容器</td>
+<td align="left"><code>docker create image-name</code></td>
+<td align="left"><code>--name</code>（指定容器名称）</td>
+</tr>
+<tr>
+<td align="left">启动容器</td>
+<td align="left"><code>docker start container-name</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">创建并启动容器</td>
+<td align="left"><code>docker run image-name</code></td>
+<td align="left"><code>--name</code>、<code>-d</code>（后台运行）<br> <code>--rm</code>（停止后删除）、<code>-e</code>（设置环境）</td>
+</tr>
+<tr>
+<td align="left">停止容器</td>
+<td align="left"><code>docker stop container-name</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">删除容器</td>
+<td align="left"><code>docker rm container-name</code></td>
+<td align="left"><code>-v</code>（删除相关联的数据卷）</td>
+</tr>
+<tr>
+<td align="left">查看容器状态</td>
+<td align="left"><code>docker ps</code></td>
+<td align="left"><code>-a</code>（查看全部容器）</td>
+</tr>
+<tr>
+<td align="left">进入容器</td>
+<td align="left"><code>docker exec container-name</code></td>
+<td align="left"><code>-it</code>（当前控制台输入输出）<br> <code>bash</code>&#x2F;<code>sh</code>（以哪种方式启动）</td>
+</tr>
+</tbody></table>
+<p><strong>写时复制：</strong></p>
+<p>在通过镜像运行容器时，并不是马上就把镜像里的所有内容拷贝到容器所运行的沙盒文件系统中，而是利用 UnionFS 将镜像以只读的方式挂载到沙盒文件系统中。只有在容器中发生对文件的修改时，修改才会体现到沙盒环境上。</p>
+<p>容器是基于镜像启动的，在启动容器的时候并不是直接创建一个容器，而是利用镜像直接启动，当发生修改时再利用写时复制机制去修改。这样可以大幅提高容器启动速度，做到秒启动。</p>
+<h1 id="Docker-网络"><a href="#Docker-网络" class="headerlink" title="Docker 网络"></a>Docker 网络</h1><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.png" alt="docker容器网络模型"></p>
+<p>在 Docker 网络中，有三个比较核心的概念，也就是：<code>沙盒（Sandbox）</code>、<code>网络（Network）</code>、<code>端点（Endpoint）</code>。这三者形成了 Docker 网络的核心模型，也就是容器网络模型 ( Container Network Model )。</p>
+<ul>
+<li><strong>沙盒：</strong>每个容器完全独立的网络环境，隔离了容器网络与宿主机网络。</li>
+<li><strong>网络：</strong>Docker 内部的虚拟子网，网络内的参与者相互可见并能够进行通讯。</li>
+<li><strong>端点：</strong>可控封闭网络环境的出入口，当端口相互配对后，就能进行数据传输了。</li>
+</ul>
+<p>目前 Docker 官方为我们提供了五种 Docker 网络驱动，分别是：<strong>Bridge Driver（默认，网桥模式）</strong>、Host Driver、Overlay Driver、MacLan Driver、None Driver。docker daemon 中默认维护了一个 bridge 的网络，所有的容器默认都是加入到此网络中。</p>
+<h2 id="容器互联"><a href="#容器互联" class="headerlink" title="容器互联"></a>容器互联</h2><p>要让一个容器连接到另外一个容器，可以在容器通过 <code>docker create</code> 或 <code>docker run</code> 创建时通过 <code>--link</code> 选项进行配置，同时也可以为连接指定一个别名，这样在代码中可以直接使用别名进行连接。如下就是创建 mysql 容器和 webapp 容器，让 webapp 容器连接至 mysql 容器中，并且在 webapp 容器中为 mysql 容器取别名为 database。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql</span><br><span class="line">docker run -d --name webapp --link mysql:database webapp</span><br></pre></td></tr></table></figure>
+
+<p>这样在 webapp 中如果需要连接 mysql 可以这么写：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://database:3306/database-name&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果不是连接默认端口，那么需要在启动时通过 <code>--expose</code> 参数告诉容器暴露对应端口，使用如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d --name mysql --expose=3307 -e MYSQL_ROOT_PASSWORD=root mysql</span><br></pre></td></tr></table></figure>
+
+<p>可通过 <code>docker ps</code> 命令查看容器对外暴露了哪些端口。</p>
+<h2 id="创建网络"><a href="#创建网络" class="headerlink" title="创建网络"></a>创建网络</h2><p>我们也可以自定义网络，形成虚拟子网的目的，<strong>只有在同一网络之中的容器才可以互联</strong>。</p>
+<ul>
+<li>创建网络：<code>docker network create -d bridge network-name</code>，<code>-d</code> 指定网络类型</li>
+<li>查看网络：<code>docker network ls</code></li>
+<li>删除网络：<code>docker network rm network-name</code></li>
+</ul>
+<p>创建容器时指定网络：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d --name your-container-name --network=network-name container-name</span><br></pre></td></tr></table></figure>
+
+<h2 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h2><p>将容器中的端口映射至宿主机的端口。如下：</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84%E6%A8%A1%E5%9E%8B.png" alt="docker网络端口映射模型"></p>
+<p>要映射端口，我们可以在创建容器时使用 <code>-p</code> 或者是 <code>--publish</code> 参数。</p>
+<p>使用方式：<code>-p &lt;host-port&gt;:&lt;container-port&gt;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d --name nginx -p 80:80 nginx</span><br></pre></td></tr></table></figure>
+
+<p>可通过 <code>docker ps</code> 查看端口映射情况</p>
+<h1 id="Docker-数据卷"><a href="#Docker-数据卷" class="headerlink" title="Docker 数据卷"></a>Docker 数据卷</h1><p>数据管理使用挂载的方式，通过数据卷可以方便管理挂载的目录</p>
+<h2 id="容器数据管理"><a href="#容器数据管理" class="headerlink" title="容器数据管理"></a>容器数据管理</h2><p>容器内的文件系统是随着容器的生命周期而创建和移除的，容器内部的数据无法被持久化存储。由于容器隔离，操作容器内部文件也变得很麻烦。Docker 解决这一问题的方式是文件挂载，将宿主操作系统中的文件挂载到容器内部，便可以让容器内外都共享这个文件。通过这种方式可以互通容器内外的文件，那么文件数据持久化以及操作容器内部文件的问题也就得到了解决。</p>
+<p>Docker 提供了三种文件挂载的方式：Bind Mount、Volume 和 Tmpfs Mount。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E6%96%87%E4%BB%B6%E6%8C%82%E8%BD%BD.png" alt="docker文件挂载"></p>
+<ul>
+<li><p><strong>Bind Mount：</strong> 直接将宿主操作系统中的目录和文件挂载到容器内的文件系统中，形成挂载映射关系，在容器内外对文件的读写都相互可见。</p>
+<blockquote>
+<p>使用 <code>-v</code> 参数设置，示例：<code>-v &lt;host-path&gt;:&lt;container-path&gt;:ro</code>，ro（可选）表示容器内只读。为避免混淆，此处强制使用绝对路径。</p>
+</blockquote>
+</li>
+<li><p><strong>Volume（数据卷）：</strong> 仅指定容器内的目录，宿主操作系统挂载的目录由 Docker 进行管理，不需要关心具体挂载到了宿主操作系统中的哪里。</p>
+<blockquote>
+<p>Bind Mount 模式为指定 <code>&lt;host-path&gt;</code> 则为 Volume。此种方式生成的数据在路径上会有 Docker 生成的 ID，所以能够自己命名：<code>-v name:&lt;container-path&gt;</code></p>
+</blockquote>
+</li>
+<li><p><strong>Tmpfs Mount：</strong> 挂载系统内存中的一部分到容器的文件系统里，不过由于内存和容器的特征，它的存储并不是持久的，其中的内容会随着容器的停止而消失。</p>
+<blockquote>
+<p>使用 <code>--tmpfs</code> 参数挂载，<code>--tmpfs &lt;host-path&gt;</code></p>
+</blockquote>
+</li>
+</ul>
+<p>以上创建出来的数据挂载信息，或者是数据卷信息可以通过 <code>docker inspect</code> 命令查看。</p>
+<h2 id="数据卷管理"><a href="#数据卷管理" class="headerlink" title="数据卷管理"></a>数据卷管理</h2><p>上面对数据卷的操作都是基于容器的，多少有点不方便，Docker 提供了独立操作数据卷的方式。</p>
+<p><strong>数据卷使用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">创建数据卷</td>
+<td align="left"><code>docker volume create volume-name</code></td>
+</tr>
+<tr>
+<td align="left">查看数据卷</td>
+<td align="left"><code>docker volume ls</code></td>
+</tr>
+<tr>
+<td align="left">删除数据卷</td>
+<td align="left"><code>docker volume rm volume-name</code></td>
+</tr>
+<tr>
+<td align="left">删除没有被引用且未命名的数据卷</td>
+<td align="left"><code>docker volume prune -f</code></td>
+</tr>
+</tbody></table>
+<p><strong>数据卷容器：</strong></p>
+<p>创建数据卷容器的方式很简单，由于不需要容器本身运行，因而我们找个简单的系统镜像都可以完成创建。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker create --name appdata -v /webapp/storage ubuntu</span><br></pre></td></tr></table></figure>
+
+<p>在使用数据卷容器时，我们不建议再定义数据卷的名称，因为我们可以通过对数据卷容器的引用来完成数据卷的引用。之前我们提到，Docker 的 Network 是容器间的网络桥梁，如果做类比，数据卷容器就可以算是容器间的文件系统桥梁。我们可以像加入网络一样引用数据卷容器，只需要在创建新容器时使用专门的 <code>--volumes-from</code> 选项即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d --name nginx --volumes-from appdata nginx</span><br></pre></td></tr></table></figure>
+
+<p>引用数据卷容器时，不需要再定义数据卷挂载到容器中的位置，Docker 会以数据卷容器中的挂载定义将数据卷挂载到引用的容器中。</p>
+<p>使用数据卷容器看起来与使用原始数据卷的方式差不多，但是数据卷容器主要是在迁移数据卷时提供方便。如果迁移数据卷至其他目录，不用修改引用容器中的数据卷，数据卷容器相当于对数据卷的路径做了一层包装或者是取了个别名的意思。</p>
+<hr>
+<blockquote>
+<p><strong>巨人的肩膀：</strong></p>
+<ul>
+<li>掘金小册-开发者必备的 Docker 实践指南</li>
+</ul>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
     <title>Spring Security</title>
     <url>/posts/28582/</url>
     <content><![CDATA[<p>关于 Spring Security 的文章网上有很多，B站也有很多教程，我都看过一些，但感觉对这部分的知识还不是很牢固。网上的大部分文章主要都是从后端的用户认证开始讲起的，一上来就是这些比较偏向实用部分的内容我觉得不是很好理解，还有很多巨长的类名方法名等等，这并不是在说网上的这些文章写的不好，毕竟本文也是一篇前人栽树，后人乘凉的文章。但是写这篇文章的初衷是想要从一个简单的小例子入手，解释清楚那些巨长的类名方法名都是干嘛的，应该怎么使用。</p>
@@ -2427,49 +2659,48 @@
     <title>Redis 持久化机制（RDB 和 AOF）</title>
     <url>/posts/59553/</url>
     <content><![CDATA[<p>RDB和AOF分别是Redis所提供的两种持久化方式，其中RDB是全量备份，也就是一个快照的方式，对应的AOF就是一个增量备份的方式，是一个日志备份的方式。</p>
-<span id="more"></span>
-
 <blockquote>
-<p>本文非原著，出自：<a href="https://pdai.tech/md/db/nosql-redis/db-redis-x-rdb-aof.html">Redis进阶 - 持久化：RDB和AOF机制详解</a></p>
+<p>本文非原创，出自：<a href="https://pdai.tech/md/db/nosql-redis/db-redis-x-rdb-aof.html">Redis进阶 - 持久化：RDB和AOF机制详解</a></p>
 </blockquote>
 <hr>
-<h1 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h1><p>触发Redis进行RDB备份的方式有两种，手动备份和自动备份。自动备份需要在配置文件种设置一些配置项，手动备份只需要手动向Redis控制台输入<code>save</code>命令或者是<code>bgsave</code>命令。</p>
+<h1 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h1><p>触发 Redis 进行 RDB 备份的方式有两种，手动备份和自动备份。自动备份需要在配置文件种设置一些配置项，手动备份只需要手动向 Redis 控制台输入 <code>save</code> 命令或者是 <code>bgsave</code> 命令。</p>
 <ul>
 <li><code>save</code>：阻塞当前Redis服务器，直到RDB过程完成为止，对于内存比较大的实例会造成长时间<strong>阻塞</strong>，线上环境不建议使用</li>
 <li><code>bgsave</code>：Redis进程执行fork操作创建子进程，RDB持久化过程由子进程负责，完成后自动结束。阻塞只发生在fork阶段，一般时间很短</li>
 </ul>
-<p>bgsave流程图如下所示<br><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221142546.png" alt="20220221142546"></p>
+<p><strong>bgsave流程如下所示：</strong></p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221142546.png" alt="20220221142546"></p>
 <h2 id="会自动触发RDB备份的四种情况"><a href="#会自动触发RDB备份的四种情况" class="headerlink" title="会自动触发RDB备份的四种情况"></a>会自动触发RDB备份的四种情况</h2><ul>
-<li>redis.conf中配置<code>save m n</code>，即在<code>m</code>秒内有<code>n</code>次修改时，自动触发bgsave生成rdb文件</li>
-<li>主从复制时，从节点要从主节点进行全量复制时也会触发bgsave操作，生成当时的快照发送到从节点；执行debug</li>
-<li>reload命令重新加载redis时也会触发bgsave操作</li>
-<li>默认情况下执行shutdown命令时，如果没有开启aof持久化，那么也会触发bgsave操作</li>
+<li>redis.conf 中配置 <code>save m n</code>，即在 <code>m</code> 秒内有 <code>n</code> 次修改时，自动触发 bgsave 生成 rdb 文件</li>
+<li>主从复制时，从节点要从主节点进行全量复制时也会触发 bgsave 操作，生成当时的快照发送到从节点</li>
+<li>reload 命令重新加载 redis 时也会触发 bgsave 操作</li>
+<li>默认情况下执行 shutdown 命令时，如果没有开启 aof 持久化，那么也会触发 bgsave 操作</li>
 </ul>
-<h2 id="redis-conf-中配置RDB备份"><a href="#redis-conf-中配置RDB备份" class="headerlink" title="redis.conf 中配置RDB备份"></a>redis.conf 中配置RDB备份</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 周期性执行条件的设置格式为</span><br><span class="line">save &lt;seconds&gt; &lt;changes&gt;</span><br><span class="line"></span><br><span class="line"># 默认的设置为：</span><br><span class="line">save 900 1      # 如果900秒内有1条Key信息发生变化，则进行快照</span><br><span class="line">save 300 10     # 如果300秒内有10条Key信息发生变化，则进行快照</span><br><span class="line">save 60 10000   # 如果60秒内有10000条Key信息发生变化，则进行快照</span><br><span class="line"></span><br><span class="line"># 以下设置方式为关闭RDB快照功能</span><br><span class="line">save &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 文件名称</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 文件保存路径</span><br><span class="line">dir /home/work/app/redis/data/</span><br><span class="line"></span><br><span class="line"># 如果持久化出错，主进程是否停止写入</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 是否压缩 </span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 导入时是否检查</span><br><span class="line">rdbchecksum yes</span><br></pre></td></tr></table></figure>
+<h2 id="redis-conf-中配置RDB备份"><a href="#redis-conf-中配置RDB备份" class="headerlink" title="redis.conf 中配置RDB备份"></a>redis.conf 中配置RDB备份</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">save 900 1  # 如果900秒内有1条Key信息发生变化，则进行快照</span><br><span class="line">save &quot;&quot;     # 关闭RDB快照功能</span><br><span class="line"></span><br><span class="line">dir /home/work/app/redis/data/  # rdb 文件保存路径</span><br><span class="line">dbfilename dump.rdb             # rdb 文件名称</span><br><span class="line"></span><br><span class="line"># 如果持久化出错，主进程是否停止写入</span><br><span class="line"># 这个特性的主要目的是使运维人员在第一时间就发现Redis的运行错误，并进行解决</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 是否压缩，将在字符串类型的数据被快照到磁盘文件时，启用 LZF 压缩算法</span><br><span class="line"># Redis 官方的建议是请保持该选项设置为 yes</span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 导入时是否检查</span><br><span class="line">rdbchecksum yes</span><br></pre></td></tr></table></figure>
 
-<p><code>rdbcompression</code>：该属性将在字符串类型的数据被快照到磁盘文件时，启用LZF压缩算法。Redis官方的建议是请保持该选项设置为yes，因为“it’s almost always a win”。<br><code>rdbchecksum</code>：从RDB快照功能的version 5 版本开始，一个64位的CRC冗余校验编码会被放置在RDB文件的末尾，以便对整个RDB文件的完整性进行验证。这个功能大概会多损失10%左右的性能，但获得了更高的数据可靠性。所以如果您的Redis服务需要追求极致的性能，就可以将这个选项设置为no。</p>
-<h2 id="拍摄快照的过程中如何保证数据一致性？"><a href="#拍摄快照的过程中如何保证数据一致性？" class="headerlink" title="拍摄快照的过程中如何保证数据一致性？"></a>拍摄快照的过程中如何保证数据一致性？</h2><p><em>由于生产环境中我们为Redis开辟的内存区域都比较大（例如6GB），那么将内存中的数据同步到硬盘的过程可能就会持续比较长的时间，而实际情况是这段时间Redis服务一般都会收到数据写操作请求。那么如何保证数据一致性呢？</em></p>
-<p>RDB中的核心思路是Copy-on-Write，来保证在进行快照操作的这段时间，需要压缩写入磁盘上的数据在内存中不会发生变化。在正常的快照操作中，一方面Redis主进程会fork一个新的快照进程专门来做这个事情，这样保证了Redis服务不会停止对客户端包括写请求在内的任何响应。另一方面这段时间发生的数据变化会以副本的方式存放在另一个新的内存区域，待快照操作结束后才会同步到原来的内存区域。 </p>
+<p>rdbchecksum：从RDB快照功能的version 5 版本开始，一个64位的CRC冗余校验编码会被放置在RDB文件的末尾，以便对整个RDB文件的完整性进行验证。这个功能大概会多损失10%左右的性能，但获得了更高的数据可靠性。所以如果您的Redis服务需要追求极致的性能，就可以将这个选项设置为no。</p>
+<h2 id="拍摄快照的过程中如何保证数据一致性？"><a href="#拍摄快照的过程中如何保证数据一致性？" class="headerlink" title="拍摄快照的过程中如何保证数据一致性？"></a>拍摄快照的过程中如何保证数据一致性？</h2><blockquote>
+<p>由于生产环境中我们为Redis开辟的内存区域都比较大（例如6GB），那么将内存中的数据同步到硬盘的过程可能就会持续比较长的时间，而实际情况是这段时间Redis服务一般都会收到数据写操作请求。那么如何保证数据一致性呢？</p>
+</blockquote>
+<p>RDB 中的核心思路是 Copy-on-Write，来保证在进行快照操作的这段时间，需要压缩写入磁盘上的数据在内存中不会发生变化。在正常的快照操作中，一方面 Redis 主进程会 fork 一个新的快照进程专门来做这个事情，这样保证了 Redis 服务不会停止对客户端包括写请求在内的任何响应。另一方面这段时间发生的数据变化会以副本的方式存放在另一个新的内存区域，待快照操作结束后才会同步到原来的内存区域。 </p>
 <p>举个例子：如果主线程对这些数据也都是读操作（例如图中的键值对 A），那么，主线程和 bgsave 子进程相互不影响。但是，如果主线程要修改一块数据（例如图中的键值对 C），那么，这块数据就会被复制一份，生成该数据的副本。然后，bgsave 子进程会把这个副本数据写入 RDB 文件，而在这个过程中，主线程仍然可以直接修改原来的数据。</p>
 <p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221144234.png" alt="20220221144234"></p>
-<h2 id="RDB优缺点"><a href="#RDB优缺点" class="headerlink" title="RDB优缺点"></a>RDB优缺点</h2><ul>
-<li><strong>优点</strong><ul>
-<li>RDB文件是某个时间节点的快照，默认使用LZF算法进行压缩，压缩后的文件体积远远小于内存大小，适用于备份、全量复制等场景；</li>
-<li>Redis加载RDB文件恢复数据要远远快于AOF方式；</li>
+<h2 id="RDB优缺点"><a href="#RDB优缺点" class="headerlink" title="RDB优缺点"></a>RDB优缺点</h2><p><strong>优点</strong></p>
+<ul>
+<li>RDB 文件是某个时间节点的快照，默认使用 LZF 算法进行压缩，压缩后的文件体积远远小于内存大小，适用于备份、全量复制等场景；</li>
+<li>Redis 加载 RDB 文件恢复数据要远远快于 AOF 方式；</li>
 </ul>
-</li>
-<li><strong>缺点</strong><ul>
-<li>RDB方式实时性不够，无法做到秒级的持久化；</li>
-<li>每次调用bgsave都需要fork子进程，fork子进程属于重量级操作，频繁执行成本较高；</li>
-<li>每次调用bgsave都需要fork子进程，fork子进程属于重量级操作，频繁执行成本较高；</li>
-<li>版本兼容RDB文件问题；</li>
+<p><strong>缺点</strong></p>
+<ul>
+<li>RDB 方式实时性不够，无法做到秒级的持久化；</li>
+<li>每次调用 bgsave 都需要 fork 子进程，fork 子进程属于重量级操作，频繁执行成本较高；</li>
+<li>版本兼容 RDB 文件问题；</li>
 </ul>
-</li>
-</ul>
-<h1 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h1><p>Redis是“写后”日志，Redis先执行命令，把数据写入内存，然后才记录日志。日志里记录的是Redis收到的每一条命令，这些命令是以文本形式保存。即先写内存，后写日志。</p>
+<hr>
+<h1 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h1><p>Redis 是 “写后” 日志，Redis 先执行命令，把数据写入内存，然后才记录日志。日志里记录的是 Redis 收到的每一条命令，这些命令是以文本形式保存。即先写内存，后写日志。</p>
 <h2 id="为什么采用写后日志？"><a href="#为什么采用写后日志？" class="headerlink" title="为什么采用写后日志？"></a>为什么采用写后日志？</h2><p>Redis要求高性能，采用写后日志有两方面好处：</p>
 <ul>
-<li><strong>避免额外的检查开销</strong>：Redis 在向 AOF 里面记录日志的时候，并不会先去对这些命令进行语法检查。所以，如果先记日志再执行命令的话，日志中就有可能记录了错误的命令，Redis 在使用日志恢复数据时，就可能会出错。 </li>
+<li>避免额外的检查开销：Redis 在向 AOF 里面记录日志的时候，并不会先去对这些命令进行语法检查。所以，如果先记日志再执行命令的话，日志中就有可能记录了错误的命令，Redis 在使用日志恢复数据时，就可能会出错。 </li>
 <li>不会阻塞当前的写操作。</li>
 </ul>
 <p>但这种方式存在潜在风险：</p>
@@ -2477,46 +2708,81 @@
 <li>如果命令执行完成，写日志之前宕机了，会丢失数据。</li>
 <li>主线程写磁盘压力大，导致写盘慢，阻塞后续操作。</li>
 </ul>
-<h2 id="三种写回策略："><a href="#三种写回策略：" class="headerlink" title="三种写回策略："></a>三种写回策略：</h2><ul>
-<li>always，同步写回：每个写命令执行完，立马同步地将日志写回磁盘</li>
-<li>everysec，每秒写回：每个写命令执行完，只是先把日志写到AOF文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘</li>
-<li>no，操作系统控制的写回：每个写命令执行完，只是先把日志写到AOF文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘</li>
-</ul>
-<p>为了提高文件写入效率，在现代操作系统中，当用户调用write函数，将一些数据写入文件时，操作系统通常会将数据暂存到一个内存缓冲区里，当缓冲区的空间被填满或超过了指定时限后，才真正将缓冲区的数据写入到磁盘里。</p>
-<p>这样的操作虽然提高了效率，但也为数据写入带来了安全问题：如果计算机停机，内存缓冲区中的数据会丢失。为此，系统提供了fsync、fdatasync同步函数，可以强制操作系统立刻将缓冲区中的数据写入到硬盘里，从而确保写入数据的安全性。</p>
-<h2 id="redis-conf中配置AOF"><a href="#redis-conf中配置AOF" class="headerlink" title="redis.conf中配置AOF"></a>redis.conf中配置AOF</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># appendonly参数开启AOF持久化</span><br><span class="line">appendonly no</span><br><span class="line"></span><br><span class="line"># AOF持久化的文件名，默认是appendonly.aof</span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的</span><br><span class="line">dir ./</span><br><span class="line"></span><br><span class="line"># 同步策略</span><br><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br><span class="line"></span><br><span class="line"># aof重写期间是否同步</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line"></span><br><span class="line"># 重写触发配置</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br><span class="line"></span><br><span class="line"># 加载aof出错如何处理</span><br><span class="line">aof-load-truncated yes</span><br><span class="line"></span><br><span class="line"># 文件重写策略</span><br><span class="line">aof-rewrite-incremental-fsync yes</span><br></pre></td></tr></table></figure>
-
+<h2 id="如何实现-AOF"><a href="#如何实现-AOF" class="headerlink" title="如何实现 AOF"></a>如何实现 AOF</h2><p>AOF日志记录Redis的每个写命令，步骤分为：命令追加（append）、文件写入（write）和文件同步（sync）。</p>
 <ul>
-<li><code>appendfsync</code>：这个参数项是AOF功能最重要的设置项之一，主要用于设置“真正执行”操作命令向AOF文件中同步的策略。与上节对应，appendfsync参数项可以设置三个值，分别是：always、everysec、no，默认的值为everysec。</li>
-<li><code>auto-aof-rewrite-percentage</code>：上文说到在生产环境下，技术人员不可能随时随地使用“BGREWRITEAOF”命令去重写AOF文件。所以更多时候我们需要依靠Redis中对AOF文件的自动重写策略。Redis中对触发自动重写AOF文件的操作提供了两个设置：auto-aof-rewrite-percentage表示如果当前AOF文件的大小超过了上次重写后AOF文件的百分之多少后，就再次开始重写AOF文件。例如该参数值的默认设置值为100，意思就是如果AOF文件的大小超过上次AOF文件重写后的1倍，就启动重写操作。 </li>
-<li><code>auto-aof-rewrite-min-size</code>：参考auto-aof-rewrite-percentage选项的介绍，auto-aof-rewrite-min-size设置项表示启动AOF文件重写操作的AOF文件最小大小。如果AOF文件大小低于这个值，则不会触发重写操作。注意，auto-aof-rewrite-percentage和auto-aof-rewrite-min-size只是用来控制Redis中自动对AOF文件进行重写的情况，如果是技术人员手动调用“BGREWRITEAOF”命令，则不受这两个限制条件左右。</li>
+<li><strong>命令追加：</strong>当AOF持久化功能打开了，服务器在执行完一个写命令之后，会以协议格式将被执行的写命令追加到服务器的 aof_buf 缓冲区。</li>
+<li><strong>文件写入和同步：</strong>关于何时将 aof_buf 缓冲区的内容写入AOF文件中，Redis提供了三种写回策略：</li>
 </ul>
-<h2 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h2><p>AOF会记录每个写命令到AOF文件，随着时间越来越长，AOF文件会变得越来越大。如果不加以控制，会对Redis服务器，甚至对操作系统造成影响，而且AOF文件越大，数据恢复也越慢。为了解决AOF文件体积膨胀的问题，Redis提供AOF文件重写机制来对AOF文件进行“瘦身”。Redis通过创建一个新的AOF文件来替换现有的AOF，新旧两个AOF文件保存的数据相同，但新AOF文件没有了冗余命令。</p>
+<h2 id="三种写回策略"><a href="#三种写回策略" class="headerlink" title="三种写回策略"></a>三种写回策略</h2><ul>
+<li><strong>always 同步写回：</strong> 每个写命令执行完，立马同步地将日志写回磁盘</li>
+<li><strong>everysec 每秒写回：</strong> 每个写命令执行完，只是先把日志写到AOF文件的内存缓冲区，每隔一秒把缓冲区中的内容写入磁盘</li>
+<li><strong>no 操作系统控制的写回：</strong> 每个写命令执行完，只是先把日志写到AOF文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘</li>
+</ul>
+<p><strong>三种写会策略的优缺点：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">配置项</th>
+<th align="left">写回时机</th>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">always</td>
+<td align="left">同步写回</td>
+<td align="left">可靠性高，数据基本不丢失</td>
+<td align="left">每个写命令都要落盘，性能影响较大</td>
+</tr>
+<tr>
+<td align="left">everysec</td>
+<td align="left">每秒写回</td>
+<td align="left">性能适中</td>
+<td align="left">宕机时丢失一秒内数据</td>
+</tr>
+<tr>
+<td align="left">no</td>
+<td align="left">操作系统控制写回</td>
+<td align="left">性能好</td>
+<td align="left">宕机丢失数据较多</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>为了提高文件写入效率，在现代操作系统中，当用户调用 write 函数，将一些数据写入文件时，操作系统通常会将数据暂存到一个内存缓冲区里，当缓冲区的空间被填满或超过了指定时限后，才真正将缓冲区的数据写入到磁盘里。<br>这样的操作虽然提高了效率，但也为数据写入带来了安全问题：如果计算机停机，内存缓冲区中的数据会丢失。为此，系统提供了 fsync、fdatasync 同步函数，可以强制操作系统立刻将缓冲区中的数据写入到硬盘里，从而确保写入数据的安全性。</p>
+</blockquote>
+<h2 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h2><blockquote>
+<p>AOF会记录每个写命令到AOF文件，随着时间越来越长，AOF文件会变得越来越大。如果不加以控制，会对Redis服务器，甚至对操作系统造成影响，而且AOF文件越大，数据恢复也越慢。为了解决AOF文件体积膨胀的问题，Redis提供AOF文件重写机制来对AOF文件进行“瘦身”。Redis通过创建一个新的AOF文件来替换现有的AOF，新旧两个AOF文件保存的数据相同，但新AOF文件没有了冗余命令。</p>
+</blockquote>
 <p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221161556.png" alt="20220221161556"></p>
-<ul>
-<li><p><strong>AOF重写会阻塞吗？</strong><br>  AOF重写过程是由后台进程bgrewriteaof来完成的。主线程fork出后台的bgrewriteaof子进程，fork会把主线程的内存拷贝一份给bgrewriteaof子进程，这里面就包含了数据库的最新数据。然后，bgrewriteaof子进程就可以在不影响主线程的情况下，逐一把拷贝的数据写成操作，记入重写日志。 </p>
-<p>  所以aof在重写时，在fork进程时是会阻塞住主线程的。</p>
-</li>
-<li><p><strong>AOF日志何时会重写？</strong><br>  有两个配置项控制AOF重写的触发：</p>
-<ul>
-<li><code>auto-aof-rewrite-min-size</code>：表示运行AOF重写时文件的最小大小，默认为64MB。</li>
-<li><code>auto-aof-rewrite-percentage</code>：这个值的计算方式是，当前aof文件大小和上一次重写后aof文件大小的差值，再除以上一次重写后aof文件大小。也就是当前aof文件比上一次重写后aof文件的增量大小，和上一次重写后aof文件大小的比值。</li>
-</ul>
-</li>
-<li><p><strong>小结：</strong></p>
-<ul>
+<div class="note default flat"><p><strong>AOF重写流程</strong></p>
+</div>
+
+<p>AOF 重写过程是由后台进程 bgrewriteaof 来完成的。主线程 fork 出后台的 bgrewriteaof 子进程，fork 会把主线程的内存拷贝一份给 bgrewriteaof 子进程，这里面就包含了数据库的最新数据。然后，bgrewriteaof 子进程就可以在不影响主线程的情况下，逐一把拷贝的数据写成操作，记入重写日志。所以 <strong>AOF 在重写时，在 fork 进程时是会阻塞住主线程的</strong>。</p>
+<ol>
 <li>主线程fork出子进程重写aof日志</li>
 <li>子进程重写日志完成后，主线程追加aof日志缓冲</li>
 <li>替换日志文件</li>
-</ul>
+</ol>
+<h2 id="redis-conf中配置AOF"><a href="#redis-conf中配置AOF" class="headerlink" title="redis.conf中配置AOF"></a>redis.conf中配置AOF</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">appendonly no # appendonly 参数开启 AOF 持久化</span><br><span class="line"></span><br><span class="line"># AOF持久化的文件名，默认是appendonly.aof</span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的</span><br><span class="line">dir ./</span><br><span class="line"></span><br><span class="line">appendfsync everysec # 同步写回策略</span><br><span class="line"></span><br><span class="line"># aof重写期间是否同步</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line"></span><br><span class="line"># 加载aof出错如何处理</span><br><span class="line">aof-load-truncated yes</span><br><span class="line"></span><br><span class="line"># AOF 重写时，缓冲区满 32MB 写一次 fsync()，防止写硬盘时I/O突增。</span><br><span class="line">aof-rewrite-incremental-fsync yes</span><br><span class="line"></span><br><span class="line"># 重写触发配置，手动 “BGREWRITEAOF” 命令不受这两个参数限制</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>appendfsync</code>：这个参数项是AOF功能最重要的设置项之一，主要用于设置“真正执行”操作命令向AOF文件中同步的策略。与上节对应，appendfsync参数项可以设置三个值，分别是：always、everysec、no，默认的值为 everysec。</p>
+</li>
+<li><p><code>auto-aof-rewrite-percentage</code>：表示如果当前AOF文件的大小超过了上次重写后AOF文件的百分之多少后，就再次开始重写AOF文件。例如该参数值的默认设置值为100，意思就是如果AOF文件的大小超过上次AOF文件重写后的1倍，就启动重写操作。 </p>
+</li>
+<li><p><code>auto-aof-rewrite-min-size</code>：表示启动AOF文件重写操作的AOF文件最小大小，如果AOF文件大小低于这个值，则不会触发重写操作。</p>
 </li>
 </ul>
+<hr>
 <h1 id="RDB和AOF混合方式"><a href="#RDB和AOF混合方式" class="headerlink" title="RDB和AOF混合方式"></a>RDB和AOF混合方式</h1><blockquote>
 <p>Redis 4.0 中提出了一个混合使用 AOF 日志和内存快照的方法。简单来说，内存快照以一定的频率执行，在两次快照之间，使用 AOF 日志记录这期间的所有命令操作。</p>
 </blockquote>
 <p>这样一来，快照不用很频繁地执行，这就避免了频繁 fork 对主线程的影响。而且，AOF 日志也只用记录两次快照间的操作，也就是说，不需要记录所有操作了，因此，就不会出现文件过大的情况了，也可以避免重写开销。</p>
 <p>如下图所示，T1 和 T2 时刻的修改，用 AOF 日志记录，等到第二次做全量快照时，就可以清空 AOF 日志，因为此时的修改都已经记录到快照中了，恢复时就不再用日志了。</p>
 <p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/20220221162108.png" alt="20220221162108"></p>
+<p>这个方法既能享受到 RDB 文件快速恢复的好处，又能享受到 AOF 只记录操作命令的简单优势, 实际环境中用的很多。</p>
+<h1 id="从持久化中恢复数据"><a href="#从持久化中恢复数据" class="headerlink" title="从持久化中恢复数据"></a>从持久化中恢复数据</h1><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/redis%E5%8A%A0%E8%BD%BD%E6%8C%81%E4%B9%85%E5%8C%96%E6%95%B0%E6%8D%AE%E9%A1%BA%E5%BA%8F%E5%9B%BE.png" alt="redis加载持久化数据顺序图"></p>
+<p>为什么会优先加载AOF呢？因为AOF保存的数据更完整，通过上面的分析我们知道AOF基本上最多损失1s的数据。</p>
 ]]></content>
       <categories>
         <category>Redis</category>
@@ -5277,21 +5543,9 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 ]]></content>
   </entry>
   <entry>
-    <title></title>
-    <url>/link/index.html</url>
-    <content><![CDATA[<hr>
-<blockquote>
-<p><strong>友链申请滴注意事项：</strong></p>
-<ol>
-<li>内容持续更新且可以稳定访问</li>
-<li>网页整洁无繁杂广告推广</li>
-<li>本站会定期清理无法访问的友链，如果更换了链接信息请至评论区留言，谢谢合作</li>
-<li>本站会定期查看双方是否互为友链，如果取消本站友链，本站也会将您的友链移除</li>
-<li>将本站的友链添加到您的友链，相关信息如下</li>
-<li>按照以下格式在以下评论区留言，待博主为您添上友链</li>
-</ol>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
+    <title>categories</title>
+    <url>/categories/index.html</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>这里</title>
@@ -5332,9 +5586,21 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 ]]></content>
   </entry>
   <entry>
-    <title>categories</title>
-    <url>/categories/index.html</url>
-    <content><![CDATA[]]></content>
+    <title></title>
+    <url>/link/index.html</url>
+    <content><![CDATA[<hr>
+<blockquote>
+<p><strong>友链申请滴注意事项：</strong></p>
+<ol>
+<li>内容持续更新且可以稳定访问</li>
+<li>网页整洁无繁杂广告推广</li>
+<li>本站会定期清理无法访问的友链，如果更换了链接信息请至评论区留言，谢谢合作</li>
+<li>本站会定期查看双方是否互为友链，如果取消本站友链，本站也会将您的友链移除</li>
+<li>将本站的友链添加到您的友链，相关信息如下</li>
+<li>按照以下格式在以下评论区留言，待博主为您添上友链</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
     <title>标签</title>

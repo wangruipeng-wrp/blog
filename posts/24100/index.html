@@ -1,0 +1,408 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Docker 真的很优秀 | 知更</title><meta name="author" content="码小瑞"><meta name="copyright" content="码小瑞"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文主要记录一些 Docker 中的基本概念，以及一些常用命令，主要是为了理清楚 镜像、容器、网络、数据卷 这几个概念、作用、操作。当然能够帮到大家就更好了。 Docker 介绍Docker 的四大组成对象：  Docker 镜像：相当于软件的安装包 Docker 容器：相当于安装完正在运行的软件 Docker 网络：负责软件之间的相互通信 Docker 数据卷：将软件内外的数据相互映射，提供容器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 真的很优秀">
+<meta property="og:url" content="https://www.wrp.cool/posts/24100/index.html">
+<meta property="og:site_name" content="知更">
+<meta property="og:description" content="本文主要记录一些 Docker 中的基本概念，以及一些常用命令，主要是为了理清楚 镜像、容器、网络、数据卷 这几个概念、作用、操作。当然能够帮到大家就更好了。 Docker 介绍Docker 的四大组成对象：  Docker 镜像：相当于软件的安装包 Docker 容器：相当于安装完正在运行的软件 Docker 网络：负责软件之间的相互通信 Docker 数据卷：将软件内外的数据相互映射，提供容器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg">
+<meta property="article:published_time" content="2022-09-13T08:15:21.000Z">
+<meta property="article:modified_time" content="2022-09-14T08:15:36.405Z">
+<meta property="article:author" content="码小瑞">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg"><link rel="shortcut icon" href="/images/avatar.png"><link rel="canonical" href="https://www.wrp.cool/posts/24100/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 码小瑞","link":"链接: ","source":"来源: 知更","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker 真的很优秀',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-14 16:15:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="知更" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">69</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-archive"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-map-marker-alt"></i><span> 这里</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user"></i><span> 我说我呀</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-book"></i><span> 喜欢看书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 喜欢电影</span></a></li><li><a class="site-page child" href="/love/"><i class="fa-fw fa fa-heart red"></i><span> 还喜欢你</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">知更</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-archive"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-map-marker-alt"></i><span> 这里</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user"></i><span> 我说我呀</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-book"></i><span> 喜欢看书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 喜欢电影</span></a></li><li><a class="site-page child" href="/love/"><i class="fa-fw fa fa-heart red"></i><span> 还喜欢你</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Docker 真的很优秀</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-13T08:15:21.000Z" title="发表于 2022-09-13 16:15:21">2022-09-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-09-14T08:15:36.405Z" title="更新于 2022-09-14 16:15:36">2022-09-14</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span></div></div></div><article class="post-content" id="article-container"><p>本文主要记录一些 Docker 中的基本概念，以及一些常用命令，主要是为了理清楚 <code>镜像</code>、<code>容器</code>、<code>网络</code>、<code>数据卷</code> 这几个概念、作用、操作。当然能够帮到大家就更好了。</p>
+<h1 id="Docker-介绍"><a href="#Docker-介绍" class="headerlink" title="Docker 介绍"></a>Docker 介绍</h1><p><strong>Docker 的四大组成对象：</strong></p>
+<ul>
+<li>Docker 镜像：相当于软件的安装包</li>
+<li>Docker 容器：相当于安装完正在运行的软件</li>
+<li>Docker 网络：负责软件之间的相互通信</li>
+<li>Docker 数据卷：将软件内外的数据相互映射，提供容器内外数据交互功能</li>
+</ul>
+<p>Docker 是以 服务端&#x2F;客户端 的形式对外提供服务的，服务端是 docker daemon，客户端是 docker CLI。所有的镜像模块、容器模块、网络模块、数据卷模块都是实现在 docker daemon 之中的。</p>
+<p>docker daemon 暴露了一套 RESTFul API 接口以对外提供服务，我们可以在控制台通过编写 http 请求来控制 docker daemon，但是这样太繁琐了。所以，Docker 提供了 docker CLI 可以在控制台更方便的控制 docker daemon。</p>
+<h1 id="搭建-Docker-运行环境"><a href="#搭建-Docker-运行环境" class="headerlink" title="搭建 Docker 运行环境"></a>搭建 Docker 运行环境</h1><p>Docker 主要是运行在 Linux 系统中的，也有提供运行在 Windows、Mac 系统上的桌面软件，运行在 Windows、Mac 系统上的 Docker 也是搭了一层 Linux 的隔离。Windows 和 Mac 操作系统的 Docker 环境下载连接如下：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/windows-install/">Windows 安装环境下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/mac-install/">Mac 安装环境下载</a></li>
+</ul>
+<p><strong>CentOS 安装如下：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install yum-utils device-mapper-persistent-data lvm2</span><br><span class="line"></span><br><span class="line">sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">sudo yum install docker-ce</span><br><span class="line"></span><br><span class="line">sudo systemctl enable docker  # 开机自启动</span><br><span class="line">sudo systemctl start docker   # 启动 Docker 服务</span><br></pre></td></tr></table></figure>
+
+<p>安装完成，启动成功之后可以运行两条命令查看 Docker 的一些基本信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker version  # Docker 版本信息（包含客户端和服务端的版本信息）</span><br><span class="line">docker info     # Docker 详细信息（包含镜像、容器状态等）</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置国内镜像源：</strong></p>
+<p>修改 <code>/etc/docker/daemon.json</code> 文件（如果不存在，直接创建即可）添加以下内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;https://registry.docker-cn.com&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改完成，重启 Docker 以生效：<code>systemctl restart docker</code></p>
+<p>运行 <code>docker info</code> 看看是否已经生效，大概在倒数两三行的位置可以看到 Registry Mirrors 信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Registry Mirrors:</span><br><span class="line"> https://registry.docker-cn.com/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Docker-镜像"><a href="#Docker-镜像" class="headerlink" title="Docker 镜像"></a>Docker 镜像</h1><p>在 <a target="_blank" rel="noopener" href="https://hub.docker.com/">dockerhub</a> 中搜索想要下载的镜像直接下载即可，有标注 <code>DOCKER OFFICIAL IMAGE</code> 字样的镜像为官方维护的镜像。也可以在控制台查看 dockerhub 的镜像信息：<code>docker search image-name</code></p>
+<p>下载命令：<code>docker pull image-name</code></p>
+<p><strong>镜像命名规则：</strong> <code>username</code>&#x2F;<code>repository</code>:<code>tag</code></p>
+<ul>
+<li><strong>username：</strong> 上传该镜像的用户，由官方维护的镜像无此信息</li>
+<li><strong>repository：</strong> 镜像名称，通常是软件名</li>
+<li><strong>tag：</strong> 镜像标签，通常是版本信息，也可以是环境需求、构建方式等信息</li>
+</ul>
+<p>当我们在下载镜像时如果没有明确给出 <code>tag</code> 时，Docker 会默认使用 <code>latest</code> 作为 <code>tag</code>，也就是默认下载最新版本的镜像。</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看本地镜像信息</td>
+<td align="left"><code>docker images</code></td>
+</tr>
+<tr>
+<td align="left">查看本地镜像的详细信息</td>
+<td align="left"><code>docker inspect image-name</code></td>
+</tr>
+<tr>
+<td align="left">删除镜像</td>
+<td align="left"><code>docker rmi image-name</code></td>
+</tr>
+</tbody></table>
+<p><strong>创建镜像：</strong></p>
+<p>提交容器修改保存成镜像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker commit -m &quot;message&quot; container-name your-image-name</span><br></pre></td></tr></table></figure>
+
+<p>创建镜像之后可以使用 <code>docker images</code> 命令查看镜像信息。创建时如果忘了指定镜像名称可以通过 <code>docker tag</code> 重新命名镜像。</p>
+<p><strong>镜像导入导出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 将镜像保存导出</span><br><span class="line">docker save -o save-path/save-name1.tar your-image-name1 your-image-name2</span><br><span class="line"># 将导出的镜像导入</span><br><span class="line">docker load -i image-path/image-name.tar</span><br></pre></td></tr></table></figure>
+
+<p><strong>容器导入导出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 导出容器（一次只能导出一个）</span><br><span class="line">docker export -o save-name.tar your-container-name</span><br><span class="line"># 导入容器（导入之后是镜像）</span><br><span class="line">docker import save-name.tar your-image-name</span><br></pre></td></tr></table></figure>
+
+<h1 id="Docker-容器"><a href="#Docker-容器" class="headerlink" title="Docker 容器"></a>Docker 容器</h1><p>Docker 镜像运行起来就是 Docker 容器了，也就是一个个运行起来的软件。</p>
+<p><strong>Docker 容器的生命周期：</strong></p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E5%AE%B9%E5%99%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="docker容器生命周期"></p>
+<p>Docker 容器的生命周期分为五种状态，分别为：</p>
+<ul>
+<li><strong>Created：</strong>容器已经被创建，容器所需的相关资源已经准备就绪，但容器中的程序还未处于运行状态。</li>
+<li><strong>Running：</strong>容器正在运行，也就是容器中的应用正在运行。</li>
+<li><strong>Paused：</strong>容器已暂停，表示容器中的所有程序都处于暂停 ( 不是停止 ) 状态。</li>
+<li><strong>Stopped：</strong>容器处于停止状态，占用的资源和沙盒环境都依然存在，只是容器中的应用程序均已停止。</li>
+<li><strong>Deleted：</strong>容器已删除，相关占用的资源及存储在 Docker 中的管理信息也都已释放和移除。</li>
+</ul>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+<th align="left">常用参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">创建容器</td>
+<td align="left"><code>docker create image-name</code></td>
+<td align="left"><code>--name</code>（指定容器名称）</td>
+</tr>
+<tr>
+<td align="left">启动容器</td>
+<td align="left"><code>docker start container-name</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">创建并启动容器</td>
+<td align="left"><code>docker run image-name</code></td>
+<td align="left"><code>--name</code>、<code>-d</code>（后台运行）<br> <code>--rm</code>（停止后删除）、<code>-e</code>（设置环境）</td>
+</tr>
+<tr>
+<td align="left">停止容器</td>
+<td align="left"><code>docker stop container-name</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">删除容器</td>
+<td align="left"><code>docker rm container-name</code></td>
+<td align="left"><code>-v</code>（删除相关联的数据卷）</td>
+</tr>
+<tr>
+<td align="left">查看容器状态</td>
+<td align="left"><code>docker ps</code></td>
+<td align="left"><code>-a</code>（查看全部容器）</td>
+</tr>
+<tr>
+<td align="left">进入容器</td>
+<td align="left"><code>docker exec container-name</code></td>
+<td align="left"><code>-it</code>（当前控制台输入输出）<br> <code>bash</code>&#x2F;<code>sh</code>（以哪种方式启动）</td>
+</tr>
+</tbody></table>
+<p><strong>写时复制：</strong></p>
+<p>在通过镜像运行容器时，并不是马上就把镜像里的所有内容拷贝到容器所运行的沙盒文件系统中，而是利用 UnionFS 将镜像以只读的方式挂载到沙盒文件系统中。只有在容器中发生对文件的修改时，修改才会体现到沙盒环境上。</p>
+<p>容器是基于镜像启动的，在启动容器的时候并不是直接创建一个容器，而是利用镜像直接启动，当发生修改时再利用写时复制机制去修改。这样可以大幅提高容器启动速度，做到秒启动。</p>
+<h1 id="Docker-网络"><a href="#Docker-网络" class="headerlink" title="Docker 网络"></a>Docker 网络</h1><p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.png" alt="docker容器网络模型"></p>
+<p>在 Docker 网络中，有三个比较核心的概念，也就是：<code>沙盒（Sandbox）</code>、<code>网络（Network）</code>、<code>端点（Endpoint）</code>。这三者形成了 Docker 网络的核心模型，也就是容器网络模型 ( Container Network Model )。</p>
+<ul>
+<li><strong>沙盒：</strong>每个容器完全独立的网络环境，隔离了容器网络与宿主机网络。</li>
+<li><strong>网络：</strong>Docker 内部的虚拟子网，网络内的参与者相互可见并能够进行通讯。</li>
+<li><strong>端点：</strong>可控封闭网络环境的出入口，当端口相互配对后，就能进行数据传输了。</li>
+</ul>
+<p>目前 Docker 官方为我们提供了五种 Docker 网络驱动，分别是：<strong>Bridge Driver（默认，网桥模式）</strong>、Host Driver、Overlay Driver、MacLan Driver、None Driver。docker daemon 中默认维护了一个 bridge 的网络，所有的容器默认都是加入到此网络中。</p>
+<h2 id="容器互联"><a href="#容器互联" class="headerlink" title="容器互联"></a>容器互联</h2><p>要让一个容器连接到另外一个容器，可以在容器通过 <code>docker create</code> 或 <code>docker run</code> 创建时通过 <code>--link</code> 选项进行配置，同时也可以为连接指定一个别名，这样在代码中可以直接使用别名进行连接。如下就是创建 mysql 容器和 webapp 容器，让 webapp 容器连接至 mysql 容器中，并且在 webapp 容器中为 mysql 容器取别名为 database。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql</span><br><span class="line">docker run -d --name webapp --link mysql:database webapp</span><br></pre></td></tr></table></figure>
+
+<p>这样在 webapp 中如果需要连接 mysql 可以这么写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://database:3306/database-name&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果不是连接默认端口，那么需要在启动时通过 <code>--expose</code> 参数告诉容器暴露对应端口，使用如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name mysql --expose=3307 -e MYSQL_ROOT_PASSWORD=root mysql</span><br></pre></td></tr></table></figure>
+
+<p>可通过 <code>docker ps</code> 命令查看容器对外暴露了哪些端口。</p>
+<h2 id="创建网络"><a href="#创建网络" class="headerlink" title="创建网络"></a>创建网络</h2><p>我们也可以自定义网络，形成虚拟子网的目的，<strong>只有在同一网络之中的容器才可以互联</strong>。</p>
+<ul>
+<li>创建网络：<code>docker network create -d bridge network-name</code>，<code>-d</code> 指定网络类型</li>
+<li>查看网络：<code>docker network ls</code></li>
+<li>删除网络：<code>docker network rm network-name</code></li>
+</ul>
+<p>创建容器时指定网络：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name your-container-name --network=network-name container-name</span><br></pre></td></tr></table></figure>
+
+<h2 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h2><p>将容器中的端口映射至宿主机的端口。如下：</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84%E6%A8%A1%E5%9E%8B.png" alt="docker网络端口映射模型"></p>
+<p>要映射端口，我们可以在创建容器时使用 <code>-p</code> 或者是 <code>--publish</code> 参数。</p>
+<p>使用方式：<code>-p &lt;host-port&gt;:&lt;container-port&gt;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name nginx -p 80:80 nginx</span><br></pre></td></tr></table></figure>
+
+<p>可通过 <code>docker ps</code> 查看端口映射情况</p>
+<h1 id="Docker-数据卷"><a href="#Docker-数据卷" class="headerlink" title="Docker 数据卷"></a>Docker 数据卷</h1><p>数据管理使用挂载的方式，通过数据卷可以方便管理挂载的目录</p>
+<h2 id="容器数据管理"><a href="#容器数据管理" class="headerlink" title="容器数据管理"></a>容器数据管理</h2><p>容器内的文件系统是随着容器的生命周期而创建和移除的，容器内部的数据无法被持久化存储。由于容器隔离，操作容器内部文件也变得很麻烦。Docker 解决这一问题的方式是文件挂载，将宿主操作系统中的文件挂载到容器内部，便可以让容器内外都共享这个文件。通过这种方式可以互通容器内外的文件，那么文件数据持久化以及操作容器内部文件的问题也就得到了解决。</p>
+<p>Docker 提供了三种文件挂载的方式：Bind Mount、Volume 和 Tmpfs Mount。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/docker%E6%96%87%E4%BB%B6%E6%8C%82%E8%BD%BD.png" alt="docker文件挂载"></p>
+<ul>
+<li><p><strong>Bind Mount：</strong> 直接将宿主操作系统中的目录和文件挂载到容器内的文件系统中，形成挂载映射关系，在容器内外对文件的读写都相互可见。</p>
+<blockquote>
+<p>使用 <code>-v</code> 参数设置，示例：<code>-v &lt;host-path&gt;:&lt;container-path&gt;:ro</code>，ro（可选）表示容器内只读。为避免混淆，此处强制使用绝对路径。</p>
+</blockquote>
+</li>
+<li><p><strong>Volume（数据卷）：</strong> 仅指定容器内的目录，宿主操作系统挂载的目录由 Docker 进行管理，不需要关心具体挂载到了宿主操作系统中的哪里。</p>
+<blockquote>
+<p>Bind Mount 模式为指定 <code>&lt;host-path&gt;</code> 则为 Volume。此种方式生成的数据在路径上会有 Docker 生成的 ID，所以能够自己命名：<code>-v name:&lt;container-path&gt;</code></p>
+</blockquote>
+</li>
+<li><p><strong>Tmpfs Mount：</strong> 挂载系统内存中的一部分到容器的文件系统里，不过由于内存和容器的特征，它的存储并不是持久的，其中的内容会随着容器的停止而消失。</p>
+<blockquote>
+<p>使用 <code>--tmpfs</code> 参数挂载，<code>--tmpfs &lt;host-path&gt;</code></p>
+</blockquote>
+</li>
+</ul>
+<p>以上创建出来的数据挂载信息，或者是数据卷信息可以通过 <code>docker inspect</code> 命令查看。</p>
+<h2 id="数据卷管理"><a href="#数据卷管理" class="headerlink" title="数据卷管理"></a>数据卷管理</h2><p>上面对数据卷的操作都是基于容器的，多少有点不方便，Docker 提供了独立操作数据卷的方式。</p>
+<p><strong>数据卷使用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">创建数据卷</td>
+<td align="left"><code>docker volume create volume-name</code></td>
+</tr>
+<tr>
+<td align="left">查看数据卷</td>
+<td align="left"><code>docker volume ls</code></td>
+</tr>
+<tr>
+<td align="left">删除数据卷</td>
+<td align="left"><code>docker volume rm volume-name</code></td>
+</tr>
+<tr>
+<td align="left">删除没有被引用且未命名的数据卷</td>
+<td align="left"><code>docker volume prune -f</code></td>
+</tr>
+</tbody></table>
+<p><strong>数据卷容器：</strong></p>
+<p>创建数据卷容器的方式很简单，由于不需要容器本身运行，因而我们找个简单的系统镜像都可以完成创建。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker create --name appdata -v /webapp/storage ubuntu</span><br></pre></td></tr></table></figure>
+
+<p>在使用数据卷容器时，我们不建议再定义数据卷的名称，因为我们可以通过对数据卷容器的引用来完成数据卷的引用。之前我们提到，Docker 的 Network 是容器间的网络桥梁，如果做类比，数据卷容器就可以算是容器间的文件系统桥梁。我们可以像加入网络一样引用数据卷容器，只需要在创建新容器时使用专门的 <code>--volumes-from</code> 选项即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name nginx --volumes-from appdata nginx</span><br></pre></td></tr></table></figure>
+
+<p>引用数据卷容器时，不需要再定义数据卷挂载到容器中的位置，Docker 会以数据卷容器中的挂载定义将数据卷挂载到引用的容器中。</p>
+<p>使用数据卷容器看起来与使用原始数据卷的方式差不多，但是数据卷容器主要是在迁移数据卷时提供方便。如果迁移数据卷至其他目录，不用修改引用容器中的数据卷，数据卷容器相当于对数据卷的路径做了一层包装或者是取了个别名的意思。</p>
+<hr>
+<blockquote>
+<p><strong>巨人的肩膀：</strong></p>
+<ul>
+<li>掘金小册-开发者必备的 Docker 实践指南</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.wrp.cool">码小瑞</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.wrp.cool/posts/24100/">https://www.wrp.cool/posts/24100/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.wrp.cool" target="_blank">知更</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/28582/"><img class="next-cover" src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spring Security</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar123"/></div><div class="author-info__name">码小瑞</div><div class="author-info__description">一直在学习，永远在路上</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">69</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wangruipeng-wrp"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">广告位招租哇</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">Docker 介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA-Docker-%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">搭建 Docker 运行环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E9%95%9C%E5%83%8F"><span class="toc-number">3.</span> <span class="toc-text">Docker 镜像</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E5%AE%B9%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">Docker 容器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E7%BD%91%E7%BB%9C"><span class="toc-number">5.</span> <span class="toc-text">Docker 网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94"><span class="toc-number">5.1.</span> <span class="toc-text">容器互联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9C"><span class="toc-number">5.2.</span> <span class="toc-text">创建网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="toc-number">5.3.</span> <span class="toc-text">端口映射</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="toc-number">6.</span> <span class="toc-text">Docker 数据卷</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="toc-number">6.1.</span> <span class="toc-text">容器数据管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7%E7%AE%A1%E7%90%86"><span class="toc-number">6.2.</span> <span class="toc-text">数据卷管理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/24100/" title="Docker 真的很优秀">Docker 真的很优秀</a><time datetime="2022-09-13T08:15:21.000Z" title="发表于 2022-09-13 16:15:21">2022-09-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/28582/" title="Spring Security">Spring Security</a><time datetime="2022-09-06T03:38:08.000Z" title="发表于 2022-09-06 11:38:08">2022-09-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/64951/" title="JWT 工具类封装">JWT 工具类封装</a><time datetime="2022-09-05T11:04:10.000Z" title="发表于 2022-09-05 19:04:10">2022-09-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/63338/" title="Java并发：volatile">Java并发：volatile</a><time datetime="2022-08-25T07:26:42.000Z" title="发表于 2022-08-25 15:26:42">2022-08-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/41133/" title="Java并发：重排序规则">Java并发：重排序规则</a><time datetime="2022-08-25T02:17:57.000Z" title="发表于 2022-08-25 10:17:57">2022-08-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 码小瑞</div><div class="footer_custom_text"><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360 号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'xHUEmhrVmHWv8MupdDvR9FvM-gzGzoHsz',
+      appKey: 'Cr1qzcPhqKCVqEhTSX6TRoa4',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="100" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
