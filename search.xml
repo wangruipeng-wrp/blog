@@ -17,6 +17,227 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Redis 对象结构和数据类型</title>
+    <url>/posts/35006/</url>
+    <content><![CDATA[<blockquote>
+<p>本文转载自：<a href="https://xiaolincoding.com/redis/data_struct/command.html">小林Coding-Redis 常见数据类型和应用场景</a></p>
+</blockquote>
+<p>Redis 是一个键值对数据库，它的键值对中的 key 就是字符串对象，value 可以是字符串对象也可以是其他的集合数据类型对象，比如：List、Hash、Set、Zset 等。</p>
+<p>Redis 中常见的数据类型有五种：String（字符串）、Hash（哈希）、List（列表）、Set（集合）、Zset（有序集合）。</p>
+<p>随着 Redis 版本更新，后面又支持了四种：BitMap（2.2 版新增）、HyperLogLog（2.8 版新增）、GEO（3.2 版新增）、Stream（5.0 版新增）。</p>
+<h1 id="Redis-对象结构"><a href="#Redis-对象结构" class="headerlink" title="Redis 对象结构"></a>Redis 对象结构</h1><p>Redis 是使用了一个<strong>哈希表</strong>保存所有键值对，哈希表的最大好处就是让我们可以用 O(1) 的时间复杂度来快速查找到键值对。哈希表其实就是一个数组，数组中的元素叫做哈希桶。</p>
+<p>哈希桶存放的是指向键值对数据的指针，这样通过指针就能找到键值对数据。因为键值对的 value 可以是字符串对象或者集合对象，所以键值对中并不直接保存值本身，而是保存了 <code>void * key</code> 和 <code>void * value</code> 指针，分别指向了实际的键对象和值对象，这样一来，即使值是集合数据，也可以通过 value 指针找到。</p>
+<p><strong>Redis对象结构示意图：</strong></p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/Redis%E5%AF%B9%E8%B1%A1%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" alt="Redis对象结构示意图"></p>
+<p>以上三个属性是 Redis 对象中重要的三个属性，Redis 对象还有其他的一些属性，这里就先不展开。</p>
+<ul>
+<li><strong>type</strong>：标识该对象是什么类型的对象（String、List、Hash、Set、Zset）</li>
+<li><strong>encoding</strong>：标识该对象使用了哪种底层的数据结构</li>
+<li><strong>ptr</strong>：指向底层数据结构的指针</li>
+</ul>
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><p>String 是最基本的 key-value 结构，key 是唯一标识，value 是具体的值，value其实不仅是字符串， 也可以是数字（整数或浮点数），value 最多可以容纳的数据长度是 <strong>512M</strong>。底层数据结构是 int 和 SDS（简单动态字符串）。</p>
+<p>SDS 是 Redis 内部实现的字符串对象，并没有采用 C语言 的字符串表示。由 Redis 内部实现的 SDS 优势如下：</p>
+<ol>
+<li>SDS 可以保存二进制数据，因为 SDS 采用 len 属性的值来表示字符串是否结束。</li>
+<li>SDS 获取字符串长度的时间复杂度是 O(1)，因为 SDS 采用 len 属性记录字符串长度</li>
+<li>SDS 拼接字符串不会造成缓冲区溢出，是安全的，因为 SDS 在拼接字符串之前会检查 SDS 空间是否满足要求，空间不够会自动扩容，所以不会导致缓冲区溢出的问题。</li>
+</ol>
+<p>字符串对象的内部编码（encoding）有 3 种 ：<strong>int、embstr 和 raw</strong>。</p>
+<ul>
+<li><p><strong>int</strong>：如果保存的是可以用 long 类型表示的整数值，那么直接将值保存在 ptr 属性里面即可，编码设置为 int。</p>
+</li>
+<li><p><strong>embstr 和 raw</strong>：保存的是字符串，底层的数据结构都是 SDS，如果是较短的字符串那么将编码设置为 embstr，如果是较长的字符串那么将编码设置为 raw。</p>
+</li>
+</ul>
+<p>embstr 和 raw 的边界在不同的 Redis 版本中是不相同的。embstr 会通过一次内存分配函数来分配一块连续的内存空间来保存 redisObject 和 SDS，而 raw 编码会通过调用两次内存分配函数来分别分配两块空间来保存redisObject 和 SDS。Redis 这样做会有很多好处：</p>
+<ul>
+<li>embstr 编码在创建和释放对象时只需要调用一次内存函数。</li>
+<li>embstr 所有的数据都保存在一块连续的内存，可以更好的利用 CPU 缓存提高性能。</li>
+</ul>
+<p>但 embstr 也是有缺点的，如果需要重新分配字符串内存时，整个 redisObject 和 SDS 都需要重新分配空间，<strong>所以 embstr 编码的字符串对象是只读的</strong>，我们对 embstr 编码的字符串对象执行的任何修改，程序都会先将对象的编码从 embstr 转换成 raw，然后再执行修改。</p>
+<p><strong>String 类型的使用场景：</strong>缓存对象、常规计数、分布式锁、分布式服务之间共享 Session 信息</p>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><p>List 列表是简单的字符串列表，按照插入顺序排序，可以从头部或尾部向 List 列表添加元素。列表的最大长度为 <code>2^32 - 1</code>，也即每个列表支持超过 40 亿个元素。在 Redis 3.2 版本之后，List 数据类型底层数据结构只由 quicklist 实现，替代了双向链表和压缩列表。</p>
+<p><strong>List 类型的使用场景：</strong>消息队列</p>
+<p>消息队列在存取消息时，必须要满足三个需求，分别是：<strong>消息保序、处理重复的消息和保证消息可靠性</strong>。</p>
+<div class="note default flat"><p><strong>如何满足消息保序需求？</strong></p>
+</div>
+
+<p>List 本身就是按先进先出的顺序对数据进行存取的，所以，如果使用 List 作为消息队列保存消息的话，就已经能满足消息保序的需求了。</p>
+<p>List 可以使用 LPUSH + RPOP （或者反过来，RPUSH + LPOP）命令实现消息队列。不过这种方式在消费者读取数据时，有一个潜在的性能风险点：</p>
+<p>生产者往 List 中写入消息时并不会通知消费者去消费消息，消费者只能不断的尝试从 List 中去取消息，这会导致消费者的 CPU 一直消耗在 RPOP 命令上，带来不必要的性能损失。</p>
+<p>为了解决这个问题，Redis提供了 BRPOP 命令。<strong>BRPOP命令也称为阻塞式读取</strong>，客户端在没有读到队列数据时，自动阻塞，直到有新的数据写入队列，再开始读取新数据。和消费者程序自己不停地调用RPOP命令相比，这种方式能节省CPU开销。</p>
+<div class="note default flat"><p><strong>如何处理重复的消息？</strong></p>
+</div>
+
+<p>需要为每一条消息生成一个 ID 号，消费者记录自己消费过的 ID，取出消息时先判断自己是否消费过此消息，如果消费过则不再处理。</p>
+<div class="note default flat"><p><strong>如何保证消息可靠性？</strong></p>
+</div>
+
+<p>当消费者程序从 List 中读取一条消息后，List 就不会再留存这条消息了。所以，如果消费者程序在处理消息的过程出现了故障或宕机，就会导致消息没有处理完成，那么，消费者程序再次启动后，就没法再次从 List 中读取消息了。</p>
+<p>为了留存消息，List 类型提供了 <code>BRPOPLPUSH</code> 命令，BRPOPLPUSH 命令从列表中取出最后一个元素，并插入到另外一个列表的头部；如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</p>
+<blockquote>
+<p>BRPOPLPUSH 命令：<code>BRPOPLPUSH L1 L2 10</code>，从 L1 取出一条消息返回并存入 L2 中，阻塞时间为 10s。</p>
+</blockquote>
+<p>使用 BRPOPLPUSH 命令后，如果消费者程序读了消息但没能正常处理，等它重启后，就可以从备份 List 中重新读取消息并进行处理了。</p>
+<h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>Hash 是一个键值对（key - value）集合，特别适合用于存储对象。其中 value 的形式如：<code>value=[&#123;field1, value1&#125;,...&#123;fieldN, valueN&#125;]</code>。在 Redis7.0 以后底层的数据结构改为 listpack，不再使用压缩列表或哈希表。</p>
+<p><strong>应用场景：</strong>缓存对象、购物车（以 用户ID 为 key，商品ID 为 field，商品数量为 value）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 缓存 UID:1 对象</span></span><br><span class="line">&gt; HSET UID:1 name admin age 18</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 UID:1 对象的姓名、年龄等属性值</span></span><br><span class="line">&gt; HGET UID:1 name</span><br><span class="line"><span class="string">&quot;admin&quot;</span></span><br><span class="line">&gt; HGET UID:1 age</span><br><span class="line"><span class="string">&quot;18&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建购物车</span></span><br><span class="line">&gt; HSET SHOPPINGCART:UID:01 1001 1 1002 2 1003 10</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取购物车信息</span></span><br><span class="line">&gt; HGETALL SHOPPINGCART:UID:01</span><br><span class="line">1) <span class="string">&quot;1001&quot;</span></span><br><span class="line">2) <span class="string">&quot;1&quot;</span></span><br><span class="line">3) <span class="string">&quot;1002&quot;</span></span><br><span class="line">4) <span class="string">&quot;2&quot;</span></span><br><span class="line">5) <span class="string">&quot;1003&quot;</span></span><br><span class="line">6) <span class="string">&quot;10&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><p>Set 类型是一个无序并唯一的集合，它的存储顺序不会按照插入的先后顺序进行存储。</p>
+<p>一个集合最多可以存储 <code>2^32-1</code> 个元素。概念和数学中个的集合基本类似，可以交集，并集，差集等等，所以 Set 类型除了支持集合内的增删改查，同时还支持多个集合取交集、并集、差集。</p>
+<p>但是 Set 的差集、并集和交集的计算复杂度较高，在数据量较大的情况下，如果直接执行这些计算，可能会导致 Redis 实例阻塞。</p>
+<p>在主从集群中，为了避免主库因为 Set 做聚合计算（交集、差集、并集）时导致主库被阻塞，我们可以选择一个从库完成聚合统计，或者把数据返回给客户端，由客户端来完成聚合统计。</p>
+<div class="note primary flat"><p><strong>Set 集合运算操作</strong></p>
+</div>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 交集运算</span></span><br><span class="line">SINTER key [key ...]</span><br><span class="line"><span class="comment"># 将交集结果存入新集合destination中</span></span><br><span class="line">SINTERSTORE destination key [key ...]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 并集运算</span></span><br><span class="line">SUNION key [key ...]</span><br><span class="line"><span class="comment"># 将并集结果存入新集合destination中</span></span><br><span class="line">SUNIONSTORE destination key [key ...]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 差集运算</span></span><br><span class="line">SDIFF key [key ...]</span><br><span class="line"><span class="comment"># 将差集结果存入新集合destination中</span></span><br><span class="line">SDIFFSTORE destination key [key ...]</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用场景：</strong>点赞、共同关注、抽奖活动。</p>
+<div class="note default flat"><p><strong>点赞</strong></p>
+</div>
+
+<p>Set 集合可以保证一个用户只能点一个赞，这里举例子一个场景，key 是文章ID，value 是用户ID。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># uid:1 用户对文章 article:1 点赞</span></span><br><span class="line">&gt; SADD article:1 uid:1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># uid:2 用户对文章 article:1 点赞</span></span><br><span class="line">&gt; SADD article:1 uid:2</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># uid:3 用户对文章 article:1 点赞</span></span><br><span class="line">&gt; SADD article:1 uid:3</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># uid:1 取消了对 article:1 文章点赞</span></span><br><span class="line">&gt; SREM article:1 uid:1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 article:1 文章所有点赞用户</span></span><br><span class="line">&gt; SMEMBERS article:1</span><br><span class="line">1) <span class="string">&quot;uid:3&quot;</span></span><br><span class="line">2) <span class="string">&quot;uid:2&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 article:1 文章的点赞用户数量</span></span><br><span class="line">&gt; SCARD article:1</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断用户 uid:1 是否对文章 article:1 点赞了</span></span><br><span class="line">&gt; SISMEMBER article:1 uid:1</span><br><span class="line">(<span class="built_in">integer</span>) 0  <span class="comment"># 返回0说明没点赞，返回1则说明点赞了</span></span><br></pre></td></tr></table></figure>
+
+<div class="note default flat"><p><strong>共同关注</strong></p>
+</div>
+
+<p>Set 类型支持交集运算，所以可以用来计算共同关注的好友、公众号等。key 可以是用户id，value 则是已关注的公众号的id。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># uid:1 用户关注公众号 id 为 5、6、7、8、9</span></span><br><span class="line">&gt; SADD uid:1 5 6 7 8 9</span><br><span class="line">(<span class="built_in">integer</span>) 5</span><br><span class="line"><span class="comment"># uid:2  用户关注公众号 id 为 7、8、9、10、11</span></span><br><span class="line">&gt; SADD uid:2 7 8 9 10 11</span><br><span class="line">(<span class="built_in">integer</span>) 5</span><br><span class="line"></span><br><span class="line"><span class="comment"># uid:1 和 uid:2 共同关注的公众号</span></span><br><span class="line">&gt; SINTER uid:1 uid:2</span><br><span class="line">1) <span class="string">&quot;7&quot;</span></span><br><span class="line">2) <span class="string">&quot;8&quot;</span></span><br><span class="line">3) <span class="string">&quot;9&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 给 uid:2 推荐 uid:1 关注的公众号</span></span><br><span class="line">&gt; SDIFF uid:1 uid:2</span><br><span class="line">1) <span class="string">&quot;5&quot;</span></span><br><span class="line">2) <span class="string">&quot;6&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 给 uid:1 推荐 uid:2 关注的公众号</span></span><br><span class="line">&gt; SDIFF uid:2 uid:1</span><br><span class="line">1) <span class="string">&quot;10&quot;</span></span><br><span class="line">2) <span class="string">&quot;11&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证某个公众号是否被 uid:1 或 uid:2 关注</span></span><br><span class="line">&gt; SISMEMBER uid:1 5</span><br><span class="line">(<span class="built_in">integer</span>) 1 <span class="comment"># 返回1，说明关注了</span></span><br><span class="line">&gt; SISMEMBER uid:2 5</span><br><span class="line">(<span class="built_in">integer</span>) 0 <span class="comment"># 返回0，说明没关注</span></span><br></pre></td></tr></table></figure>
+
+<div class="note default flat"><p><strong>抽奖活动</strong></p>
+</div>
+
+<p>存储某活动中中奖的用户名 ，Set 类型因为有去重功能，可以保证同一个用户不会中奖两次。</p>
+<p>如果允许重复中奖，使用 SRANDMEMBER 命令。如果不允许重复中奖，使用 SPOP 命令。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 从集合key中随机选出count个元素，元素不从key中删除</span></span><br><span class="line">SRANDMEMBER key [count]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从集合key中随机选出count个元素，元素从key中删除</span></span><br><span class="line">SPOP key [count]</span><br></pre></td></tr></table></figure>
+
+<h1 id="Zset"><a href="#Zset" class="headerlink" title="Zset"></a>Zset</h1><p>Zset 有序集合相比于 Set 集合多了一个排序属性 score（分值），对于有序集合 ZSet 来说，每个存储元素相当于有两个值组成的，一个是有序集合的元素值，一个是元素排序值。</p>
+<p>有序集合保留了集合不能有重复成员的特性（分值可以重复），但不同的是，有序集合中的元素可以排序。</p>
+<p>在 Redis 7.0 中，Zset 有序集合的底层数据结构就交由 listpack 数据结构来实现了，压缩列表数据结构就被废弃了。</p>
+<div class="note primary flat"><p><strong>常用命令</strong></p>
+</div>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 往有序集合key中加入带分值元素</span></span><br><span class="line">ZADD key score member [[score member]...]   </span><br><span class="line"><span class="comment"># 往有序集合key中删除元素</span></span><br><span class="line">ZREM key member [member...]                 </span><br><span class="line"><span class="comment"># 返回有序集合key中元素member的分值</span></span><br><span class="line">ZSCORE key member</span><br><span class="line"><span class="comment"># 返回有序集合key中元素个数</span></span><br><span class="line">ZCARD key </span><br><span class="line"></span><br><span class="line"><span class="comment"># 为有序集合key中元素member的分值加上increment</span></span><br><span class="line">ZINCRBY key increment member</span><br><span class="line"></span><br><span class="line"><span class="comment"># 正序获取有序集合key从start下标到stop下标的元素</span></span><br><span class="line">ZRANGE key start stop [WITHSCORES]</span><br><span class="line"><span class="comment"># 倒序获取有序集合key从start下标到stop下标的元素</span></span><br><span class="line">ZREVRANGE key start stop [WITHSCORES]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回有序集合中指定分数区间内的成员，分数由低到高排序。</span></span><br><span class="line">ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回指定成员区间内的成员，按字典正序排列, 分数必须相同。</span></span><br><span class="line">ZRANGEBYLEX key min max [LIMIT offset count]</span><br><span class="line"><span class="comment"># 返回指定成员区间内的成员，按字典倒序排列, 分数必须相同</span></span><br><span class="line">ZREVRANGEBYLEX key max min [LIMIT offset count]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 并集计算(相同元素分值相加)，numberkeys一共多少个key，结果保存至destkey集合</span></span><br><span class="line">ZUNIONSTORE destkey numberkeys key [key...] </span><br><span class="line"><span class="comment"># 交集计算(相同元素分值相加)，numberkeys一共多少个key，结果保存至destkey集合</span></span><br><span class="line">ZINTERSTORE destkey numberkeys key [key...]</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用场景：</strong>排行榜、电话或者姓名等排序</p>
+<div class="note default flat"><p><strong>排行榜</strong></p>
+</div>
+
+<p>以文章点赞数排行榜为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># arcticle:1 文章获得了200个赞</span></span><br><span class="line">&gt; ZADD user:1:ranking 200 arcticle:1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># arcticle:2 文章获得了40个赞</span></span><br><span class="line">&gt; ZADD user:1:ranking 40 arcticle:2</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># arcticle:3 文章获得了100个赞</span></span><br><span class="line">&gt; ZADD user:1:ranking 100 arcticle:3</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># arcticle:4 文章获得了50个赞</span></span><br><span class="line">&gt; ZADD user:1:ranking 50 arcticle:4</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># arcticle:5 文章获得了150个赞</span></span><br><span class="line">&gt; ZADD user:1:ranking 150 arcticle:5</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure>
+
+<div class="note default flat"><p><strong>电话排序</strong></p>
+</div>
+
+<p>使用有序集合的 ZRANGEBYLEX 或 ZREVRANGEBYLEX 可以帮助我们实现电话号码或姓名的排序，我们以 ZRANGEBYLEX （返回指定成员区间内的成员，按 key 正序排列，分数必须相同）为例。</p>
+<p>注意：不要在分数不一致的 SortSet 集合中去使用 ZRANGEBYLEX和 ZREVRANGEBYLEX 指令，因为获取的结果会不准确。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; ZADD phone 0 13100111100 0 13110114300 0 13132110901 </span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">&gt; ZADD phone 0 13200111100 0 13210414300 0 13252110901 </span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">&gt; ZADD phone 0 13300111100 0 13310414300 0 13352110901 </span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取所有电话号码</span></span><br><span class="line">&gt; ZRANGEBYLEX phone - +</span><br><span class="line">1) <span class="string">&quot;13100111100&quot;</span></span><br><span class="line">2) <span class="string">&quot;13110114300&quot;</span></span><br><span class="line">3) <span class="string">&quot;13132110901&quot;</span></span><br><span class="line">4) <span class="string">&quot;13200111100&quot;</span></span><br><span class="line">5) <span class="string">&quot;13210414300&quot;</span></span><br><span class="line">6) <span class="string">&quot;13252110901&quot;</span></span><br><span class="line">7) <span class="string">&quot;13300111100&quot;</span></span><br><span class="line">8) <span class="string">&quot;13310414300&quot;</span></span><br><span class="line">9) <span class="string">&quot;13352110901&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 132 号段的号码</span></span><br><span class="line">&gt; ZRANGEBYLEX phone [132 (133</span><br><span class="line">1) <span class="string">&quot;13200111100&quot;</span></span><br><span class="line">2) <span class="string">&quot;13210414300&quot;</span></span><br><span class="line">3) <span class="string">&quot;13252110901&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="BitMap"><a href="#BitMap" class="headerlink" title="BitMap"></a>BitMap</h1><p>Bitmap，即位图，是一串连续的二进制数组（0和1），可以通过偏移量（offset）定位元素。BitMap 通过最小的单位bit来进行 <code>0|1</code> 的设置，表示某个元素的值或者状态，时间复杂度为 O(1)。使用它进行储存将非常节省空间，特别适合一些数据量大且使用二值统计的场景。</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/BitMap%E5%AD%98%E5%82%A8%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="BitMap存储示意图"></p>
+<p>Bitmap 本身是用 String 类型作为底层数据结构实现的一种统计二值状态的数据类型。</p>
+<p>String 类型是会保存为二进制的字节数组，所以，Redis 就把字节数组的每个 bit 位利用起来，用来表示一个元素的二值状态，你可以把 Bitmap 看作是一个 bit 数组。</p>
+<div class="note primary flat"><p><strong>常用命令</strong></p>
+</div>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置值，其中value只能是 0 和 1</span></span><br><span class="line">SETBIT key offset value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取值</span></span><br><span class="line">GETBIT key offset</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取指定范围内值为 1 的个数</span></span><br><span class="line"><span class="comment"># start 和 end 以字节为单位</span></span><br><span class="line">BITCOUNT key start end</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># BitMap间的运算</span><br><span class="line"># operations 位移操作符，枚举值</span><br><span class="line">#   AND 与运算 &amp;</span><br><span class="line">#   OR 或运算 |</span><br><span class="line">#   XOR 异或 ^</span><br><span class="line">#   NOT 取反 ~</span><br><span class="line"># result 计算的结果，会存储在该key中</span><br><span class="line"># key1 … keyn 参与运算的key，可以有多个，空格分割，NOT 运算只能一个key</span><br><span class="line"># 当 BITOP 处理不同长度的字符串时，较短的那个字符串所缺少的部分会被看作 <span class="number">0</span>。</span><br><span class="line"># 返回值是保存到 destkey 的字符串的长度（以字节<span class="type">byte</span>为单位），和输入 key 中最长的字符串长度相等。</span><br><span class="line">BITOP [operations] [result] [key1] [keyn…]</span><br><span class="line"></span><br><span class="line"># 返回指定key中第一次出现指定value(<span class="number">0</span>/<span class="number">1</span>)的位置</span><br><span class="line">BITPOS [key] [value]</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用场景：</strong>签到统计、判断用户登录状态、连续签到用户统计</p>
+<div class="note default flat"><p><strong>连续签到用户统计</strong></p>
+</div>
+
+<p>以统计七天连续签到打卡的用户为例：</p>
+<p>把每天的日期作为 Bitmap 的 key，userId 作为 offset，若是打卡则将 offset 位置的 bit 设置成 1。key 对应的集合的每个 bit 位的数据则是一个用户在该日期的打卡记录。</p>
+<p>一共有 7 个这样的 Bitmap，如果我们能对这 7 个 Bitmap 的对应的 bit 位做 『与』运算。同样的 UserID offset 都是一样的，当一个 userID 在 7 个 Bitmap 对应对应的 offset 位置的 bit &#x3D; 1 就说明该用户 7 天连续打卡。</p>
+<p>结果保存到一个新 Bitmap 中，我们再通过 BITCOUNT 统计 bit &#x3D; 1 的个数便得到了连续打卡 7 天的用户总数了。</p>
+<h1 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h1><p>HyperLogLog 是一个用来做基数估计的数据类型，什么是基数估计呢？</p>
+<p>比如现有数据集：{1, 3, 5, 7, 5, 7, 8}，其中构成这个集合的基本元素是：{1, 3, 5, 7, 8}，总共有 5 个，那么基数就是 5。基数估计就是在可接受的误差范围内，快速计算基数。</p>
+<p>在 Redis 里面，每个 HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 <code>2^64</code> 个不同元素的基数，和元素越多就越耗费内存的 Set 和 Hash 类型相比，HyperLogLog 就非常节省空间。</p>
+<p>不过，有一点需要你注意一下，HyperLogLog 的统计规则是基于概率完成的，所以它给出的统计结果是有一定误差的，标准误算率是 0.81%。</p>
+<div class="note primary flat"><p><strong>HyperLogLog 使用命令：</strong></p>
+</div>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加指定元素到 HyperLogLog 中</span></span><br><span class="line">PFADD key element [element ...]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回给定 HyperLogLog 的基数估算值。</span></span><br><span class="line">PFCOUNT key [key ...]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将多个 HyperLogLog 合并为一个 HyperLogLog</span></span><br><span class="line">PFMERGE destkey sourcekey [sourcekey ...]</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用场景：</strong>百万级网页 UV 计数</p>
+<p>在统计 UV 时，你可以用 PFADD 命令（用于向 HyperLogLog 中添加新元素）把访问页面的每个用户都添加到 HyperLogLog 中。</p>
+<p>接下来，就可以用 PFCOUNT 命令直接获得 page1 的 UV 值了，这个命令的作用就是返回 HyperLogLog 的统计结果。</p>
+<h1 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h1><p>Stream 是 Redis 5.0 版本新增加的数据类型，是 Redis 专门为消息队列设计的数据类型。在 Redis 5.0 Stream 没出来之前，消息队列的实现方式都有着各自的缺陷，例如：</p>
+<ul>
+<li>发布订阅模式，不能持久化也就无法可靠的保存消息，并且对于离线重连的客户端不能读取历史消息的缺陷；</li>
+<li>List 实现消息队列的方式不能重复消费，一个消息消费完就会被删除，而且生产者需要自行实现全局唯一 ID。</li>
+</ul>
+<p>基于以上问题，Redis 5.0 便推出了 Stream 用于完美地实现消息队列，它支持消息的持久化、支持自动生成全局唯一 ID、支持 ack 确认消息的模式、支持消费组模式等，让消息队列更加的稳定和可靠。</p>
+<div class="note default flat"><p><strong>基本操作：生产和消费</strong></p>
+</div>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># * 表示让 Redis 为插入的数据自动生成一个全局唯一的 ID</span></span><br><span class="line"><span class="comment"># 往名称为 mymq 的消息队列中插入一条消息，消息的键是 name，值是 zhangsan</span></span><br><span class="line">&gt; XADD mymq * name zhangsan</span><br><span class="line"><span class="string">&quot;1663241868161-0&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>插入成功后会返回全局唯一的 ID：”1663241868161-0”。消息的全局唯一 ID 由两部分组成：</p>
+<ul>
+<li>第一部分“1663241868161”是数据插入时，以毫秒为单位计算的当前服务器时间；</li>
+<li>第二部分表示插入消息在当前毫秒内的消息序号，这是从 0 开始编号的。例如，“1663241868161-0”就表示在“1663241868161”毫秒内的第 1 条消息。</li>
+</ul>
+<p>消费者通过 XREAD 命令从消息队列中读取消息时，可以指定一个消息 ID，并从这个消息 ID 的下一条消息开始进行读取（注意是输入消息 ID 的下一条信息开始读取，不读取输入ID的消息）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这里输入的毫秒时间戳是刚才生成的ID的前一毫秒</span></span><br><span class="line">&gt; XREAD STREAMS mymq 1663241868160-0</span><br><span class="line">1) 1) <span class="string">&quot;mymq&quot;</span></span><br><span class="line">   2) 1) 1) <span class="string">&quot;1663241868161-0&quot;</span></span><br><span class="line">         2) 1) <span class="string">&quot;name&quot;</span></span><br><span class="line">            2) <span class="string">&quot;zhangsan&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果想要实现阻塞读（当没有数据时，阻塞住），可以调用 XRAED 时设定 BLOCK 配置项，实现类似于 BRPOP 的阻塞读取操作。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 10000 = 10s，命令最后的“$”符号表示读取最新的消息</span></span><br><span class="line">&gt; XREAD BLOCK 10000 STREAMS mymq $</span><br><span class="line">(nil)</span><br><span class="line">(10.00s)</span><br></pre></td></tr></table></figure>
+
+<div class="note default flat"><p><strong>消费组</strong></p>
+</div>
+
+<p>Stream 可以以使用 XGROUP 创建消费组，创建消费组之后，Stream 可以使用 XREADGROUP 命令让消费组内的消费者读取消息。</p>
+<p>创建两个消费组，这两个消费组消费的消息队列是 mymq，都指定从第一条消息开始读取：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建一个名为 group1 的消费组，0-0 表示从第一条消息开始读取。</span></span><br><span class="line">&gt; XGROUP CREATE mymq group1 0-0</span><br><span class="line">OK</span><br><span class="line"><span class="comment"># 创建一个名为 group2 的消费组，0-0 表示从第一条消息开始读取。</span></span><br><span class="line">&gt; XGROUP CREATE mymq group2 0-0</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<p>消费组 group1 内的消费者 consumer1 从 mymq 消息队列中读取所有消息的命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 命令最后的参数“&gt;”，表示从第一条尚未被消费的消息开始读取。</span></span><br><span class="line">&gt; XREADGROUP GROUP group1 consumer1 STREAMS mymq &gt;</span><br><span class="line">1) 1) <span class="string">&quot;mymq&quot;</span></span><br><span class="line">   2) 1) 1) <span class="string">&quot;1654254953808-0&quot;</span></span><br><span class="line">         2) 1) <span class="string">&quot;name&quot;</span></span><br><span class="line">            2) <span class="string">&quot;xiaolin&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>消息队列中的消息一旦被消费组里的一个消费者读取了，就不能再被该消费组内的其他消费者读取了，即同一个消费组里的消费者不能消费同一条消息。</p>
+<p>不同消费组的消费者可以消费同一条消息（但是有前提条件，创建消息组的时候，不同消费组指定了相同位置开始读取消息）</p>
+<p>使用消费组的目的是让组内的多个消费者共同分担读取消息，所以，我们通常会让每个消费者读取部分消息，从而实现消息读取负载在多个消费者间是均衡分布的。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 让 group2 中的 consumer1 从 mymq 消息队列中消费一条消息</span></span><br><span class="line">&gt; XREADGROUP GROUP group2 consumer1 COUNT 1 STREAMS mymq &gt;</span><br><span class="line">1) 1) <span class="string">&quot;mymq&quot;</span></span><br><span class="line">   2) 1) 1) <span class="string">&quot;1663243059501-0&quot;</span></span><br><span class="line">         2) 1) <span class="string">&quot;name&quot;</span></span><br><span class="line">            2) <span class="string">&quot;1&quot;</span></span><br><span class="line"><span class="comment"># 让 group2 中的 consumer2 从 mymq 消息队列中消费一条消息</span></span><br><span class="line">&gt; XREADGROUP GROUP group2 consumer2 COUNT 1 STREAMS mymq &gt;</span><br><span class="line">1) 1) <span class="string">&quot;mymq&quot;</span></span><br><span class="line">   2) 1) 1) <span class="string">&quot;1663243061599-0&quot;</span></span><br><span class="line">         2) 1) <span class="string">&quot;name&quot;</span></span><br><span class="line">            2) <span class="string">&quot;2&quot;</span></span><br><span class="line"><span class="comment"># 让 group2 中的 consumer3 从 mymq 消息队列中消费一条消息</span></span><br><span class="line">&gt; XREADGROUP GROUP group2 consumer3 COUNT 1 STREAMS mymq &gt;</span><br><span class="line">1) 1) <span class="string">&quot;mymq&quot;</span></span><br><span class="line">   2) 1) 1) <span class="string">&quot;1663243062597-0&quot;</span></span><br><span class="line">         2) 1) <span class="string">&quot;name&quot;</span></span><br><span class="line">            2) <span class="string">&quot;3&quot;</span></span><br></pre></td></tr></table></figure>
+
+<div class="note default flat"><p><strong>消息确认</strong></p>
+</div>
+
+<p>Streams 会自动使用内部队列（也称为 PENDING List）留存消费组里每个消费者读取的消息，直到消费者使用 XACK 命令通知 Streams “消息已经处理完成”。</p>
+<p>消费确认增加了消息的可靠性，一般在业务处理完成之后，需要执行 XACK 命令确认消息已经被消费完成，整个流程的执行如下图所示：</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/Stream%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="Stream消息确认流程图"></p>
+<p>如果消费者没有成功处理消息，它就不会给 Streams 发送 XACK 命令，消息仍然会留存。此时，消费者可以在重启后，用 XPENDING 命令查看已读取、但尚未确认处理完成的消息。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; XPENDING mymq group1</span><br><span class="line">1) (<span class="built_in">integer</span>) 3</span><br><span class="line">2) <span class="string">&quot;1663245004996-0&quot;</span> <span class="comment"># 表示 group1 中所有消费者读取的消息最小 ID</span></span><br><span class="line">3) <span class="string">&quot;1663245010578-0&quot;</span> <span class="comment"># 表示 group1 中所有消费者读取的消息最大 ID</span></span><br><span class="line">4) 1) 1) <span class="string">&quot;consumer1&quot;</span></span><br><span class="line">      2) <span class="string">&quot;1&quot;</span></span><br><span class="line">   2) 1) <span class="string">&quot;consumer2&quot;</span></span><br><span class="line">      2) <span class="string">&quot;1&quot;</span></span><br><span class="line">   3) 1) <span class="string">&quot;consumer3&quot;</span></span><br><span class="line">      2) <span class="string">&quot;1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果想查看某个消费者具体读取了哪些数据，可以执行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看 group1 里 consumer2 从 mymq 消息队列中读取未确认哪些消息</span></span><br><span class="line">&gt; XPENDING mymq group1 - + 10 consumer2</span><br><span class="line">1) 1) <span class="string">&quot;1663245009507-0&quot;</span></span><br><span class="line">   2) <span class="string">&quot;consumer2&quot;</span></span><br><span class="line">   3) (<span class="built_in">integer</span>) 276418</span><br><span class="line">   4) (<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure>
+
+<p>group1 里 consumer2 应答 1663245009507-0：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 应答</span></span><br><span class="line">&gt; XACK mymq GROUP1 1663245009507-0</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 应答成功后没有未确认消息了</span></span><br><span class="line">&gt; XPENDING mymq GROUP1 - + 10 consumer2</span><br><span class="line">(empty array)</span><br></pre></td></tr></table></figure>
+
+<div class="note default flat"><p><strong>对于 MQ 来说，为什么 Redis 显得不专业？</strong></p>
+</div>
+
+<ol>
+<li><p>Redis 在以下 2 个场景下，可能会导致数据丢失：</p>
+<ul>
+<li>AOF 持久化配置为每秒写盘，但这个写盘过程是异步的，Redis 宕机时会存在数据丢失的可能</li>
+<li>主从复制也是异步的，主从切换时，也存在丢失数据的可能 (opens new window)。</li>
+</ul>
+</li>
+<li><p>Redis Stream 消息不可堆积</p>
+<ul>
+<li>Redis 的数据都存储在内存中，这就意味着一旦发生消息积压，则会导致 Redis 的内存持续增长，如果超过机器内存上限，就会面临被 OOM 的风险。</li>
+</ul>
+</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
     <title>Docker 真的很优秀</title>
     <url>/posts/24100/</url>
     <content><![CDATA[<p>本文主要记录一些 Docker 中的基本概念，以及一些常用命令，主要是为了理清楚 <code>镜像</code>、<code>容器</code>、<code>网络</code>、<code>数据卷</code> 这几个概念、作用、操作。当然能够帮到大家就更好了。</p>
@@ -619,30 +840,7 @@
   <entry>
     <title>Java并发：线程的执行结果和异常</title>
     <url>/posts/62788/</url>
-    <content><![CDATA[<p>由于 Runnable 和 Thread 之间的解耦设计，导致 Thread 在运行 Runnable 时其实是无法感知到 Runnable 内部的运行逻辑的，Thread 无法知道这个线程执行完了是否需要处理返回值，是否会抛出什么异常等等</p>
-<p>例如线程池，线程池中的 Thread 根本不知道会传进来一个什么样的 Runnable，对于 Thread 而言，只关注执行上的逻辑，而不关注 Runnable 内部的逻辑。</p>
-<p>这样的设计是优秀的，但如果需要处理线程中的异常或者需要返回值来做后续的一些操作就不方便了。如果需要子线程的返回值才能继续后面的操作，可以先去做一些别的事情，等子线程执行完毕之后拿到返回值了再继续这部分逻辑。</p>
-<h1 id="利用-Thread-UncaughtExceptionHandler-捕获异常"><a href="#利用-Thread-UncaughtExceptionHandler-捕获异常" class="headerlink" title="利用 Thread.UncaughtExceptionHandler 捕获异常"></a>利用 Thread.UncaughtExceptionHandler 捕获异常</h1><p>如果主线程抛出一个异常，可以直接使用 <code>try-catch</code> 捕获处理这个异常。如果异常是子线程中抛出的，那么主线程对这个异常并不敏感，无法直接捕获处理这个异常。虽然在控制台能看到异常信息，但是这个异常信息是子线程输出的，主线程并无法感知到这个异常，之所以能在控制台看到异常信息，是因为主线程与子线程共用了同一个控制台。</p>
-<p>如果看不明白上面这段话，你可以跑一下这段代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;我是子线程抛出来的异常&quot;</span>);</span><br><span class="line">    &#125;).start();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5000</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;我是主线程抛出来的异常&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">                System.out.println(e.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>对于主线程的异常，可以直接使用 <code>try-catch</code> 来捕获处理。对于子线程的异常，每次抛出异常的时机都不相同，主线程无法知道什么时候子线程会抛出异常，更无法捕获处理子线程中的异常。</p>
-<blockquote>
-<p>其实这个例子也很形象的向我们展示了线程的工作过程：每个线程在执行期间是互不打扰的，自己干自己的事情。每个线程在领取到自己的任务（run方法）之后，等待被分配资源开始执行（start方法）之后便是一直闷头干下去，直到把工作做完（run方法执行完毕）</p>
-</blockquote>
-<p>这样就要求子线程必须能够自行处理异常，也就是在子线程内部使用 <code>try-catch</code> 来处理异常。但子线程不一定能够处理自己的异常，有些异常需要向外通知父线程，让父线程去执行对应的处理逻辑。</p>
-<blockquote>
-<p>这样看来，子线程更像是父线程的一个方法：异常可以在方法中使用 <code>try-catch</code> 自行处理，也可以标记在方法签名上向外抛出。</p>
-</blockquote>
-<p>针对需要通知父线程处理的异常，可以使用 <strong>Thread.UncaughtExceptionHandler</strong> 这个接口来接收并处理异常。</p>
-<p>这个接口的使用方式如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义的线程异常处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">MyUncaughtExceptionHandler</span> <span class="keyword">implements</span> <span class="title class_">Thread</span>.UncaughtExceptionHandler &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyUncaughtExceptionHandler</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> &#123;</span><br><span class="line">        System.out.println(name + <span class="string">&quot;：成功捕获了异常。抛出异常的线程是：&quot;</span> + t.getName() + <span class="string">&quot;。抛出的异常是：&quot;</span> + e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="comment">// 设置为默认异常处理器</span></span><br><span class="line">    <span class="comment">// MyUncaughtExceptionHandler --&gt; Thread.defaultUncaughtExceptionHandler</span></span><br><span class="line">    Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">new</span> <span class="title class_">MyUncaughtExceptionHandler</span>(<span class="string">&quot;默认的线程异常处理器&quot;</span>));</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>()).start();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置为线程专用的异常处理器</span></span><br><span class="line">    <span class="comment">// MyUncaughtExceptionHandler --&gt; t.uncaughtExceptionHandler</span></span><br><span class="line">    <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>(), <span class="string">&quot;Thread-0&quot;</span>);</span><br><span class="line">    t.setUncaughtExceptionHandler(<span class="keyword">new</span> <span class="title class_">MyUncaughtExceptionHandler</span>(<span class="string">&quot;为 Thread-0 专门设置的异常处理器&quot;</span>));</span><br><span class="line">    t.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Task</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;Task 抛出的异常&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>首先创建一个类实现 <code>Thread.UncaughtExceptionHandler</code> 作为自定义的线程异常处理器，再根据需要设置为默认的异常处理器，或者是为每个线程单独设置的异常处理器。</p>
-<p>如果没有单独设置异常处理器也没有设置默认的异常处理器，那么调用 <code>ThreadGroup</code> 类对异常做处理，该类实现了 <code>Thread.UncaughtExceptionHandler</code> 接口，内容如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">uncaughtException</span><span class="params">(Thread t, Throwable e)</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 首先检查是否存在父线程组，如果存在则调用父线程组的异常处理器进行处理，这里是一个递归的操作</span></span><br><span class="line">    <span class="keyword">if</span> (parent != <span class="literal">null</span>) &#123;</span><br><span class="line">        parent.uncaughtException(t, e);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 获取全局异常处理器</span></span><br><span class="line">        Thread.<span class="type">UncaughtExceptionHandler</span> <span class="variable">ueh</span> <span class="operator">=</span> Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        <span class="comment">// 尝试使用全局异常处理器处理</span></span><br><span class="line">        <span class="keyword">if</span> (ueh != <span class="literal">null</span>) &#123;</span><br><span class="line">            ueh.uncaughtException(t, e);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!(e <span class="keyword">instanceof</span> ThreadDeath)) &#123;</span><br><span class="line">            <span class="comment">// 不存在全局异常处理器，直接将异常的堆栈信息打印出来</span></span><br><span class="line">            System.err.print(<span class="string">&quot;Exception in thread \&quot;&quot;</span> + t.getName() + <span class="string">&quot;\&quot; &quot;</span>);</span><br><span class="line">            e.printStackTrace(System.err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="利用-Future-获取线程执行结果和处理异常"><a href="#利用-Future-获取线程执行结果和处理异常" class="headerlink" title="利用 Future 获取线程执行结果和处理异常"></a>利用 Future 获取线程执行结果和处理异常</h1><p><strong>简介：</strong></p>
+    <content><![CDATA[<h1 id="利用-Future-获取线程执行结果和处理异常"><a href="#利用-Future-获取线程执行结果和处理异常" class="headerlink" title="利用 Future 获取线程执行结果和处理异常"></a>利用 Future 获取线程执行结果和处理异常</h1><p><strong>简介：</strong></p>
 <p>如果当前任务需要另外的某一个任务执行完毕获取到返回值后才能继续执行，但是这个另外的任务又比较耗时，那么可以使用 Future 类将这个任务的返回结果包装起来，然后当前线程先去做点其他的事情，等到 Future 拿到结果之后再执行那部分的逻辑。这个被包装的对象就是 <code>Callable</code>。</p>
 <p><strong>简而言之：</strong>如果有个很耗时的方法的需要执行，那么先开个线程让它执行，当前线程先做点其他的事情，不要一直在哪里傻等</p>
 <p><strong>Callable 介绍：</strong></p>
@@ -2190,8 +2388,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>锁</tag>
         <tag>笔记</tag>
+        <tag>锁</tag>
       </tags>
   </entry>
   <entry>
@@ -4551,10 +4749,10 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
         <category>并发</category>
       </categories>
       <tags>
+        <tag>锁</tag>
         <tag>Java</tag>
         <tag>并发</tag>
         <tag>synchronized</tag>
-        <tag>锁</tag>
       </tags>
   </entry>
   <entry>
@@ -5543,9 +5741,21 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 ]]></content>
   </entry>
   <entry>
-    <title>categories</title>
-    <url>/categories/index.html</url>
-    <content><![CDATA[]]></content>
+    <title></title>
+    <url>/link/index.html</url>
+    <content><![CDATA[<hr>
+<blockquote>
+<p><strong>友链申请滴注意事项：</strong></p>
+<ol>
+<li>内容持续更新且可以稳定访问</li>
+<li>网页整洁无繁杂广告推广</li>
+<li>本站会定期清理无法访问的友链，如果更换了链接信息请至评论区留言，谢谢合作</li>
+<li>本站会定期查看双方是否互为友链，如果取消本站友链，本站也会将您的友链移除</li>
+<li>将本站的友链添加到您的友链，相关信息如下</li>
+<li>按照以下格式在以下评论区留言，待博主为您添上友链</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
     <title>这里</title>
@@ -5586,25 +5796,13 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 ]]></content>
   </entry>
   <entry>
-    <title></title>
-    <url>/link/index.html</url>
-    <content><![CDATA[<hr>
-<blockquote>
-<p><strong>友链申请滴注意事项：</strong></p>
-<ol>
-<li>内容持续更新且可以稳定访问</li>
-<li>网页整洁无繁杂广告推广</li>
-<li>本站会定期清理无法访问的友链，如果更换了链接信息请至评论区留言，谢谢合作</li>
-<li>本站会定期查看双方是否互为友链，如果取消本站友链，本站也会将您的友链移除</li>
-<li>将本站的友链添加到您的友链，相关信息如下</li>
-<li>按照以下格式在以下评论区留言，待博主为您添上友链</li>
-</ol>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">名称：知更博客</span><br><span class="line">头像链接：https://www.wrp.cool/images/avatar.png</span><br><span class="line">主页链接：https://www.wrp.cool</span><br><span class="line">说明信息：知道要更新，知道要进步</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
     <title>标签</title>
     <url>/tags/index.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>categories</title>
+    <url>/categories/index.html</url>
     <content><![CDATA[]]></content>
   </entry>
 </search>
