@@ -266,9 +266,47 @@
 ]]></content>
   </entry>
   <entry>
-    <title>拿到 synchronized 锁之后，先释放再等等</title>
+    <title>synchronized 关键字是怎样保证线程安全的</title>
     <url>/posts/11150/</url>
-    <content><![CDATA[<p>在 synchronized 的使用中，如果继续往下执行代码的条件不被满足的话需要先释放当前持有的锁对象再等等，等到执行条件被满足后再接着往下执行。</p>
+    <content><![CDATA[<p><strong>一句话说明 synchronized 关键字的作用：</strong></p>
+<blockquote>
+<p>保证在 <strong>「同一时刻」</strong> 最多只有 <strong>「一个」</strong> 线程执行该段代码，以达到保证 <strong>「并发安全」</strong> 的效果</p>
+</blockquote>
+<p>上一篇文章讲述的线程不安全的例子，现在就给出解决办法：synchronized。</p>
+<h1 id="synchronized-关键字的使用方式"><a href="#synchronized-关键字的使用方式" class="headerlink" title="synchronized 关键字的使用方式"></a>synchronized 关键字的使用方式</h1><p>为了阅读方便，把前一篇文章中的示例代码再放到这里：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Task</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 共享变量</span></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 对共享变量的修改</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100_000</span>; i++) &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>());</span><br><span class="line">        <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>());</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        <span class="keyword">while</span> (t1.isAlive() || t2.isAlive()) &#123; &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;num = &quot;</span> + num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以理解为是一个锁的作用，用来保护需要同步执行的代码，只有拿到锁的线程才能执行被保护的代码。如果使用 synchronized 来保护 <code>num++</code> 这行代码 ，那就可以保证 num 变量的线程安全。因为这样同一个时刻就只有一个线程能执行 <code>num++</code> 了。被保护代码也称为临界区代码。</p>
+<p>synchronized 既然是一把锁，那肯定就需要一个对象来充当这个锁对象，这个对象可以是类对象或者是实例对象。由此就有了两个锁的概念：类锁、对象锁。</p>
+<p>再根据使用方式的不同，类锁可以分为：</p>
+<ul>
+<li>静态方法加锁</li>
+<li>代码块直接指定类锁</li>
+</ul>
+<p>对象锁可以分为：</p>
+<ul>
+<li>普通方法加锁</li>
+<li>代码块直接指定对象锁</li>
+</ul>
+<p>由于 Java 中的类是全局唯一的对象，而对象则可以存在多个。于是，类锁是全局唯一的，被类锁保护的代码在同一时刻肯定只有唯一一个线程能执行该代码；对象锁在全局可以同时存在多个，被对象锁保护的代码在同一时刻可能会被多个线程同时执行，但这些线程肯定持有不同的对象锁。</p>
+<h2 id="类锁"><a href="#类锁" class="headerlink" title="类锁"></a>类锁</h2><p>由于类锁在全局的唯一性，所以使用类锁保护的代码可以保证在整个 JVM 实例中同一时刻只有一个线程能执行该方法。</p>
+<h3 id="静态方法加锁"><a href="#静态方法加锁" class="headerlink" title="静态方法加锁"></a>静态方法加锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将 synchronized 关键字添加在静态方法签名上，以 Task.class 类对象为锁</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">incr</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码块指定类锁"><a href="#代码块指定类锁" class="headerlink" title="代码块指定类锁"></a>代码块指定类锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (Task.class) &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="对象锁"><a href="#对象锁" class="headerlink" title="对象锁"></a>对象锁</h2><p>被 new 出来或者反射加载的对象，在内存中可以存在多份。所以被对象锁保护的代码同一时刻可能会被多个线程执行，但是这些线程持有的实例对象肯定不同。</p>
+<h3 id="普通方法加锁"><a href="#普通方法加锁" class="headerlink" title="普通方法加锁"></a>普通方法加锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将 synchronized 关键字添加在方法签名上，以 this 对象为锁</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码块指定对象锁"><a href="#代码块指定对象锁" class="headerlink" title="代码块指定对象锁"></a>代码块指定对象锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>) &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类锁和对象锁的使用场景"><a href="#类锁和对象锁的使用场景" class="headerlink" title="类锁和对象锁的使用场景"></a>类锁和对象锁的使用场景</h2><p>类锁的经典使用场景有单例模式的双重检查锁（DCL）实现，由于类锁限制的范围太广泛了，在整个 JVM 实例同一时刻只有一个线程能执行被保护代码，也就是完全放弃了并行带来的性能提升，在使用类锁的时候这一点是需要认真考量的。DCL 的外层判断也是为了降低锁的粒度，基于性能的考量而加的。</p>
+<p>对象锁的使用场景就比较多了，早期的并发容器当中使用的都是对象锁来保护并发安全，例如 Vector 和 Hashtable。早期并发容器中对象锁的使用也可以做为一个参考，一个对象内部的资源需要被保护时，可以以这个对象为锁来使用 synchronized 关键字。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>synchronized 锁的方法，不急就再等等</title>
+    <url>/posts/11151/</url>
+    <content><![CDATA[<p>在 synchronized 的使用中，如果继续往下执行代码的条件不被满足的话可以先释放当前持有的锁对象再等等，等到执行条件被满足后再接着往下执行。</p>
 <blockquote>
 <p>就像平时去医院排队看病一样，轮到我们了在医生问诊的过程中，可能会先让你先去做某一项检查，等检查完拿到检查结果之后再重新排队等待医生叫号。<br>排队看病的例子中，当我们在被医生问诊的时候，我们就独占了医生这把锁；需要做某一项检查的时候就是往下继续问诊的流程继续不了了；拿到检查结果后我们也要重新排队等待医生继续问诊。</p>
 </blockquote>
@@ -310,44 +348,6 @@
 <li><p>尽量使用 notifyAll() 方法唤醒，因为不能确定被唤醒线程能否往下继续执行。如果被唤醒线程因条件不满足继续等待，那还有其他线程可以继续抢锁，而 notify() 在这种情况下会导致所有线程都陷入等待无法唤醒。</p>
 </li>
 </ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>synchronized 关键字是怎样保证线程安全的</title>
-    <url>/posts/11150/</url>
-    <content><![CDATA[<p><strong>一句话说明 synchronized 关键字的作用：</strong></p>
-<blockquote>
-<p>保证在 <strong>「同一时刻」</strong> 最多只有 <strong>「一个」</strong> 线程执行该段代码，以达到保证 <strong>「并发安全」</strong> 的效果</p>
-</blockquote>
-<p>上一篇文章讲述的线程不安全的例子，现在就给出解决办法：synchronized。</p>
-<h1 id="synchronized-关键字的使用方式"><a href="#synchronized-关键字的使用方式" class="headerlink" title="synchronized 关键字的使用方式"></a>synchronized 关键字的使用方式</h1><p>为了阅读方便，把前一篇文章中的示例代码再放到这里：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Task</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 共享变量</span></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 对共享变量的修改</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100_000</span>; i++) &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>());</span><br><span class="line">        <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Task</span>());</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        <span class="keyword">while</span> (t1.isAlive() || t2.isAlive()) &#123; &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;num = &quot;</span> + num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以理解为是一个锁的作用，用来保护需要同步执行的代码，只有拿到锁的线程才能执行被保护的代码。如果使用 synchronized 来保护 <code>num++</code> 这行代码 ，那就可以保证 num 变量的线程安全。因为这样同一个时刻就只有一个线程能执行 <code>num++</code> 了。被保护代码也称为临界区代码。</p>
-<p>synchronized 既然是一把锁，那肯定就需要一个对象来充当这个锁对象，这个对象可以是类对象或者是实例对象。由此就有了两个锁的概念：类锁、对象锁。</p>
-<p>再根据使用方式的不同，类锁可以分为：</p>
-<ul>
-<li>静态方法加锁</li>
-<li>代码块直接指定类锁</li>
-</ul>
-<p>对象锁可以分为：</p>
-<ul>
-<li>普通方法加锁</li>
-<li>代码块直接指定对象锁</li>
-</ul>
-<p>由于 Java 中的类是全局唯一的对象，而对象则可以存在多个。于是，类锁是全局唯一的，被类锁保护的代码在同一时刻肯定只有唯一一个线程能执行该代码；对象锁在全局可以同时存在多个，被对象锁保护的代码在同一时刻可能会被多个线程同时执行，但这些线程肯定持有不同的对象锁。</p>
-<h2 id="类锁"><a href="#类锁" class="headerlink" title="类锁"></a>类锁</h2><p>由于类锁在全局的唯一性，所以使用类锁保护的代码可以保证在整个 JVM 实例中同一时刻只有一个线程能执行该方法。</p>
-<h3 id="静态方法加锁"><a href="#静态方法加锁" class="headerlink" title="静态方法加锁"></a>静态方法加锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将 synchronized 关键字添加在静态方法签名上，以 Task.class 类对象为锁</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">incr</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="代码块指定类锁"><a href="#代码块指定类锁" class="headerlink" title="代码块指定类锁"></a>代码块指定类锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (Task.class) &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="对象锁"><a href="#对象锁" class="headerlink" title="对象锁"></a>对象锁</h2><p>被 new 出来或者反射加载的对象，在内存中可以存在多份。所以被对象锁保护的代码同一时刻可能会被多个线程执行，但是这些线程持有的实例对象肯定不同。</p>
-<h3 id="普通方法加锁"><a href="#普通方法加锁" class="headerlink" title="普通方法加锁"></a>普通方法加锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将 synchronized 关键字添加在方法签名上，以 this 对象为锁</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="代码块指定对象锁"><a href="#代码块指定对象锁" class="headerlink" title="代码块指定对象锁"></a>代码块指定对象锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>) &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="类锁和对象锁的使用场景"><a href="#类锁和对象锁的使用场景" class="headerlink" title="类锁和对象锁的使用场景"></a>类锁和对象锁的使用场景</h2><p>类锁的经典使用场景有单例模式的双重检查锁（DCL）实现，由于类锁限制的范围太广泛了，在整个 JVM 实例同一时刻只有一个线程能执行被保护代码，也就是完全放弃了并行带来的性能提升，在使用类锁的时候这一点是需要认真考量的。DCL 的外层判断也是为了降低锁的粒度，基于性能的考量而加的。</p>
-<p>对象锁的使用场景就比较多了，早期的并发容器当中使用的都是对象锁来保护并发安全，例如 Vector 和 Hashtable。早期并发容器中对象锁的使用也可以做为一个参考，一个对象内部的资源需要被保护时，可以以这个对象为锁来使用 synchronized 关键字。</p>
 ]]></content>
   </entry>
   <entry>
@@ -5685,6 +5685,26 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
       </categories>
   </entry>
   <entry>
+    <title>categories</title>
+    <url>/categories/index.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>这里</title>
+    <url>/here/index.html</url>
+    <content><![CDATA[<ul>
+<li>人生最重要的是找到自己的热爱，并坚持。</li>
+<li>生命的意义在于不断发现美的过程，就像你发现了这朵花，而我发现了你。</li>
+<li>以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</li>
+<li>人们总是喜欢先入为主地评价别人，却不知背后的逻辑也可以很复杂，不知道自己所知道的真的很少。所以，学习是一辈子的事情。</li>
+<li>人这一生应该通过阅读、行走、学习、阅人，逐渐解锁更大的地图，看到更亮的世界。其实在二十多岁时，人最应该做的，就是拓展边界、探索未知、去伪存真、求知发问，打破不属于自己的人设。</li>
+<li>世界上并没有完美的程序，但我们并不因此而沮丧，因为写程序本来就是一个不断追求完美的过程。<br></li>
+</ul>
+<hr>
+<p>大家加油：）</p>
+]]></content>
+  </entry>
+  <entry>
     <title></title>
     <url>/link/index.html</url>
     <content><![CDATA[<hr>
@@ -5727,26 +5747,6 @@ Class 类中的 getFields、getMethods 和 getConstructors 方法将分别返回
 <p>座右铭：以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</p>
 <p align="right">—— 来自一个温柔、浪漫的年轻人</p>
 </blockquote>
-<hr>
-<p>大家加油：）</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>categories</title>
-    <url>/categories/index.html</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>这里</title>
-    <url>/here/index.html</url>
-    <content><![CDATA[<ul>
-<li>人生最重要的是找到自己的热爱，并坚持。</li>
-<li>生命的意义在于不断发现美的过程，就像你发现了这朵花，而我发现了你。</li>
-<li>以宁静敬重的心敲出的每一行代码，都会以最优雅的方式留存它的美丽。</li>
-<li>人们总是喜欢先入为主地评价别人，却不知背后的逻辑也可以很复杂，不知道自己所知道的真的很少。所以，学习是一辈子的事情。</li>
-<li>人这一生应该通过阅读、行走、学习、阅人，逐渐解锁更大的地图，看到更亮的世界。其实在二十多岁时，人最应该做的，就是拓展边界、探索未知、去伪存真、求知发问，打破不属于自己的人设。</li>
-<li>世界上并没有完美的程序，但我们并不因此而沮丧，因为写程序本来就是一个不断追求完美的过程。<br></li>
-</ul>
 <hr>
 <p>大家加油：）</p>
 ]]></content>
