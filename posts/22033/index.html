@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>AspectJ 形式的 Spring AOP | 知更</title><meta name="author" content="码小瑞"><meta name="copyright" content="码小瑞"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="《Spring揭秘》读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AspectJ 形式的 Spring AOP">
+<meta property="og:url" content="https://www.wrp.cool/posts/22033/index.html">
+<meta property="og:site_name" content="知更">
+<meta property="og:description" content="《Spring揭秘》读书笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg">
+<meta property="article:published_time" content="2022-12-08T05:55:01.000Z">
+<meta property="article:modified_time" content="2022-12-13T12:20:33.601Z">
+<meta property="article:author" content="码小瑞">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg"><link rel="shortcut icon" href="/images/avatar.png"><link rel="canonical" href="https://www.wrp.cool/posts/22033/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 码小瑞","link":"链接: ","source":"来源: 知更","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'AspectJ 形式的 Spring AOP',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-12-13 20:20:33'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="知更" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">81</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-archive"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-map-marker-alt"></i><span> 这里</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user"></i><span> 我说我呀</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-book"></i><span> 喜欢看书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 喜欢电影</span></a></li><li><a class="site-page child" href="/love/"><i class="fa-fw fa fa-heart red"></i><span> 还喜欢你</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">知更</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-archive"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-map-marker-alt"></i><span> 这里</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-user"></i><span> 我说我呀</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-book"></i><span> 喜欢看书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 喜欢电影</span></a></li><li><a class="site-page child" href="/love/"><i class="fa-fw fa fa-heart red"></i><span> 还喜欢你</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">AspectJ 形式的 Spring AOP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-12-08T05:55:01.000Z" title="发表于 2022-12-08 13:55:01">2022-12-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-12-13T12:20:33.601Z" title="更新于 2022-12-13 20:20:33">2022-12-13</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span></div></div></div><article class="post-content" id="article-container"><p>Spring 框架 2.0 版本发布之后，Spring AOP 增加了新的特性，或者说增加了新的使用方式。2.0之后的 Spring AOP 集成了 AspectJ，但底层的各种概念的实现以及织入方式，依然使用的是 Spring 1.x 原先的实现体系。</p>
+<p>@AspectJ 代表一种定义 Aspect 的风格，它让我们能够以 POJO 的形式定义 Aspect，没有其他接口定义限制。唯一需要的，就是使用相应的注解标注这些 Aspect 定义的 POJO 类。之后，Spring AOP 会根据标注的注解搜索这些 Aspect 定义类，然后将其织入系统。</p>
+<h1 id="AspectJ-形式：AOP"><a href="#AspectJ-形式：AOP" class="headerlink" title="@AspectJ 形式：AOP"></a>@AspectJ 形式：AOP</h1><p>看看 @AspectJ 形式的 AOP 应该怎么使用，定义一个用于性能监控的 AOP：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceTraceAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(public void *.method1()) || execution(public void *.method2())&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pointcutName</span><span class="params">()</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around(&quot;pointcutName()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">performanceTrace</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;start_time : &quot;</span> + System.currentTimeMillis());</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> joinPoint.proceed();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;end_time : &quot;</span> + System.currentTimeMillis());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如下是目标类定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;method1 execution.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method2</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;method2 execution.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过编码的方式织入，像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">AspectJProxyFactory</span> <span class="variable">weaver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AspectJProxyFactory</span>();</span><br><span class="line">weaver.setTarget(<span class="keyword">new</span> <span class="title class_">Foo</span>());</span><br><span class="line">weaver.addAspect(PerformanceTraceAspect.class);</span><br><span class="line">((Foo) weaver.getProxy()).method1();</span><br><span class="line">((Foo) weaver.getProxy()).method2();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>AspectJProxyFactory 的使用与 ProxyFactory 没有多大区别，如果愿意，也完全可以把 AspectJProxyFactory 当作 ProxyFactory 来用。</p>
+</blockquote>
+<p>也可以通过自动代理织入，如果你使用了 Spring Boot 来构建 Spring 项目，那你只需要在启动类上加这个注解 <code>@EnableAspectJAutoProxy</code> 来开启自动代理，它会使用 <code>org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator</code> 类来自动搜集 IoC 容器中注册的 Aspect，并应用到 Pointcut 定义的各个目标对象上。此时，如果再通过容器获取 target 对象的话，会发现它已经是被代理过的了。像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableAspectJAutoProxy</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringDemoApplication</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="type">ApplicationContext</span> <span class="variable">ac</span> <span class="operator">=</span> SpringApplication.run(SpringDemoApplication.class, args);</span><br><span class="line"></span><br><span class="line">        ((Foo) ac.getBean(<span class="string">&quot;foo&quot;</span>)).method1();</span><br><span class="line">        ((Foo) ac.getBean(<span class="string">&quot;foo&quot;</span>)).method2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于执行结果，你不妨自己试试看。</p>
+<h1 id="AspectJ-形式：Pointcut-的声明"><a href="#AspectJ-形式：Pointcut-的声明" class="headerlink" title="@AspectJ 形式：Pointcut 的声明"></a>@AspectJ 形式：Pointcut 的声明</h1><p>@AspectJ 形式的 Pointcut 声明，依附在 @Aspect 所标注的 Aspect 定义类之内，通过使用 <code>org.aspectj.lang.annotation.Pointcut</code> 这个注解，指定 AspectJ 形式的 Pointcut 表达式之后，将这个指定了相应表达式的注解标注到 Aspect 定义类的某个方法上即可。比如刚刚 PerformanceTraceAspect 的 pointcutName 方法上的 <code>@Pointcut</code> 注解一样。</p>
+<p><strong>@AspectJ 形式的 Pointcut 声明包含如下两个部分：</strong></p>
+<ol>
+<li><strong>Pointcut Expression。</strong>Pointcut Expression 的载体为 @Pointcut，该注解是方法级别的注解，所以 Pointcut Expression 不能脱离某个方法单独声明。Pointcut Expression 是真正规定 Pointcut 匹配规则的地方，可以通过 @Pointcut 直接指定 AspectJ 形式的 Pointcut 表达式，由两部分组成，分别是标识符和匹配模式，将在下文详细说明。</li>
+<li><strong>Pointcut Signature。</strong>Pointcut Signature 在这里具体化为一个方法定义，它是 Pointcut Expression 的载体。Pointcut Signature 所在的方法定义，除了返回类型必须是 void 之外，没有其他限制。方法修饰符所起的作用与 Java 语言中语义相同。可以将 Pointcut Signature 作为相应 Pointcut Expression 标识符，在 Pointcut Expression 的定义中取代重复的 Pointcut 表达式定义，像这样：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PointcutExpressionDemo</span> &#123;</span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(void method1())&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method1Execution</span><span class="params">()</span> &#123; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Pointcut(&quot;method1Execution()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stillMethod1Execution</span><span class="params">()</span> &#123; &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>AspectJ 的 Pointcut 表达式支持通过 <code>&amp;&amp;</code>、<code>||</code> 以及 <code>!</code> 逻运算符，进行 Pontcut 表达式之间的逻辑运算运算符可以应用于具体的 Pointcut 表达式，以及相应的 Pointcut Signature。</p>
+<hr>
+<p>以下是 @AspectJ 形式 Pointcut 表达式的标志符</p>
+<h2 id="execution"><a href="#execution" class="headerlink" title="execution"></a>execution</h2><p>execution 可以帮助我们匹配拥有指定方法前面的 Joinpoint，使用 execution 标志符的 Pointcut 表达式的规定格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execution(modifiers-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern)</span><br></pre></td></tr></table></figure>
+
+<p>其中，方法的返回类型、方法名以及参数部分的匹配模式是必须指定的，其他部分的匹配模式可以省略。PerformanceTraceAspect.pointcutName 方法使用的就是 execution 标识符。</p>
+<p>还可以在 execution 表达式中使用两种通配符，即 <code>*</code> 和 <code>..</code></p>
+<ul>
+<li><code>*</code>：可以用于任何部分的匹配模式中，可以匹配相邻的多个字符，即一整个单词。</li>
+<li><code>..</code>：只能在 <code>declaring-type-pattern</code> 和 <code>param-pattern</code> 的位置使用。<ul>
+<li>使用在 <code>declaring-type-pattern</code>：可以指定多个层次的类型声明，如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 只能指定到 cn.spring21 这层下的所有类型</span><br><span class="line">execution(void cn.spring21.*.doSomething(*))</span><br><span class="line">// 可以匹配到 cn.spring21 包下的所有类型，以及 cn.spring21 下层包下声明的所有类型</span><br><span class="line">execution(void cn.spring21..*.doSomething(*))</span><br></pre></td></tr></table></figure></li>
+<li>使用在 <code>param-pattern</code>：表示该方法可以有0到多个参数，参数类型不限，如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execution(void *.doSomething(..))</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<p>execution 使用示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 匹配两个参数的 doSomething 方法，第一个参数为 String 类型，第二个参数类型不限</span><br><span class="line">execution(void doSomething(string, *))</span><br><span class="line"></span><br><span class="line">// 匹配拥有多个参数的 doSomething 方法，之前几个参数类型不限，但最后一个参数类型必须为 String</span><br><span class="line">execution(void doSomething(.., String))</span><br><span class="line"></span><br><span class="line">// 匹配拥有多个参数的 doSomething 方法，第一个参数类型不限，第二个参数类型为 String，其它剩余参数数量，类型均不限</span><br><span class="line">execution(void doSomething(*,String,..))</span><br></pre></td></tr></table></figure>
+
+<h2 id="within"><a href="#within" class="headerlink" title="within"></a>within</h2><p>within 标志符只接收类型声明，它将会匹配指定类型下的所有 Joinpoint。不过，因为 Spring AOP 只支持方法级别的 Joinpoint，所以，在我们为 within 指定某个类后，它将匹配指定类所声明的所有方法执行。假设我们声明一个使用 within 标志符的 Pointcut 像这样：<code>within(cool.wrp.springdemo.aop.Foo)</code>。</p>
+<p>那么，该 Pointcut 表达式在 Spring AOP 中将会匹配 Foo 类中的所有方法声明。另外，我们也可以通过 <code>*</code> 和 <code>..</code> 通配符来扩展匹配的类型范围，如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 匹配 cool.wrp.springdemo.aop 包下所有类型内部的方法级别的 Joinpoint</span><br><span class="line">within(cool.wrp.springdemo.aop.*)</span><br><span class="line"></span><br><span class="line">// 匹配 cool.wrp.springdemo.aop 以及其子包下所有类型的内部方法级别的 Joinpoint</span><br><span class="line">within(cool.wrp.springdemo.aop..*)</span><br></pre></td></tr></table></figure>
+
+<h2 id="this-和-target"><a href="#this-和-target" class="headerlink" title="this 和 target"></a>this 和 target</h2><p>在 AspectJ 中，this 指代调用方法一方所在的对象（caller），target 指代被调用方法所在的对象（callee），这样通常可以同时使用这两个标志符限定方法的调用关系。比如，如果 Object1、Object2 都会调用 Object3 的某个方法，那么 Pointcut 表达式定义 <code>this(Object1) &amp;&amp; target(Object3)</code>，只会当 Object1 调用 Object3 上的方法的时候才会匹配，而 Object2 调用 Object3 上的方法则不会被匹配。</p>
+<p>Spring AOP 中的 this 和 target 标志符语义，有别于 AspectJ 中两个标志符的原始语义。Spring AOP 中 this <strong>指代的是目标对象的代理对象</strong>，而由于 Spring AOP 只支持方法执行类型的 Joinpoint，所以 Spring AOP 中的目标对象的语义刚好与 target 一致，target 就<strong>指代的就还是目标对象</strong>。</p>
+<p><strong>至于为什么，这块书上没说，但我是这么理解的：</strong></p>
+<p>因为 AOP 实际上是一个规范，而 Spring AOP 是这个规范的一个具体实现，所以一些 AOP 中的内容可能由于 Java 的特性没办法完美的实现出来，比如 AOP 就没规定必须使用代理实现吧，这里的 this 和 target 也是如此。</p>
+<p><strong>this 为什么有别于 AOP 的 this，我想应该是这样：</strong></p>
+<p>AOP 中 this 的语义很明显，就是指代调用方（caller）对象，但由于 Java 是静态语言，caller 对象被编写出来之后，Java 没有更改 caller 的能力，所以在 AOP 的实现上 Java 采用了曲线救国的方式，也就是代理。那么如果 this 的语义还是指代 caller 对象的话，Java 没有能力为 caller 做横切逻辑的织入。所以在这里 this 的语义<strong>指代的是目标对象的代理对象</strong>。</p>
+<p>实际上，从代理模式来看，代理对象通常跟目标对象的类型是相同的，因为目标对象与它的代理对象实现同一个接口。即使使用 CGLIB 的方式，目标对象的代理对象属于目标对象的子类，通过单独使用 this 或者 target 指定类型，起到的限定作用其实是差不多的。假设我们现在有如下的对象定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ProxyInterface</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TargetFoo</span> <span class="keyword">implements</span> <span class="title class_">ProxyInterface</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不论使用基于接口的代理方式，还是基于类的代理方式 <code>this(ProxyInterface)</code> 和 <code>target(ProxyInterface)</code> 这两个表达式所起的效果实际上是差不多的。因为 TargetFoo 作为目标对象实现了 ProxyInterface。对于基于接口的代理来说，它的代理对象同样实现了这个接口。对于基于类的代理来说，因为目标对象的代理对象是继承了目标对象，自然也继承了目标对象实现的接口。所以这两个 Pointcut 定义起得作用差不多。</p>
+<p>但如果指定到具体类型，像这样：<code>this(TargetFoo)</code> 和 <code>target(TargetFoo)</code>。这时，如果还是基于类的代理来说，这两个 Pointcut 表达式限定的语义还是基本相同的。但基于接口的代理就有区别了，<code>target(TargetFoo)</code> 还是可以匹配到目标对象中所有的 Joinpoint，因为目标对象确实是 TargetFoo 类型，而 <code>this(TargetFoo)</code> 则不可以，因为 this 匹配的是目标对象的代理，这里只能匹配到代理对象，而匹配不到 TargetFoo 对象。</p>
+<p>通常，this 和 target 标志符都是在 Pointcut 表达式中与其他标志符结合使用，以进一步加强匹配的限定规则。对于 Introduction 来说，代理对象所实现的接口数量通常比目标对象多，可以通过同时使用 this 和 target 进一步限定匹配规则，比如：</p>
+<p><code>this(IntroductionInterface) &amp;&amp; target(TargetObjectType)</code></p>
+<p>Introduction 为目标对象动态添加了新的接口，但是新的接口添加到了目标对象的代理对象上。那么以上表达式就可以匹配到 Introduction 代理对象（TargetObjectType）上的特定接口（IntroductionInterface）中的方法。</p>
+<h2 id="args"><a href="#args" class="headerlink" title="args"></a>args</h2><p>args 标志符可以帮助我们捕捉拥有指定参数类型、指定参数数量的方法级 Joinpoint，而不管该方法在什么类型中被声明。如果我们声明了这样的 Pointcut 表达式：<code>args(User)</code>，那么，只要参数是单个的 User 对象都会被匹配到，如下的方法签名都将被该 Pointcut 所匹配：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">login</span><span class="params">(User user)</span> &#123; &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Bar</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isLogin</span><span class="params">(User user)</span> &#123; &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与使用 execution 标志符可以直接明确指定方法参数类型不同，args 标志符会在运行期间动态检查参数的类型，即使是这样的方法签名：<code>public boolean login(Object user)</code>，只要传入的是 User 类型的实例，那么使用 args 标志符的 Pointcut 表达式依然可以捕捉到该 Joinpoint，但 execution 则捕捉不到了。args 同样可以使用 <code>*</code> 和 <code>..</code> 通配符。</p>
+<h2 id="within-1"><a href="#within-1" class="headerlink" title="@within"></a>@within</h2><p>如果使用 @within 指定了某种类型的注解，那么，只要对象标注了该类型的注解，使用了 @within 标志符的 Pointcut 表达式将匹配该对象内部所有的 Joinpoint。对于 Spring AOP 来说，当然是对象内部声明的所有方法级 Joinpoint。假设我们声明注解如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnyJoinpointAnnotation &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该注解拥有类声明如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AnyJoinpointAnnotation</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span> &#123; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method2</span><span class="params">()</span> &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，当使用 @within 标志符声明 Pointcut 表达式时 <code>@within(AnyJoinpointAnnotation)</code>，Foo 类中的 method1、method2 等方法将全部被该 Pointcut 表达式所匹配。</p>
+<h2 id="target"><a href="#target" class="headerlink" title="@target"></a>@target</h2><p>使用方式与 @within 相同，在 Spring AOP 中，@within 和 @target 没有太大的区别，只不过 @within 属于静态匹配，而 @target 则是在运行时点动态匹配 Joinpoint。</p>
+<h2 id="args-1"><a href="#args-1" class="headerlink" title="@args"></a>@args</h2><p>使用 @args 标志符的 Pointcut 表达式将会尝试检查当前方法级的 Joinpoint 的方法参数类型。如果该次调用传入的参数类型拥有 @args 所指定的注解，当前 Joinpoint 将被匹配，否则将不会被匹配。</p>
+<p>以 @within 部分 @AnyJoinpontAnnotation 为例，如果指定 Pointcut 表达式像这样：<code>@args(AnyJoinpointAnnotation) &amp;&amp; execution(public void *.method(*))</code>。该注解拥有类声明如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IArgsProxy</span> &#123;</span><br><span class="line">    <span class="meta">@AnyJoinpointAnnotation</span></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">ArgsProxyImpl_1</span> <span class="keyword">implements</span> <span class="title class_">IArgsProxy</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">ArgsProxyImpl_2</span> <span class="keyword">implements</span> <span class="title class_">IArgsProxy</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目标类 Foo 像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">(IArgsProxy proxy)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用的时候，像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ApplicationContext</span> <span class="variable">ac</span> <span class="operator">=</span> SpringApplication.run(SpringDemoApplication.class, args);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="type">Foo</span> <span class="variable">foo</span> <span class="operator">=</span> ac.getBean(<span class="string">&quot;foo&quot;</span>, Foo.class);</span><br><span class="line">    foo.method(<span class="keyword">new</span> <span class="title class_">IArgsProxy</span>.ArgsProxyImpl_1()); <span class="comment">// 被代理</span></span><br><span class="line">    foo.method(<span class="keyword">new</span> <span class="title class_">IArgsProxy</span>.ArgsProxyImpl_2()); <span class="comment">// 不被代理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@args 会尝试对系统中所有对象的每次方法执行的参数，都进行指定的注解的动态检查。只要参数类型标注有 @args 指定的注解类型，当前方法执行就将被匹配，至于说参数类型是什么，它并不是十分关心。</p>
+<h2 id="annotation"><a href="#annotation" class="headerlink" title="@annotation"></a>@annotation</h2><p>使用 @annotation 标志符的 Pointcut 表达式，将会尝试检查系统中所有对象的所有方法级别 Joinpoint。如果被检测的方法标注有 @annotation 标志符所指定的类型，那么当前方法所在的 Joinpoint 将被 Pointcut 表达式所匹配。</p>
+<p>@annotation 标志符的应用场景也比较广泛，假设我们要对系统中的事务处理进行统一管理，可以通过团队内部规定的使用注解的方式管理事务。当开发人员希望对某个方法加事务控制的时候，只要使用相应的注解标注一下即可。</p>
+<p>需要注意的是，@annotation 所接受的注解类型只应用于方法级别，即标注了 <code>@Target(ElementType.METHOD)</code> 的注解声明。</p>
+<h1 id="AspectJ-形式：Pointcut-的实现"><a href="#AspectJ-形式：Pointcut-的实现" class="headerlink" title="@AspectJ 形式：Pointcut 的实现"></a>@AspectJ 形式：Pointcut 的实现</h1><p>实际上，@AspectJ 形式声明的所有 Pointcut 表达式，在 Spring AOP 内部都会通过解析，转化为具体的 Pointcut 对象。因为 Spring AOP 有自己的 Pointcut 定义结构，所以，@AspectJ 形式声明的这些 Pointcut 表达式，最终都会转化成一个专门面向 AspectJ 的 Pointcut 实现。</p>
+<p><code>org.springframework.aop.aspectj.AspectJExpressionPointcut</code> 代表 Spring AOP 中面向 AspectJ 的 Pointcut 具体实现。虽然它会使用 AspectJ 的相应支持，但仍然遵循 Spring AOP 的 Pointcut 定义，其在 Pointcut 中的地位如图所示：</p>
+<p><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/AspectJPointcut%E6%89%A9%E5%B1%95%E7%9A%84%E7%B1%BB%E5%9B%BE.png" alt="AspectJPointcut扩展的类图"></p>
+<p><code>ExpressionPointcut</code> 和 <code>AbstractExpressionPointcut</code> 主要是为了以后的扩展性。如果还有除 AspectJ 以外的 Pointcut 描述形式，可以在这个基础之上扩展。</p>
+<p>在 AspectJProxyFactory 或者 AnnotationAwareAspectJAutoProxyCreator 通过反射获取了 Aspect 中的 @Pointcut 定义的 AspectJ 形式的 Pointcut 定义之后，在 Spring AOP 框架内部都会构造一个对应的 AspectJExpressionPointcut 对象实例。也就是说，AspectJExpressionPointcut 内部持有通过反射获得的 Pointcut 表达式。</p>
+<p>AspectJExpressionPointcut 依然属于 Spring AOP 的 Pointcut 定义之一，所以，Spring AOP 框架内部处理 Pointcut 匹配的逻辑不需要改变，依然使用原来的匹配机制（通过 ClassFilter 和 MethodMatcher 进行具体 Joinpoint 匹配工作）。</p>
+<p>不过 AspectJExpressionPointcut 在实现 ClassFilter 和 MethodMatcher 相应方法逻辑的时候，会委托 AspectJ 类库中的 PointcutParser 来对它所持有的 AspectJ 形式的 Pointcut 表达式进行解析。PointcutParser 解析后会返回一个 PointcutExpression 对象（依然是 AspectJ 类库中的类），之后，匹配与否就直接委托这个 PointcutExpression 对象进行处理了。</p>
+<h1 id="AspectJ-形式：Advice"><a href="#AspectJ-形式：Advice" class="headerlink" title="@AspectJ 形式：Advice"></a>@AspectJ 形式：Advice</h1><p>@AspectJ 形式的 Advice 定义，实际上就是使用 @Aspect 标注的 Aspect 定义类中的普通方法。只不过，这些方法需要针对不同的 Advice 类型使用对应的注解进行标注。</p>
+<p>可以用于标注对应 Advice 定义方法的注解包括：</p>
+<ul>
+<li><code>@Before</code>、<code>@AfterReturning</code>、<code>@AfterThrowing</code>、<code>@After</code>、<code>@Around</code></li>
+<li><code>@DeclareParents</code>，用于标注 Introduction 类型的 Advice，但该注解标注的对象是<code>域(Field)</code>，而不是<code>方法(Method)</code></li>
+</ul>
+<p>各种 Advice 最终织入到什么位置，是由相应的 Pointcut 定义决定的。所以，我们需要为这些 Advice 注解指定对应的 Pointcut 定义，可以直接指定 @AspectJ 形式的 Pointcut 表达式，也可以指定单独声明的 @Pointcut 类型定义的 Pointcut Signature（不包括 @DeclareParents）</p>
+<hr>
+<p>这些注解的使用大体上都跟 PerformanceTraceAspect 相似，以下列举一些不同之处。</p>
+<h2 id="Before"><a href="#Before" class="headerlink" title="@Before"></a>@Before</h2><p>某些情况下，我们可能需要在 Advice 定义中访问 Joinpoint 处的方法参数，在 1.x 的 Spring AOP 中，我们可以通过 MethodBeforeAdvice 的 before 方法传入的 Object[] 数组，访问相应的方法参数。现在，我们有如下两种方式达到相同的目的：</p>
+<ol>
+<li><code>org.aspectj.lang.JoinPoint</code>，被 @Before 注解标注的方法可以将第一个参数声明为 JoinPoint 类型（JoinPoint 类型的参数必须在参数列表的第一位），通过 JoinPoint 我们可以借助它的 getArgs 方法，访问相应 Joinpoint 处方法的参数值。另外，getThis 方法可以获取当前代理对象；getTarget 方法可以取得当前目标对象；getSignature 方法可以取得当前 Joinpoint 处的方法签名。</li>
+<li><strong>通过 args 标志符绑定。</strong> args 标志符除了可以限定 Pointcut 定义之外，当 args 标志符接受的不是具体的对象类型，而是某个参数名称的时候，它会将这个参数名称对应的参数值绑定到 Advice 方法的调用。使用如下：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Before(&quot;execution(...) &amp;&amp; args(name)&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeAdvice</span><span class="params">(String name)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：args 指定的参数名称必须与 Advice 定义所在方法的参数名称相同。在这里，args 指定的值和 beforeAdvice 方法的参数名都是 name。</p>
+<p>以上如果 Advice 引用的是独立的 Pointcut 定义，可以这么写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Pointcut(&quot;execution(...) &amp;&amp; args(name)&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pointcutName</span><span class="params">(String name)</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Before(&quot;pointcutName(name)&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeAdvice</span><span class="params">(String name)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>由此扩展：</strong></p>
+<ol>
+<li>在 @AspectJ 形式的 Advice 声明中，除了 Around Advice 和 Introduction 之外，余下的 Advice 类型声明如果需要 <code>org.aspectj.lang.JoinPoint</code> 参数，必须将其声明在参数列表中的第一位。</li>
+<li>不只可以使用 args 标志符来绑定参数声明到方法，实际上，Pointcut 标志符中，除了 execution 标志符不会直接指定对象类型之外，其他像 this、target、@within、@target、@annotation、@args 等原本都是指定对象类型的。它们与 args 一样，在这样的场合下，如果它们指定的是参数名称，那么，所起的作用与 args 在这种参数绑定的场景中的作用是相似的，比如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Before(&quot;execution(...) &amp;&amp; args(name) &amp;&amp; annotation(txInfo)&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeAdvice</span><span class="params">(String name, Transactional txInfo)</span> &#123;</span><br><span class="line">    <span class="comment">// 访问 name 参数</span></span><br><span class="line">    <span class="comment">// 通过 txInfo 参数访问事务控制相关信息</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="AfterThrowing"><a href="#AfterThrowing" class="headerlink" title="@AfterThrowing"></a>@AfterThrowing</h2><p>@AfterThrowing 有一个 throwing 属性，该属性可以限定 Advice 定义方法的参数名，并在方法带哦用的时候，将相应的异常绑定到具体的方法参数上，之后就可以在方法内部访问具体的异常信息，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AfterThrowing(pointcut = &quot;execution(...)&quot;, throwing = &quot;e&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterThrowingAdvice</span><span class="params">(RuntimeExeception e)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与 1.x 中的 ThrowsAdvice 可以同时针对不同的异常类型声明不同的方法进行处理一样，我们也可以在 Aspect 中针对多个不同的异常类型，声明不同的 AfterThrowingAdvice 的方法定义。</p>
+<h2 id="AfterReturning"><a href="#AfterReturning" class="headerlink" title="@AfterReturning"></a>@AfterReturning</h2><p>某些时候需要访问方法的返回值，可以通过 @AfterReturning 的 returning 属性将返回值绑定到 After Returning Advice 定义所在的方法，像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AfterReturning(pointcut = &quot;execution(...)&quot;, returning = &quot;retValue&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterReturningAdvice</span><span class="params">(<span class="type">boolean</span> retValue)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="After"><a href="#After" class="headerlink" title="@After"></a>@After</h2><p>对于匹配的 Joinpoint 处的方法执行来说，不管该方法是正常执行返回，还是执行过程中抛出异常而非正常返回，都会触发其上的 After（Finally）Advice 执行，一般适用于释放某些资源的场景比如网络连接的释放、数据库连接资源的释放。使用起来没有什么特殊的地方，就不做代码展示了。</p>
+<h2 id="Around"><a href="#Around" class="headerlink" title="@Around"></a>@Around</h2><p>被 @Around 注解标注的方法的第一个参数必须是 <code>org.aspectj.lang.ProceedingJoinPoint</code> 类型，且必须指定该参数。通常需要通过 <code>ProceedingJoinPoint::proceed()</code> 方法继续调用链的执行。除了直接调用 proceed 方法，还可以在调用 proceed 方法的时候，传入一个 Object[] 数组代表方法参数列表。如果想要修改方法调用参数值的时候，就可以使用带 Object[] 参数的 proceed 方法。</p>
+<p>PerformanceTraceAspect 中使用的就是 @Advice。</p>
+<h2 id="DeclareParents"><a href="#DeclareParents" class="headerlink" title="@DeclareParents"></a>@DeclareParents</h2><p>以 @AspectJ 形式声明的 Introduction，完全不同于之前提到过的任何 Advice，@DeclareParents 注解不是对 Aspect 中各 Advice 方法进行标注，而是对 Aspect 中的实例变量定义进行标注。</p>
+<p>在 Spring 中，Introduction 的实现是通过将需要添加的新的行为逻辑，以新的接口定义增加到目标对象上。要以 @AspectJ 形式声明 Introduction，我们需要在 Aspect 中声明一个实例变量它的类型对应的就是新增加的接口类型，然后使用 @DeclareParents 对其进行标注。通过 @DeclareParents 指定新接口定义的实现类以及将要加诸其上的目标对象。使用起来像这样，为 Task 添加 ICounter 的接口实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntroductionAspect</span> &#123;</span><br><span class="line">    <span class="meta">@DeclareParents(</span></span><br><span class="line"><span class="meta">        value = &quot;...Task&quot;, // 指定目标对象</span></span><br><span class="line"><span class="meta">        defaultImpl = CounterImpl.class // 新增接口的实现类</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="comment">// 为目标对象新增的对象类型</span></span><br><span class="line">    <span class="keyword">public</span> ICounter counter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>指定目标对象的时候，可以使用通配符指定一批目标对象，假设 service 包下的所有类都想增加 ICounter 的行为，那么可以把 value 定义成这样：service.*。</p>
+<p>注意：Introduction 属于 per-instance 类型的 Advice，所以目标对象的 scope 通常情况下应该设置成 prototype。</p>
+<h2 id="Advice-的执行顺序"><a href="#Advice-的执行顺序" class="headerlink" title="Advice 的执行顺序"></a>Advice 的执行顺序</h2><p>对于多个 Advice 来说，如果它们引用的 Pointcut 定义恰好匹配到同一个 Joinpoint 的时候，在这个 Joinpoint 上，这些 Advice 的执行顺序有以下规律：</p>
+<ol>
+<li>当这些 Advice 都声明在<strong>同一个 Aspect 内</strong>的时候，那么这些 Advice 的执行顺序，由它们在 Aspect 中的声明顺序来决定，最先声明的 Advice 拥有最高的优先级。对于 Before Advice 来说，拥有最高优先级的最先运行，而对于 AfterReturningAdvice，拥有最高优先级的则是最后运行。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MultiAdvicesAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(...)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">executionPointcut</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before(&quot;executionPointcut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeOne</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;before one&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before(&quot;executionPointcut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeTwo</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;before two&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterReturning(&quot;executionPointcut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterReturningOne</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;after returning one&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterReturning(&quot;executionPointcut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterReturningTwo</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;after returning two&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果将该 Aspect 织入目标对象，那么可以得到如下的输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">before One</span><br><span class="line">before Two</span><br><span class="line">task executed</span><br><span class="line">after returning two</span><br><span class="line">after returning one</span><br></pre></td></tr></table></figure>
+
+<p>@Before 的输出很容易理解，尤其需要注意 @AfterReturning 的输出，afterReturningOne 方法先于afterReturningTwo 方法声明，拥有较高的优先级，但因为它属于 AfterReturning Advice，所以，要晚于 afterReturningTwo 方法的执行。</p>
+<ol start="2">
+<li>当这些 Advice 声明都在<strong>不同 Aspect 内</strong>的时候，这时需要用到 Spring 的 <code>org.springframework.core.Ordered</code> 接口，只需要让相应的 Aspect 定义实现 Ordered 接口即可，否则，Advice 的执行顺序是无法确定的。Ordered.getorder() 方法返回的值越小 Aspect，其内部所声明的Advice 拥有的优先级越高。</li>
+</ol>
+<p>注意：如果使用编程的方式来使用这些 Aspect，那么 Aspect 内的 Advice 执行顺序完全由添加到 AspectJProxyFactory 的顺序来决定了。</p>
+<h1 id="AspectJ-形式：Aspect-的实例化模式"><a href="#AspectJ-形式：Aspect-的实例化模式" class="headerlink" title="@AspectJ 形式：Aspect 的实例化模式"></a>@AspectJ 形式：Aspect 的实例化模式</h1><p>Spring 2.0 之后的 AOP 仅支持 AspectJ 的三种实例化模式，即 singleton、perthis 和 pertarget。默认是 singleton 单例模式，也就是说，在容器中会实例化并持有每个 Aspect 定义的单一实例。</p>
+<ul>
+<li>perthis：为代理对象实例化各自的 Aspect 实例</li>
+<li>pertarget：为匹配的单独的目标对象实例化相应的 Aspect 实例</li>
+</ul>
+<p>使用起来像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect(&quot;perthis(execution(...))&quot;)</span> <span class="comment">// 为指定的 pointcut 创建 perthis 实例化模式的 Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InstanceModeAspect</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不过，使用 perthis 或者 pertarget 指定了 Aspect 的实例化模式之后，将这些 Aspect 注册到容器时，不能为其 Bean 定义指定 singleton 的 scope，否则会出现异常。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.wrp.cool">码小瑞</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.wrp.cool/posts/22033/">https://www.wrp.cool/posts/22033/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.wrp.cool" target="_blank">知更</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/59891/"><img class="prev-cover" src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">什么是幸福？</div></div></a></div><div class="next-post pull-right"><a href="/posts/22032/"><img class="next-cover" src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/index_img.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spring AOP 实现</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar123"/></div><div class="author-info__name">码小瑞</div><div class="author-info__description">一直在学习，永远在路上</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">81</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wangruipeng-wrp"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AspectJ-%E5%BD%A2%E5%BC%8F%EF%BC%9AAOP"><span class="toc-number">1.</span> <span class="toc-text">@AspectJ 形式：AOP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AspectJ-%E5%BD%A2%E5%BC%8F%EF%BC%9APointcut-%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text">@AspectJ 形式：Pointcut 的声明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#execution"><span class="toc-number">2.1.</span> <span class="toc-text">execution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#within"><span class="toc-number">2.2.</span> <span class="toc-text">within</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#this-%E5%92%8C-target"><span class="toc-number">2.3.</span> <span class="toc-text">this 和 target</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#args"><span class="toc-number">2.4.</span> <span class="toc-text">args</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#within-1"><span class="toc-number">2.5.</span> <span class="toc-text">@within</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#target"><span class="toc-number">2.6.</span> <span class="toc-text">@target</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#args-1"><span class="toc-number">2.7.</span> <span class="toc-text">@args</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#annotation"><span class="toc-number">2.8.</span> <span class="toc-text">@annotation</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AspectJ-%E5%BD%A2%E5%BC%8F%EF%BC%9APointcut-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">@AspectJ 形式：Pointcut 的实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AspectJ-%E5%BD%A2%E5%BC%8F%EF%BC%9AAdvice"><span class="toc-number">4.</span> <span class="toc-text">@AspectJ 形式：Advice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before"><span class="toc-number">4.1.</span> <span class="toc-text">@Before</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AfterThrowing"><span class="toc-number">4.2.</span> <span class="toc-text">@AfterThrowing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AfterReturning"><span class="toc-number">4.3.</span> <span class="toc-text">@AfterReturning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#After"><span class="toc-number">4.4.</span> <span class="toc-text">@After</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Around"><span class="toc-number">4.5.</span> <span class="toc-text">@Around</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DeclareParents"><span class="toc-number">4.6.</span> <span class="toc-text">@DeclareParents</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Advice-%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-number">4.7.</span> <span class="toc-text">Advice 的执行顺序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AspectJ-%E5%BD%A2%E5%BC%8F%EF%BC%9AAspect-%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">@AspectJ 形式：Aspect 的实例化模式</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/59891/" title="什么是幸福？">什么是幸福？</a><time datetime="2022-12-13T06:37:47.000Z" title="发表于 2022-12-13 14:37:47">2022-12-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/22033/" title="AspectJ 形式的 Spring AOP">AspectJ 形式的 Spring AOP</a><time datetime="2022-12-08T05:55:01.000Z" title="发表于 2022-12-08 13:55:01">2022-12-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/22032/" title="Spring AOP 实现">Spring AOP 实现</a><time datetime="2022-12-04T03:46:38.000Z" title="发表于 2022-12-04 11:46:38">2022-12-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/40742/" title="IoC和Spring IoC">IoC和Spring IoC</a><time datetime="2022-11-30T10:39:50.000Z" title="发表于 2022-11-30 18:39:50">2022-11-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/38849/" title="行为型设计模式">行为型设计模式</a><time datetime="2022-11-17T05:35:23.000Z" title="发表于 2022-11-17 13:35:23">2022-11-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 码小瑞</div><div class="footer_custom_text"><img src="https://wrp-blog-image.oss-cn-beijing.aliyuncs.com/blog-images/icp.png" style="display:inline; padding:0 4px; vertical-align:text-bottom; max-height:1.4em; width:auto;"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备 19093360 号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'xHUEmhrVmHWv8MupdDvR9FvM-gzGzoHsz',
+      appKey: 'Cr1qzcPhqKCVqEhTSX6TRoa4',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="100" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
